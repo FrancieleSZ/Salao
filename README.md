@@ -8,7 +8,7 @@
 - **Nomes dos alunos e RGM**
   - Franciele Souza — RGM: _______________
   - Julia Parra — RGM: _______________
-  - Emilly Rodriquez — RGM: _______________
+  - Emilly Rodriguez — RGM: _______________
   - Kamilly — RGM:__________
 
 ---
@@ -176,11 +176,11 @@
 
 **DER Conceitual** (`DER_Conceitual.png`):
 
-![DER Conceitual](DER_Conceitual.png)
+![DER Conceitual](DER Conceitual.png)
 
 **DER Lógico** (`DER_Logico.png`):
 
-![DER Lógico](DER_Logico.png)
+![DER Lógico](DER Lógico.png)
 
 - O diagrama conceitual representa as 5 entidades (Cliente, Profissional, Procedimento, Agendamento, Especialidade), seus atributos e as cardinalidades de cada relacionamento (Seção 6).
 - O diagrama lógico deriva do conceitual: cada relacionamento 1:N vira uma chave estrangeira na tabela do lado "N" (todas em Agendamento) e o relacionamento N:N entre Profissional e Especialidade vira a tabela associativa Profissional_Especialidade.
