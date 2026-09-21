@@ -3,127 +3,409 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dicionário de Dados - Salão dos Primos</title>
+<title>Dicionário de Dados — Salão dos Primos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  body {
-    font-family: Arial, Helvetica, sans-serif;
-    margin: 30px auto;
-    max-width: 1000px;
-    padding: 0 15px;
-    color: #000;
-    background: #fff;
+  :root {
+    --paper: #FAF9FB;
+    --surface: #FFFFFF;
+    --ink: #2A2430;
+    --ink-soft: #5C5566;
+    --line: #E3DEE8;
+    --head-font: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+    --body-font: "Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
   }
-  h1 { font-size: 26px; }
-  h2 { font-size: 20px; margin-top: 35px; }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 1.5rem; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body-font);
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 250px minmax(0, 1fr);
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  /* Navegação lateral */
+  .side {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: 100vh;
+    padding: 2rem 1.25rem 2rem 1.5rem;
+    border-right: 1px solid var(--line);
+    overflow-y: auto;
+  }
+  .side h2 {
+    font-family: var(--head-font);
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem;
+  }
+  .side ul { list-style: none; margin: 0 0 1.5rem; padding: 0; }
+  .side li { margin: 0; }
+  .side a {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 0.5rem;
+    border-radius: 6px;
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+  .side a:hover { background: #EFEAF3; }
+  .side a:focus-visible, .tag:focus-visible {
+    outline: 2px solid #6B3FA0;
+    outline-offset: 2px;
+  }
+  .swatch {
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 3px;
+    flex: none;
+    border: 1px solid rgba(0,0,0,0.15);
+  }
+
+  /* Conteúdo */
+  main { padding: 2.5rem 2.25rem 4rem; min-width: 0; }
+
+  header.top { margin-bottom: 2.5rem; }
+  header.top h1 {
+    font-family: var(--head-font);
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin: 0 0 0.6rem;
+  }
+  header.top p { margin: 0.2rem 0; color: var(--ink-soft); max-width: 62ch; }
+  header.top .group { color: var(--ink); font-weight: 600; margin-top: 0.9rem; }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    margin: 1.25rem 0 0;
+    padding: 0.75rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 0.92rem;
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+
+  h2.section-title {
+    font-family: var(--head-font);
+    font-size: 1.5rem;
+    margin: 0 0 0.4rem;
+  }
+  .intro { color: var(--ink-soft); margin: 0 0 1rem; max-width: 64ch; }
+
+  /* Entidades */
+  section.entity {
+    --tint: #eee;
+    --accent: #999;
+    margin: 0 0 2.5rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 6px solid var(--accent);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .entity-head {
+    padding: 1rem 1.25rem 0.9rem;
+    background: var(--tint);
+    border-bottom: 1px solid var(--line);
+  }
+  .entity-head h3 {
+    font-family: var(--head-font);
+    font-size: 1.35rem;
+    margin: 0 0 0.2rem;
+  }
+  .entity-head p { margin: 0; max-width: 70ch; }
+
+  .cliente  { --tint: #FFF1DD; --accent: #F0A24B; }
+  .profissional { --tint: #FFFBD1; --accent: #E6D93A; }
+  .especialidade { --tint: #F1E8FF; --accent: #B58BE6; }
+  .vinculo { --tint: #E2F1FD; --accent: #5AAEEA; }
+  .procedimento { --tint: #FDE6F4; --accent: #EE7DC2; }
+  .agendamento { --tint: #FDE7E2; --accent: #F08672; }
+
+  .table-wrap { overflow-x: auto; }
+
   table {
-    border-collapse: collapse;
     width: 100%;
-    margin-bottom: 10px;
+    border-collapse: collapse;
+    font-size: 0.95rem;
   }
   th, td {
-    border: 1px solid #000;
-    padding: 6px 8px;
+    padding: 0.65rem 1rem;
     text-align: left;
     vertical-align: top;
+    border-bottom: 1px solid var(--line);
   }
-  th { background: #ddd; }
-  .tabela { overflow-x: auto; }
+  thead th {
+    font-weight: 600;
+    background: #FBFAFC;
+    white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td:first-child { white-space: nowrap; }
+  td:nth-child(2) { min-width: 15rem; }
+  td:nth-child(3) { min-width: 15rem; }
+
+  code {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 0.9em;
+    background: #F3EFF6;
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+  }
+
+  .tag {
+    display: inline-block;
+    margin-left: 0.35rem;
+    padding: 0 0.4rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.5;
+    vertical-align: middle;
+    border: 1px solid;
+  }
+  .pk { background: #FFF3C4; border-color: #C9A400; color: #5C4A00; }
+  .fk { background: #E6F0FF; border-color: #4A7BD0; color: #1B3F7A; }
+
+  /* Relacionamentos */
+  .rel { margin-bottom: 2.5rem; }
+  .rel .box {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .rel td:first-child { white-space: normal; }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; }
+    .side {
+      position: static;
+      height: auto;
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+      padding: 1.25rem 1.25rem 0.5rem;
+    }
+    .side ul { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+    main { padding: 1.5rem 1.25rem 3rem; }
+  }
+
+  @media print {
+    body { background: #fff; }
+    .side { display: none; }
+    .layout { display: block; }
+    main { padding: 0; }
+    section.entity { break-inside: avoid; }
+  }
 </style>
 </head>
 <body>
+<div class="layout">
 
-<h1>Dicionário de Dados - Salão dos Primos</h1>
-<p>Entrega 1 - Modelo Conceitual (DER)</p>
-<p>Grupo: Franciele Souza, Julia Parra e Emilly Rodriquez</p>
-<p>(PK) = chave primária, (FK) = chave estrangeira</p>
+  <nav class="side" aria-label="Índice do dicionário">
+    <h2>Entidades</h2>
+    <ul>
+      <li><a href="#cliente"><span class="swatch" style="background:#F0A24B"></span>Cliente</a></li>
+      <li><a href="#profissional"><span class="swatch" style="background:#E6D93A"></span>Profissional</a></li>
+      <li><a href="#especialidade"><span class="swatch" style="background:#B58BE6"></span>Especialidade</a></li>
+      <li><a href="#profissional-especialidade"><span class="swatch" style="background:#5AAEEA"></span>Profissional_Especialidade</a></li>
+      <li><a href="#procedimento"><span class="swatch" style="background:#EE7DC2"></span>Procedimento</a></li>
+      <li><a href="#agendamento"><span class="swatch" style="background:#F08672"></span>Agendamento</a></li>
+    </ul>
+    <h2>Relacionamentos</h2>
+    <ul>
+      <li><a href="#relacionamentos">Cardinalidades</a></li>
+    </ul>
+  </nav>
 
-<h2>Entidade: Cliente</h2>
-<div class="tabela">
-<table>
-  <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
-  <tr><td>id_cliente (PK)</td><td>Identificador único do cliente</td><td>Obrigatório, gerado pelo sistema</td></tr>
-  <tr><td>nome</td><td>Nome do cliente</td><td>Obrigatório</td></tr>
-  <tr><td>telefone</td><td>Telefone principal, para confirmar agendamentos</td><td>Obrigatório; dado sensível, deve ser protegido</td></tr>
-  <tr><td>telefone_2</td><td>Telefone alternativo</td><td>Opcional; dado sensível, deve ser protegido</td></tr>
-  <tr><td>email</td><td>E-mail principal</td><td>Opcional; dado sensível, deve ser protegido</td></tr>
-  <tr><td>email_2</td><td>E-mail alternativo</td><td>Opcional; dado sensível, deve ser protegido</td></tr>
-  <tr><td>data_cadastro</td><td>Data em que o cliente foi cadastrado</td><td>Gerado automaticamente</td></tr>
-</table>
+  <main>
+    <header class="top">
+      <h1>Dicionário de Dados — Salão dos Primos</h1>
+      <p>Dicionário de dados conceitual (preliminar) da Entrega 1, com as entidades, os atributos e as regras de negócio do sistema de agendamento do salão.</p>
+      <p class="group">Franciele Souza, Julia Parra e Emilly Rodriquez</p>
+      <div class="legend" aria-label="Legenda">
+        <span><span class="tag pk" style="margin:0">PK</span> chave primária</span>
+        <span><span class="tag fk" style="margin:0">FK</span> chave estrangeira</span>
+        <span>As cores seguem as tabelas do DER lógico.</span>
+      </div>
+    </header>
+
+    <!-- CLIENTE -->
+    <section class="entity cliente" id="cliente">
+      <div class="entity-head">
+        <h3>Cliente</h3>
+        <p>Pessoa que agenda e recebe os serviços do salão.</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+          <tbody>
+            <tr><td><code>id_cliente</code><span class="tag pk">PK</span></td><td>Identificador único do cliente</td><td>Obrigatório, gerado pelo sistema</td></tr>
+            <tr><td><code>nome</code></td><td>Nome do cliente</td><td>Obrigatório</td></tr>
+            <tr><td><code>telefone</code></td><td>Contato principal para confirmação de agendamentos</td><td>Obrigatório; dado sensível, deve ser protegido</td></tr>
+            <tr><td><code>telefone_2</code></td><td>Telefone alternativo do cliente</td><td>Opcional; dado sensível, deve ser protegido</td></tr>
+            <tr><td><code>email</code></td><td>E-mail principal do cliente</td><td>Opcional; dado sensível, deve ser protegido</td></tr>
+            <tr><td><code>email_2</code></td><td>E-mail alternativo do cliente</td><td>Opcional; dado sensível, deve ser protegido</td></tr>
+            <tr><td><code>data_cadastro</code></td><td>Data em que o cliente foi cadastrado</td><td>Gerado automaticamente</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PROFISSIONAL -->
+    <section class="entity profissional" id="profissional">
+      <div class="entity-head">
+        <h3>Profissional</h3>
+        <p>Quem executa o procedimento; a agenda é controlada por profissional.</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+          <tbody>
+            <tr><td><code>id_profissional</code><span class="tag pk">PK</span></td><td>Identificador único do profissional</td><td>Obrigatório, gerado pelo sistema</td></tr>
+            <tr><td><code>nome</code></td><td>Nome do profissional</td><td>Obrigatório</td></tr>
+            <tr><td><code>telefone</code></td><td>Contato do profissional</td><td>Opcional; dado sensível, deve ser protegido</td></tr>
+            <tr><td><code>ativo</code></td><td>Indica se o profissional está atuando no salão (verdadeiro/falso)</td><td>Obrigatório; profissional inativo não pode receber novos agendamentos</td></tr>
+            <tr><td><code>data_cadastro</code></td><td>Data em que o profissional foi cadastrado</td><td>Gerado automaticamente</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ESPECIALIDADE -->
+    <section class="entity especialidade" id="especialidade">
+      <div class="entity-head">
+        <h3>Especialidade</h3>
+        <p>Área de atuação que um profissional domina, como corte ou coloração.</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+          <tbody>
+            <tr><td><code>id_especialidade</code><span class="tag pk">PK</span></td><td>Identificador único da especialidade</td><td>Obrigatório, gerado pelo sistema</td></tr>
+            <tr><td><code>nome</code></td><td>Nome da especialidade (ex.: coloração, corte, tratamentos capilares)</td><td>Obrigatório; não pode se repetir</td></tr>
+            <tr><td><code>descricao</code></td><td>Descrição da especialidade</td><td>Opcional</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PROFISSIONAL_ESPECIALIDADE -->
+    <section class="entity vinculo" id="profissional-especialidade">
+      <div class="entity-head">
+        <h3>Profissional_Especialidade</h3>
+        <p>Entidade associativa que resolve o relacionamento N:N entre Profissional e Especialidade no modelo lógico.</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+          <tbody>
+            <tr><td><code>id_profissional_especialidade</code><span class="tag pk">PK</span></td><td>Identificador único do vínculo</td><td>Obrigatório, gerado pelo sistema</td></tr>
+            <tr><td><code>id_profissional</code><span class="tag fk">FK</span></td><td>Profissional que possui a especialidade</td><td>Obrigatório</td></tr>
+            <tr><td><code>id_especialidade</code><span class="tag fk">FK</span></td><td>Especialidade que o profissional possui</td><td>Obrigatório; a mesma combinação profissional + especialidade não pode se repetir</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PROCEDIMENTO -->
+    <section class="entity procedimento" id="procedimento">
+      <div class="entity-head">
+        <h3>Procedimento</h3>
+        <p>Serviço oferecido pelo salão; a duração define o tempo reservado na agenda.</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+          <tbody>
+            <tr><td><code>id_procedimento</code><span class="tag pk">PK</span></td><td>Identificador único do procedimento</td><td>Obrigatório, gerado pelo sistema</td></tr>
+            <tr><td><code>nome</code></td><td>Nome do procedimento (ex.: corte, progressiva, coloração)</td><td>Obrigatório</td></tr>
+            <tr><td><code>duracao_minutos</code></td><td>Duração média do procedimento, em minutos</td><td>Obrigatório; usada para calcular disponibilidade de horário (ex.: coloração para loiro = tempo padrão x2)</td></tr>
+            <tr><td><code>preco</code></td><td>Valor cobrado pelo procedimento</td><td>Opcional na modelagem conceitual</td></tr>
+            <tr><td><code>descricao</code></td><td>Descrição do procedimento</td><td>Opcional</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- AGENDAMENTO -->
+    <section class="entity agendamento" id="agendamento">
+      <div class="entity-head">
+        <h3>Agendamento</h3>
+        <p>Evento no tempo que une cliente, profissional e procedimento em uma data e horário. É o núcleo do problema de controle de horários.</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
+          <tbody>
+            <tr><td><code>id_agendamento</code><span class="tag pk">PK</span></td><td>Identificador único do agendamento</td><td>Obrigatório, gerado pelo sistema</td></tr>
+            <tr><td><code>data_agendamento</code></td><td>Data do atendimento</td><td>Obrigatório</td></tr>
+            <tr><td><code>hora_inicio</code></td><td>Horário de início do procedimento</td><td>Obrigatório; não pode coincidir com outro agendamento do mesmo profissional</td></tr>
+            <tr><td><code>hora_fim</code></td><td>Horário previsto de término</td><td>Calculado a partir de hora_inicio + duracao_minutos do procedimento</td></tr>
+            <tr><td><code>status</code></td><td>Situação do agendamento (marcado, concluído, cancelado)</td><td>Obrigatório</td></tr>
+            <tr><td><code>observacoes</code></td><td>Observações sobre o atendimento</td><td>Opcional</td></tr>
+            <tr><td><code>data_criacao</code></td><td>Data e hora em que o agendamento foi registrado</td><td>Gerado automaticamente</td></tr>
+            <tr><td><code>id_cliente</code><span class="tag fk">FK</span></td><td>Cliente que realizou o agendamento</td><td>Obrigatório</td></tr>
+            <tr><td><code>id_profissional</code><span class="tag fk">FK</span></td><td>Profissional que realizará o atendimento</td><td>Obrigatório; deve estar ativo</td></tr>
+            <tr><td><code>id_procedimento</code><span class="tag fk">FK</span></td><td>Procedimento que será realizado</td><td>Obrigatório</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- RELACIONAMENTOS -->
+    <section class="rel" id="relacionamentos">
+      <h2 class="section-title">Relacionamentos e cardinalidades</h2>
+      <p class="intro">Cada cardinalidade está no formato (mínimo, máximo) e é lida a partir da entidade ao lado dela.</p>
+      <div class="box">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Relacionamento</th><th>Entidade A</th><th>Entidade B</th><th>Tipo</th></tr></thead>
+            <tbody>
+              <tr><td>Cliente realiza Agendamento</td><td>Cliente (0,n)</td><td>Agendamento (1,1)</td><td>1:N</td></tr>
+              <tr><td>Profissional atende Agendamento</td><td>Profissional (0,n)</td><td>Agendamento (1,1)</td><td>1:N</td></tr>
+              <tr><td>Procedimento tem Agendamento</td><td>Procedimento (0,n)</td><td>Agendamento (1,1)</td><td>1:N</td></tr>
+              <tr><td>Profissional possui Especialidade</td><td>Profissional (0,n)</td><td>Especialidade (0,n)</td><td>N:N, resolvido por Profissional_Especialidade</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      Salão dos Primos — Entrega 1, Modelo Conceitual (DER). Versão preliminar do dicionário de dados.
+    </footer>
+  </main>
+
 </div>
-
-<h2>Entidade: Profissional</h2>
-<div class="tabela">
-<table>
-  <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
-  <tr><td>id_profissional (PK)</td><td>Identificador único do profissional</td><td>Obrigatório, gerado pelo sistema</td></tr>
-  <tr><td>nome</td><td>Nome do profissional</td><td>Obrigatório</td></tr>
-  <tr><td>telefone</td><td>Telefone do profissional</td><td>Opcional; dado sensível, deve ser protegido</td></tr>
-  <tr><td>ativo</td><td>Mostra se o profissional está trabalhando no salão (verdadeiro/falso)</td><td>Obrigatório; profissional inativo não recebe novos agendamentos</td></tr>
-  <tr><td>data_cadastro</td><td>Data em que o profissional foi cadastrado</td><td>Gerado automaticamente</td></tr>
-</table>
-</div>
-
-<h2>Entidade: Especialidade</h2>
-<div class="tabela">
-<table>
-  <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
-  <tr><td>id_especialidade (PK)</td><td>Identificador único da especialidade</td><td>Obrigatório, gerado pelo sistema</td></tr>
-  <tr><td>nome</td><td>Nome da especialidade (ex.: coloração, corte)</td><td>Obrigatório; não pode repetir</td></tr>
-  <tr><td>descricao</td><td>Descrição da especialidade</td><td>Opcional</td></tr>
-</table>
-</div>
-
-<h2>Entidade: Profissional_Especialidade</h2>
-<p>Tabela que liga Profissional e Especialidade no modelo lógico, porque o relacionamento é N:N.</p>
-<div class="tabela">
-<table>
-  <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
-  <tr><td>id_profissional_especialidade (PK)</td><td>Identificador único do vínculo</td><td>Obrigatório, gerado pelo sistema</td></tr>
-  <tr><td>id_profissional (FK)</td><td>Profissional que tem a especialidade</td><td>Obrigatório</td></tr>
-  <tr><td>id_especialidade (FK)</td><td>Especialidade que o profissional tem</td><td>Obrigatório; a mesma combinação de profissional e especialidade não pode repetir</td></tr>
-</table>
-</div>
-
-<h2>Entidade: Procedimento</h2>
-<div class="tabela">
-<table>
-  <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
-  <tr><td>id_procedimento (PK)</td><td>Identificador único do procedimento</td><td>Obrigatório, gerado pelo sistema</td></tr>
-  <tr><td>nome</td><td>Nome do procedimento (ex.: corte, progressiva, coloração)</td><td>Obrigatório</td></tr>
-  <tr><td>duracao_minutos</td><td>Duração média do procedimento em minutos</td><td>Obrigatório; usada para calcular os horários disponíveis (ex.: coloração para loiro = tempo padrão x2)</td></tr>
-  <tr><td>preco</td><td>Valor cobrado pelo procedimento</td><td>Opcional na modelagem conceitual</td></tr>
-  <tr><td>descricao</td><td>Descrição do procedimento</td><td>Opcional</td></tr>
-</table>
-</div>
-
-<h2>Entidade: Agendamento</h2>
-<div class="tabela">
-<table>
-  <tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr>
-  <tr><td>id_agendamento (PK)</td><td>Identificador único do agendamento</td><td>Obrigatório, gerado pelo sistema</td></tr>
-  <tr><td>data_agendamento</td><td>Data do atendimento</td><td>Obrigatório</td></tr>
-  <tr><td>hora_inicio</td><td>Horário em que o procedimento começa</td><td>Obrigatório; não pode coincidir com outro agendamento do mesmo profissional</td></tr>
-  <tr><td>hora_fim</td><td>Horário previsto para o fim</td><td>Calculado: hora_inicio + duracao_minutos do procedimento</td></tr>
-  <tr><td>status</td><td>Situação do agendamento (marcado, concluído, cancelado)</td><td>Obrigatório</td></tr>
-  <tr><td>observacoes</td><td>Observações sobre o atendimento</td><td>Opcional</td></tr>
-  <tr><td>data_criacao</td><td>Data e hora em que o agendamento foi registrado</td><td>Gerado automaticamente</td></tr>
-  <tr><td>id_cliente (FK)</td><td>Cliente que fez o agendamento</td><td>Obrigatório</td></tr>
-  <tr><td>id_profissional (FK)</td><td>Profissional que vai atender</td><td>Obrigatório; deve estar ativo</td></tr>
-  <tr><td>id_procedimento (FK)</td><td>Procedimento que vai ser feito</td><td>Obrigatório</td></tr>
-</table>
-</div>
-
-<h2>Relacionamentos e cardinalidades</h2>
-<p>Formato (mínimo, máximo), lido a partir de cada entidade.</p>
-<div class="tabela">
-<table>
-  <tr><th>Relacionamento</th><th>Entidade A</th><th>Entidade B</th><th>Tipo</th></tr>
-  <tr><td>Cliente realiza Agendamento</td><td>Cliente (0,n)</td><td>Agendamento (1,1)</td><td>1:N</td></tr>
-  <tr><td>Profissional atende Agendamento</td><td>Profissional (0,n)</td><td>Agendamento (1,1)</td><td>1:N</td></tr>
-  <tr><td>Procedimento tem Agendamento</td><td>Procedimento (0,n)</td><td>Agendamento (1,1)</td><td>1:N</td></tr>
-  <tr><td>Profissional possui Especialidade</td><td>Profissional (0,n)</td><td>Especialidade (0,n)</td><td>N:N (tabela Profissional_Especialidade)</td></tr>
-</table>
-</div>
-
 </body>
 </html>
