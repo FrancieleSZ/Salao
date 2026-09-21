@@ -176,11 +176,11 @@
 
 **DER Conceitual** (`DER Conceitual.png`):
 
-[Ver DER Conceitual](imagens/DER Conceitual.png)
+[Ver DER Conceitual](DER_Conceitual.png)
 
 **DER Lógico** (`DER Lógico.png`):
 
-![DER Lógico](DER Lógico.png)
+[Ver DER Conceitual](DER_Lógico.png)
 
 - O diagrama conceitual representa as 5 entidades (Cliente, Profissional, Procedimento, Agendamento, Especialidade), seus atributos e as cardinalidades de cada relacionamento (Seção 6).
 - O diagrama lógico deriva do conceitual: cada relacionamento 1:N vira uma chave estrangeira na tabela do lado "N" (todas em Agendamento) e o relacionamento N:N entre Profissional e Especialidade vira a tabela associativa Profissional_Especialidade.
