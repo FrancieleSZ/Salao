@@ -7,7 +7,7 @@
 
 - **Nomes dos alunos e RGM**
   - Franciele Souza — RGM: 47643323
-  - Julia Parra — RGM: _______________
+  - Julia Parra — RGM: 47566604
   - Emilly Rodriguez — RGM: _______________
   - Kamilly — RGM:__________
 
