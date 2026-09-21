@@ -82,6 +82,8 @@ RF01. Permitir **cadastrar clientes**, com dados básicos de contato.
 
 **Os exemplos de valores são fictícios**, apenas para ilustrar o tipo de informação — não representam clientes ou dados reais do salão.
 
+[Ver Dicionário de dados](Dicionário_de_dados.html)
+
 ### Entidade: Cliente
 
 | Atributo | Descrição | Regra de negócio associada |
