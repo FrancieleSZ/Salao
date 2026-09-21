@@ -174,11 +174,11 @@
 
 ## 7. Diagrama Entidade-Relacionamento (DER)
 
-**DER Conceitual** (`DER_Conceitual.png`):
+**DER Conceitual** (`DER Conceitual.png`):
 
 ![DER Conceitual](DER Conceitual.png)
 
-**DER Lógico** (`DER_Logico.png`):
+**DER Lógico** (`DER Lógico.png`):
 
 ![DER Lógico](DER Lógico.png)
 
