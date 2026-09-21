@@ -50,22 +50,19 @@
 
 ### 3.1 Requisitos Funcionais
 
-- RF01. Permitir **cadastrar clientes**, com dados básicos de contato.
+RF01. Permitir **cadastrar clientes**, com dados básicos de contato.
 - RF02. Permitir **cadastrar procedimentos** oferecidos pelo salão, incluindo a duração estimada de cada um.
-- RF03. Permitir **cadastrar os profissionais** do salão e suas especialidades.
-- RF04. Permitir **registrar um agendamento**, associando cliente, profissional, procedimento, data e horário.
-- RF05. **Impedir a criação de um agendamento em um horário que já esteja ocupado** para o mesmo profissional (evitar conflito de horários).
-- RF06. **Calcular automaticamente o horário de término do agendamento** com base na duração do procedimento escolhido.
-- RF07. **Impedir que um novo agendamento sobreponha ou substitua um horário já marcado** de outro cliente.
-- RF08. Permitir **consultar a agenda** (por dia, por profissional) para saber quais horários estão livres — substituindo a necessidade de o cliente ir até o salão perguntar pessoalmente.
-- RF09. Permitir **cancelar ou remarcar** um agendamento existente.
-- RF10. Permitir **consultar o histórico de atendimentos** de um cliente.
+- RF03. Permitir **cadastrar os profissionais** do salão e sua especialidade/disponibilidade.
+- RF07. Permitir **consultar a agenda** (por dia, por profissional) para saber quais horários estão livres — substituindo a necessidade de o cliente ir até o salão perguntar pessoalmente.
+- RF08. Permitir **cancelar ou remarcar** um agendamento existente.
+- RF09. Permitir consultar o histórico de atendimentos de um cliente.
+  
 
 ### 3.2 Requisitos Não Funcionais
 
 - RNF01. **Usabilidade:** interface simples, já que os usuários (profissionais do salão) não necessariamente têm familiaridade avançada com tecnologia — a lógica deve ser tão rápida quanto anotar no caderno.
 - RNF02. **Desempenho:** a consulta de horários disponíveis deve responder rapidamente em horários de pico, quando o salão está cheio e o tempo do profissional é escasso.
-- RNF03. **Segurança/privacidade:** dados de contato dos clientes (telefone, e-mail) devem ser protegidos e não expostos publicamente.
+- RNF03. **Segurança/privacidade:** dados de contato dos clientes (telefone) devem ser protegidos e não expostos publicamente.
 - RNF04. **Disponibilidade:** o sistema deve estar acessível durante o horário de funcionamento do salão, e idealmente também fora dele, para permitir que clientes consultem/solicitem horários remotamente.
 - RNF05. **Confiabilidade:** o sistema deve evitar conflitos de agenda (dois clientes no mesmo horário/profissional), já que isso é a maior fonte de problema com o caderno.
 
