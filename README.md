@@ -174,7 +174,9 @@
 
 ## 7. Diagrama Entidade-Relacionamento (DER)
 
-**DER Conceitual** (`DER Conceitual.png`):
+**DER Conceitual** (`<a href="https://github.com/FrancieleSZ/Sal-o/blob/main/DER%20L%C3%B3gico.png">
+  <img src="DER Conceitual.jpg" alt="DER Conceitual" width="300" height="200">
+</a>`):
 
 ![DER Conceitual](DER Conceitual.png)
 
