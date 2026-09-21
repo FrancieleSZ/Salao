@@ -115,11 +115,13 @@
   - **Profissional** — quem executa o procedimento; necessário para controlar a agenda individual e evitar conflitos de horário por profissional.
   - **Procedimento** — o serviço oferecido pelo salão; necessário porque sua duração determina diretamente as regras de agendamento relatadas na entrevista.
   - **Agendamento** — entidade associativa que conecta Cliente, Profissional e Procedimento em uma data/horário específico; é o núcleo do problema relatado (controle de horários hoje feito em papel).
+  - **Especialidades** — especialidades que cada profissional domina, para melhorar as escolhas do cliente.
 - **Atributos e classificações:** detalhados no dicionário de dados (Seção 5).
 - **Relacionamentos pertinentes:**
   - Um **Cliente** pode ter **vários Agendamentos** ao longo do tempo (1:N).
   - Um **Profissional** realiza **vários Agendamentos** (1:N).
   - Um **Procedimento** pode estar associado a **vários Agendamentos** (1:N).
+  - Um **Especialidade** pode estar associado a **vários Profissionais** (1:N).
   - **Agendamento** é o elo que une as três entidades acima em um único evento (cliente + profissional + procedimento + data/horário).
 - **Restrições e políticas organizacionais aplicadas ao modelo:**
   - Um Agendamento só é válido se o intervalo de tempo (hora_inicio até hora_fim) não colidir com outro Agendamento do mesmo Profissional — reflete diretamente a regra de negócio de que nenhum cliente pode perder seu horário para outro.
@@ -129,7 +131,7 @@
 ## 7. Diagrama Entidade-Relacionamento (DER)
  
 - Ver arquivo anexo `DER_Salao_dos_Primos.svg` (a ser incluído/exportado como imagem no repositório).
-- O diagrama representa as 4 entidades (Cliente, Profissional, Procedimento, Agendamento), seus atributos principais e as cardinalidades 1:N entre cada entidade "mestre" e o Agendamento.
+- O diagrama representa as 5 entidades (Cliente, Profissional, Procedimento, Agendamento, Especialidades), seus atributos principais e as cardinalidades 1:N entre cada entidade "mestre" e o Agendamento.
 - O modelo foi pensado para ser **escalável**: novas entidades (ex.: Pagamento, Produto/Estoque, Avaliação do atendimento) podem se conectar ao Agendamento ou ao Cliente sem quebrar a estrutura atual.
 ---
  
