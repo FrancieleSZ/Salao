@@ -83,7 +83,10 @@ RF01. Permitir **cadastrar clientes**, com dados básicos de contato.
 **Os exemplos de valores são fictícios**, apenas para ilustrar o tipo de informação — não representam clientes ou dados reais do salão.
 
 [Ver Dicionário de dados](https://dicionariodedados.vercel.app/)
-[Ver Dicionário de dados](dicionario_de_dados.html)
+
+###
+
+[Ver Site do Dicionário de dados](dicionario_de_dados.html)
 
 
 
