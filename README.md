@@ -9,7 +9,7 @@
   - Franciele Souza — RGM: 47643323
   - Julia Parra — RGM: 47566604
   - Emilly Rodriguez — RGM: _______________
-  - Kamilly — RGM:__________
+  - Kamilly Vitória — RGM: 46919431 
 
 ---
 
