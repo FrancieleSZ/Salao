@@ -27,7 +27,9 @@
   - Google Meu Negócio: https://www.google.com/searchviewer/10?svid=CAwSHRIbCgNwdnESFENnMHZaeTh4TVdZeWQyYzNkR3R4GAo
   - Telefone de contato: (11) 94400-0738
   - Responsável pela organização: Alaide
-  - *(Anexar aqui as fotos do local/da visita de campo.)*
+  - Fotos da visita de campo:
+  - ![Foto da visita](.github/workflows/Imagem1.jpeg)
+  - ![Foto da visita](.github/workflows/Imagem2.jpeg)
 
 ---
 
