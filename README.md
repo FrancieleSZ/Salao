@@ -211,10 +211,10 @@ Como alternativa, o grupo considerou modelar "duração" como atributo fixo do A
 
 | Item | O que registrar |
 |------|------------------|
-| **Ferramenta e etapa** | Claude (Anthropic) foi usado para criar o esboço inicial do READMI. |
+| **Ferramenta e etapa** | Claude (Anthropic) foi usado para criar o esboço inicial do README. |
 | **Motivação** | O grupo já havia realizado a entrevista de campo e tinha as respostas em um PDF/roteiro; recorreu-se à IA para organizar essas respostas dentro da estrutura obrigatória do esboço do README. Depois, para conferir se o README e os DERs estavam coerentes entre si. |
 | **Prompt(s) utilizados** | (1) "[Upload do roteiro de entrevista + template do trabalho] responda essas perguntas de acordo com esse pdf e me entregue o readme igual as instruções".|
-| **Resposta recebida** | A IA gerou uma versão completa do esboço incompleto do README seguindo as seções do modelo, preenchendo com as respostas literais da entrevista onde havia dado e propondo conteúdo (requisitos, entidades, atributos, relacionamentos, justificativa) onde a entrevista não continha resposta explícita. Na versão mais recente, a IA alinhou o README aos DERs enviados, corrigiu inconsistências (cardinalidades, relacionamento Profissional–Especialidade, atributos do dicionário). |
+| **Resposta recebida** | A IA gerou uma versão incompleta do README seguindo as seções do modelo, preenchendo com as respostas literais da entrevista onde havia dado e propondo conteúdo (requisitos, entidades, atributos, relacionamentos, justificativa) onde a entrevista não continha resposta explícita. Na versão mais recente, a IA alinhou o README aos DERs enviados, corrigiu inconsistências (cardinalidades, relacionamento Profissional–Especialidade, atributos do dicionário). |
 | **Fontes consultadas e verificadas** | Claude e PDFs fornecidos pelo professor. |
 | **Trechos rejeitados ou corrigidos** | Foram arrumadas as entidades, dicionário de dados, requisitos funcionais e não funcionais, link das imagens no READMI e informações da instituição.  |
 | **Justificativa da escolha final** | Eram respostas erradas e génericas, fora do padrão de READMI desejado, erros simples mas que confundiriam. |
