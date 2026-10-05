@@ -218,18 +218,4 @@ Como alternativa, o grupo considerou modelar "duração" como atributo fixo do A
 | **Fontes consultadas e verificadas** | Claude e PDFs fornecidos pelo professor. |
 | **Trechos rejeitados ou corrigidos** | Foram arrumadas as entidades, dicionário de dados, requisitos funcionais e não funcionais, link das imagens no READMI e informações da instituição.  |
 | **Justificativa da escolha final** | Eram respostas erradas e génericas, fora do padrão de READMI desejado, erros simples mas que confundiriam. |
-| **Reflexão crítica** | ... |
-
->  Este preenchimento da Seção 9 é um ponto de partida. Cada integrante do grupo deve revisar, editar e assinar esse registro com informações fiéis ao que de fato foi feito — inclusive completando as linhas "Trechos rejeitados ou corrigidos" e "Justificativa da escolha final", que dependem de decisões humanas do grupo, não da IA.
-
----
-
-## Resumo dos Pesos
-
-| Dimensão | Peso total |
-|----------|-----------|
-| Conceitual (contexto, requisitos/regras, modelagem, justificativa técnica) | 30% |
-| Procedimental (requisitos, fluxogramas, dicionário de dados, DER) | 50% |
-| Atitudinal (participação, comprometimento, colaboração, autonomia) | 20% |
-
-**Entrega final:** README.md completo + DER + Dicionário de Dados em HTML (com exceção dos cursos GTI) anexado no repositório GitHub do grupo.
+| **Reflexão crítica** | A IA teve alucinações bem grandes durante o esboço inicial, errou diversas coisas que foram arrumadas manualmente, todas as seções tiveram alteração por mão humanas. |
