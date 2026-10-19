@@ -15,18 +15,19 @@
 
 ## 1. Caracterização da Organização
 
-- **Nome e natureza da organização:** Salão dos Primos — salão de beleza (feminino e masculino), organização **com fins lucrativos**.
-- **Contexto e porte:** Operação de pequeno porte, atualmente com **4 profissionais** atuando no salão e um público de **30 a 50 clientes** atendidos. O volume de atividade é composto principalmente por agendamentos e execução de procedimentos de beleza (corte, coloração, progressiva, entre outros).
-- **Problemas e necessidades identificados:** A principal "crise operacional" do salão está no **controle de horários**, que hoje é feito em **caderno de papel**. Isso gera dois problemas centrais:
-  1. Falta de visibilidade em tempo real da agenda — clientes precisam ir até o salão pessoalmente para saber se há horário disponível, podendo descobrir que não há vaga só ao chegar.
-  2. Sobrecarga do WhatsApp dos funcionários, que é usado tanto para marcar horários quanto para tirar dúvidas dos clientes durante o expediente. Como o salão fica cheio, o WhatsApp acaba ficando de lado, atrasando respostas e tirando o foco do profissional durante os atendimentos.
-- **Justificativa da escolha:** O Salão dos Primos foi escolhido por ser uma organização real, de porte adequado ao escopo da disciplina — pequena o suficiente para ser modelada nesta etapa, mas com processos, entidades e regras de negócio suficientes (clientes, procedimentos, profissionais, agendamentos, restrições de tempo) para justificar um modelo de dados. Além disso, o grupo tem acesso direto à organização para realizar entrevistas e observação in loco.
+- **Nome e natureza:** Salão dos Primos — salão de beleza feminino e masculino, organização **com fins lucrativos**.
+- **Porte e contexto:** operação de pequeno porte, com **4 profissionais** e um público de **30 a 50 clientes**. A atividade gira em torno de agendamentos e da execução de procedimentos (corte, coloração, progressiva, entre outros).
+- **Como as informações foram obtidas:** o grupo realizou **entrevista de campo e observação no local** com a responsável, Alaide, dentro do salão. As respostas da entrevista embasam a caracterização, os processos, as regras e a modelagem deste documento. Fotos da visita estão no repositório (abaixo).
+- **Problemas identificados:**
+  1. **Agenda em caderno de papel:** não há visibilidade da disponibilidade; o cliente precisa ir ao salão para saber se há horário e pode descobrir que não há vaga só ao chegar.
+  2. **WhatsApp sobrecarregado:** é usado para marcar horários e tirar dúvidas durante o expediente. Com o salão cheio, as mensagens ficam de lado, as respostas atrasam e o profissional perde o foco no atendimento.
+- **Justificativa da escolha:** organização real, de porte adequado ao escopo da disciplina, com processos, entidades e regras suficientes para justificar um modelo de dados, e com acesso direto do grupo para entrevista e observação.
 - **Evidências da organização:**
-  - Localização (Google Maps): R. Bernardino Vergueiro, 276 — Jardim Jaú (Zona Leste), São Paulo - SP, 03710-060
-  - Instagram: https://www.instagram.com/salaodosprimoss/
-  - Google Meu Negócio: https://www.google.com/searchviewer/10?svid=CAwSHRIbCgNwdnESFENnMHZaeTh4TVdZeWQyYzNkR3R4GAo
-  - Telefone de contato: (11) 94400-0738
-  - Responsável pela organização: Alaide
+  - Endereço: R. Bernardino Vergueiro, 276 — Jardim Jaú (Zona Leste), São Paulo - SP, 03710-060
+  - Instagram: <https://www.instagram.com/salaodosprimoss/>
+  - Google Meu Negócio: <https://www.google.com/searchviewer/10?svid=CAwSHRIbCgNwdnESFENnMHZaeTh4TVdZeWQyYzNkR3R4GAo>
+  - Telefone: (11) 94400-0738
+  - Responsável: Alaide
   - Fotos da visita de campo:
   - ![Foto da visita](.github/workflows/Imagem1.jpeg)
   - ![Foto da visita](.github/workflows/Imagem2.jpeg)
@@ -45,39 +46,109 @@
   - O **contato com o cliente** (via WhatsApp) alimenta tanto a marcação de horário quanto eventuais dúvidas durante o atendimento — mas, como ocorre durante o expediente, compete pela atenção do profissional com o **atendimento em andamento**, podendo estender o tempo do procedimento.
   - O **atendimento/execução do procedimento** consome o tempo reservado na agenda; procedimentos mais longos (ex.: coloração para loiro, que leva o dobro do tempo por causa da cor natural do cabelo) precisam ser considerados já na hora de marcar o horário, para não invadir o horário do próximo cliente.
 - **Fluxogramas (opcional):** *(Anexar como imagem no repositório — ex.: um fluxograma para "Marcar horário" e outro para "Atendimento", mostrando as decisões: "há tempo disponível?", "procedimento é padrão ou requer tempo extra?", etc.)*
+- O problema central relatado na entrevista é o **controle de horários**. Por isso, o núcleo do modelo é a agenda (cliente, profissional, procedimento, agendamento). Três assuntos foram mapeados nos processos (Seção 3), mas **não viraram entidades** nesta entrega, e a decisão é intencional:
+ 
+| Assunto                | Decisão nesta entrega                    | Justificativa (vinda da observação no salão)                                                                                                                                                                                                                                  |
+| ---------------------- | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Pagamento              | Fora do banco; recebido presencialmente  | O valor não é tabelado: depende do tamanho e das características do cabelo (ex.: uma progressiva em cabelo curto não custa o mesmo que em cabelo longo) e é definido no atendimento. O pagamento é feito no próprio salão, sem cobrança antecipada. **[CONFIRMAR com Alaide]** |
+| Material/insumos       | Fora do banco; sem controle de estoque   | O material é escolhido pelo profissional e é pré-requisito para qualquer atendimento; hoje não há controle de estoque a ser substituído. **[CONFIRMAR com Alaide]**                                                                                                            |
+| Comissão e caixa       | Fora do banco                            | Dependem do pagamento, que está fora do escopo. **[CONFIRMAR com Alaide]**                                                                                                                                                                                                    |
+ 
+**Extensão prevista:** o modelo foi pensado para crescer. `Pagamento`, `Produto/Insumo` e `Fornecedor` poderiam se ligar a `Agendamento` sem alterar a estrutura atual.
+ 
+> **[DECISÃO DO GRUPO]** Para registrar o valor realmente cobrado sem criar uma entidade nova, o grupo pode incluir `valor_cobrado` (opcional) em `Agendamento`, mantendo `preco` em `Procedimento` como valor de referência. Se adotado, atualizar dicionário e DER.
+ 
 
 ---
+### 2.1 Processos centrais (modelados)
+ 
+| # | Processo | Descrição |
+|---|----------|-----------|
+| P1 | **Marcação de horário** | Registro do agendamento do cliente (hoje em caderno). Exige consultar a agenda e verificar tempo livre compatível com a duração do procedimento. |
+| P2 | **Organização da agenda** | Manutenção dos horários por profissional, evitando conflitos. |
+| P3 | **Contato e confirmação com o cliente** | Feito presencialmente e por WhatsApp, para marcar, confirmar ou tirar dúvidas. |
+| P4 | **Atendimento / execução do procedimento** | Realização do serviço contratado; cada procedimento tem duração própria (ex.: coloração para loiro leva o dobro do tempo). |
+ 
+### 2.2 Processos complementares (mapeados)
+ 
+| # | Processo | Descrição | Relação com o modelo |
+|---|----------|-----------|----------------------|
+| P5 | **Cancelamento e remarcação** | O cliente avisa que não virá ou pede outro horário; o horário liberado volta a ficar disponível. **[CONFIRMAR prazo e como é feito hoje]** | Modelado: `status` do Agendamento (RF06, RF07). |
+| P6 | **Cadastro de clientes** | Coleta de nome e contato na primeira visita ou no primeiro agendamento. | Modelado: entidade Cliente (RF01). |
+| P7 | **Recebimento do pagamento** | Feito presencialmente, ao final do atendimento, com valor definido conforme o cabelo. **[CONFIRMAR formas de pagamento]** | Fora do escopo (Seção 2). |
+| P8 | **Venda de produtos no salão** | **[CONFIRMAR se o salão vende produtos; há produtos expostos nas fotos da visita]** | Fora do escopo (Seção 2). |
+| P9 | **Comissão dos profissionais** | **[CONFIRMAR se existe e como é calculada]** | Fora do escopo (Seção 2). |
+| P10 | **Fechamento de caixa** | **[CONFIRMAR como é feito]** | Fora do escopo (Seção 2). |
+| P11 | **Compra de produtos e insumos** | O material é escolhido pelos profissionais. **[CONFIRMAR quem compra e de onde]** | Fora do escopo (Seção 2). |
+| P12 | **Cadastro de fornecedores** | **[CONFIRMAR]** | Fora do escopo (Seção 2). |
+| P13 | **Controle de estoque de insumos** | Não há controle formal hoje. **[CONFIRMAR]** | Fora do escopo (Seção 2). |
 
 ## 3. Requisitos do Sistema
 
 ### 3.1 Requisitos Funcionais
 
-RF01. Permitir **cadastrar clientes**, com dados básicos de contato.
-- RF02. Permitir **cadastrar procedimentos** oferecidos pelo salão, incluindo a duração estimada de cada um.
-- RF03. Permitir **cadastrar os profissionais** do salão e sua especialidade/disponibilidade.
-- RF07. Permitir **consultar a agenda** (por dia, por profissional) para saber quais horários estão livres — substituindo a necessidade de o cliente ir até o salão perguntar pessoalmente.
-- RF08. Permitir **cancelar ou remarcar** um agendamento existente.
-- RF09. Permitir consultar o histórico de atendimentos de um cliente.
+- RNF01. Cadastrar **clientes**, com dados básicos de contato.
+- RNF02. Cadastrar **procedimentos** oferecidos pelo salão, incluindo a duração estimada e o preço de referência.
+- RNF03. Cadastrar **profissionais**, suas **especialidades** e se estão ativos.
+- RNF04. **Registrar um agendamento** (cliente, profissional, procedimento, data e hora de início), calculando automaticamente a hora de término pela duração do procedimento.
+- RNF05. **Impedir conflitos de agenda:** recusar agendamento cujo intervalo se sobreponha a outro do mesmo profissional ou envolva profissional inativo.
+- RNF06. **Cancelar** um agendamento existente, liberando o horário.
+- RNF07. **Remarcar** um agendamento existente, validando o novo horário como no RF05.
+- RNF08. **Consultar a agenda** por dia e por profissional, para saber quais horários estão livres — substituindo a ida do cliente ao salão.
+- RNF09. **Registrar a conclusão** do atendimento (atualizar o status do agendamento).
+- RNF10. Consultar o **histórico de atendimentos** de um cliente. 
   
 
 ### 3.2 Requisitos Não Funcionais
 
-- RNF01. **Usabilidade:** interface simples, já que os usuários (profissionais do salão) não necessariamente têm familiaridade avançada com tecnologia — a lógica deve ser tão rápida quanto anotar no caderno.
-- RNF02. **Desempenho:** a consulta de horários disponíveis deve responder rapidamente em horários de pico, quando o salão está cheio e o tempo do profissional é escasso.
-- RNF03. **Segurança/privacidade:** dados de contato dos clientes (telefone) devem ser protegidos e não expostos publicamente.
-- RNF04. **Disponibilidade:** o sistema deve estar acessível durante o horário de funcionamento do salão, e idealmente também fora dele, para permitir que clientes consultem/solicitem horários remotamente.
-- RNF05. **Confiabilidade:** o sistema deve evitar conflitos de agenda (dois clientes no mesmo horário/profissional), já que isso é a maior fonte de problema com o caderno.
+- RNF01. Usabilidade | Interface simples; os usuários não têm familiaridade avançada com tecnologia, e registrar deve ser tão rápido quanto anotar no caderno.
+- RNF02. Desempenho | A consulta de horários livres deve responder rapidamente nos horários de pico.
+- RNF03. Segurança/privacidade | Dados pessoais dos clientes (telefone e e-mail) devem ser protegidos e não expostos publicamente (ver Seção 5.4 e LGPD).
+- RNF04. Disponibilidade | Acessível durante o horário de funcionamento e, idealmente, fora dele, para consulta remota de horários.
+- RNF05. Confiabilidade | Evitar conflitos de agenda (dois clientes no mesmo horário/profissional), principal fonte de problema do caderno.
 
 ---
 
 ## 4. Regras de Negócio
 
-- **Regras operacionais:**
-  - Um horário só pode ser marcado se houver tempo disponível compatível com a duração do procedimento (ex.: pintar o cabelo para ficar loiro exige o dobro do tempo de um procedimento padrão, por causa da cor natural do cabelo).
-  - Nenhum cliente pode perder o horário reservado para dar lugar a outro cliente com um procedimento mais longo — a ordem e a duração reservada devem ser respeitadas.
-- **Restrições organizacionais:**
-  - Essas regras existem para garantir que **todos os clientes mantenham seu horário reservado**, sem serem "atropelados" pela extensão do atendimento de outro cliente que ocupou o horário anterior. O não cumprimento gera atrasos em cascata na agenda do dia e insatisfação dos clientes.
-
+### 4.1 Regras operacionais
+ 
+| Código | Regra |
+|--------|-------|
+| RN01 | Nenhum profissional pode ter dois agendamentos com horários sobrepostos. |
+| RN02 | O tempo reservado no agendamento é a **duração do procedimento** (ex.: coloração para loiro = tempo padrão × 2, pela cor natural do cabelo). |
+| RN03 | Um horário reservado não pode ser tomado por outro cliente, mesmo que o procedimento de outro seja mais longo. |
+| RN04 | Profissional **inativo** não recebe novos agendamentos. |
+| RN05 | Cancelamento com antecedência mínima de **[CONFIRMAR: X horas]**, para o horário poder ser reaproveitado. |
+| RN06 | Tolerância de atraso do cliente de **[CONFIRMAR: X minutos]**; passado o prazo, o agendamento pode ser cancelado ou ajustado. |
+| RN07 | O valor final cobrado depende das características do cabelo e é definido no atendimento; o pagamento é feito presencialmente. **[CONFIRMAR]** |
+| RN08 | Formas de pagamento aceitas: **[CONFIRMAR: dinheiro, Pix, cartão…]**. |
+| RN09 | Sinal ou pagamento antecipado: **[CONFIRMAR: não é exigido?]**. |
+| RN10 | Comissão do profissional: **[CONFIRMAR se existe e qual o percentual]**. |
+ 
+### 4.2 Restrições organizacionais e legais
+ 
+| Código | Restrição |
+|--------|-----------|
+| RS01 | **LGPD (Lei 13.709/2018):** telefone e e-mail do cliente são dados pessoais; devem ser coletados só para fins de agendamento e contato, com acesso restrito e possibilidade de correção e exclusão a pedido do titular. |
+| RS02 | **Normas sanitárias (vigilância sanitária):** esterilização de instrumentos e manuseio de produtos químicos. Não geram dados no modelo atual, mas condicionam o tempo de preparo entre atendimentos. **[CONFIRMAR]** |
+| RS03 | **Nota fiscal:** **[CONFIRMAR se o salão emite e em que situações]**. Fora do escopo do modelo atual. |
+ 
+### 4.3 Motivo das regras principais
+ 
+As regras RN01 a RN04 existem para que **todos os clientes mantenham o horário reservado**, sem serem "atropelados" por atendimentos longos anteriores. O descumprimento gera atrasos em cascata na agenda do dia e insatisfação dos clientes.
+ 
+### 4.4 Cobertura das regras no modelo
+ 
+| Regra | Onde aparece no modelo |
+|-------|------------------------|
+| RN01 | Agendamento: `hora_inicio`, `hora_fim`, `id_profissional` (verificação de intervalo) |
+| RN02 | Procedimento: `duracao_minutos`; Agendamento: `hora_fim` calculada |
+| RN03 | Mesma verificação da RN01 |
+| RN04 | Profissional: `ativo` |
+| RN05–RN06 | Agendamento: `status`, `observacoes` |
+| RS01 | Seção 6.5 (acesso e LGPD) |
+ 
 ---
 
 ## 5. Dicionário de Dados Conceitual (Preliminar)
@@ -91,95 +162,194 @@ RF01. Permitir **cadastrar clientes**, com dados básicos de contato.
 [Ver HTML do Dicionário de dados](dicionario_de_dados.html)
 
 
+### 5.1 Entidades e atributos
+ 
+Resumo (detalhe em `dicionario_de_dados.html`):
+ 
+| Entidade | Atributos |
+|----------|-----------|
+| Cliente | **id_cliente** (PK), nome, telefone, telefone_2, email, email_2, data_cadastro |
+| Profissional | **id_profissional** (PK), nome, telefone, ativo, data_cadastro |
+| Especialidade | **id_especialidade** (PK), nome, descricao |
+| Profissional_Especialidade | **id_profissional_especialidade** (PK), id_profissional (FK), id_especialidade (FK) |
+| Procedimento | **id_procedimento** (PK), nome, duracao_minutos, preco, descricao |
+| Agendamento | **id_agendamento** (PK), data_agendamento, hora_inicio, hora_fim, status, observacoes, data_criacao, id_cliente (FK), id_profissional (FK), id_procedimento (FK) |
+ 
+### 5.2 Fluxo de dados
+ 
+1. O cliente pede um horário (presencial ou WhatsApp) → o atendente consulta **Agenda** (leitura de `Agendamento` por profissional/dia) e `Procedimento.duracao_minutos`.
+2. Havendo tempo livre, grava-se um novo **Agendamento** com `id_cliente`, `id_profissional`, `id_procedimento`, data, `hora_inicio` e `hora_fim` calculada; `status = marcado`.
+3. Se o cliente é novo, grava-se antes o **Cliente** (nome e contato).
+4. A confirmação com o cliente usa `Cliente.telefone`.
+5. No dia, o atendimento é realizado e `status` passa para `concluído`; em caso de falta ou aviso, `status = cancelado` e o horário volta a ficar livre.
+7. O histórico do cliente é a leitura de seus `Agendamento` com `status = concluído`.
 
-### Entidade: Cliente
-
-| Atributo | Descrição | Regra de negócio associada |
-|----------|-----------|------------------------------|
-| id_cliente | Identificador único do cliente | Obrigatório, gerado pelo sistema |
-| nome | Nome do cliente | Obrigatório |
-| telefone | Contato principal para confirmação de agendamentos | Obrigatório; dado sensível, deve ser protegido |
-| telefone_2 | Telefone alternativo do cliente | Opcional; dado sensível, deve ser protegido |
-| email | E-mail principal do cliente | Opcional; dado sensível, deve ser protegido |
-| email_2 | E-mail alternativo do cliente | Opcional; dado sensível, deve ser protegido |
-| data_cadastro | Data em que o cliente foi cadastrado | Gerado automaticamente |
-
-### Entidade: Profissional
-
-| Atributo | Descrição | Regra de negócio associada |
-|----------|-----------|------------------------------|
-| id_profissional | Identificador único do profissional | Obrigatório, gerado pelo sistema |
-| nome | Nome do profissional | Obrigatório |
-| telefone | Contato do profissional | Opcional; dado sensível, deve ser protegido |
-| ativo | Indica se o profissional está atuando no salão (verdadeiro/falso) | Obrigatório; profissional inativo não pode receber novos agendamentos |
-| data_cadastro | Data em que o profissional foi cadastrado | Gerado automaticamente |
-
-### Entidade: Especialidade
-
-| Atributo | Descrição | Regra de negócio associada |
-|----------|-----------|------------------------------|
-| id_especialidade | Identificador único da especialidade | Obrigatório, gerado pelo sistema |
-| nome | Nome da especialidade (ex.: coloração, corte, tratamentos capilares) | Obrigatório; não pode se repetir |
-| descricao | Descrição da especialidade | Opcional |
-
-### Entidade associativa: Profissional_Especialidade
-*(resolve o relacionamento N:N entre Profissional e Especialidade no modelo lógico)*
-
-| Atributo | Descrição | Regra de negócio associada |
-|----------|-----------|------------------------------|
-| id_profissional_especialidade | Identificador único do vínculo | Obrigatório, gerado pelo sistema |
-| id_profissional | Profissional que possui a especialidade (chave estrangeira) | Obrigatório |
-| id_especialidade | Especialidade que o profissional possui (chave estrangeira) | Obrigatório; a mesma combinação profissional + especialidade não pode se repetir |
-
-### Entidade: Procedimento
-
-| Atributo | Descrição | Regra de negócio associada |
-|----------|-----------|------------------------------|
-| id_procedimento | Identificador único do procedimento | Obrigatório, gerado pelo sistema |
-| nome | Nome do procedimento (ex.: corte, progressiva, coloração) | Obrigatório |
-| duracao_minutos | Duração média do procedimento, em minutos | Obrigatório; usada para calcular disponibilidade de horário (ex.: coloração para loiro = tempo padrão x2) |
-| preco | Valor cobrado pelo procedimento | Opcional na modelagem conceitual |
-| descricao | Descrição do procedimento | Opcional |
-
-### Entidade: Agendamento
-
-| Atributo | Descrição | Regra de negócio associada |
-|----------|-----------|------------------------------|
-| id_agendamento | Identificador único do agendamento | Obrigatório, gerado pelo sistema |
-| data_agendamento | Data do atendimento | Obrigatório |
-| hora_inicio | Horário de início do procedimento | Obrigatório; não pode coincidir com outro agendamento do mesmo profissional |
-| hora_fim | Horário previsto de término | Calculado a partir de hora_inicio + duracao_minutos do procedimento |
-| status | Situação do agendamento (marcado, concluído, cancelado) | Obrigatório |
-| observacoes | Observações sobre o atendimento | Opcional |
-| data_criacao | Data e hora em que o agendamento foi registrado | Gerado automaticamente |
-| id_cliente | Cliente que realizou o agendamento (chave estrangeira) | Obrigatório |
-| id_profissional | Profissional que realizará o atendimento (chave estrangeira) | Obrigatório; deve estar ativo |
-| id_procedimento | Procedimento que será realizado (chave estrangeira) | Obrigatório |
-
+### 5.3 Convenções
+ 
+| Item | Convenção |
+|------|-----------|
+| SGBD alvo | **[CONFIRMAR: ex. MySQL 8 ou PostgreSQL]** |
+| Collation / charset | UTF-8 (ex.: `utf8mb4_0900_ai_ci` no MySQL) **[ajustar ao SGBD escolhido]** |
+| Notação do DER | Cardinalidades no formato (mínimo, máximo), lidas a partir de cada entidade |
+| Nomes | minúsculas, sem acento, palavras separadas por `_` |
+| Prefixos/sufixos | `id_` para chaves; `data_` para datas; `hora_` para horários; `_2` para segundo contato |
+| Chaves | PK = `id_<entidade>`; FK mantém o nome da PK de origem |
+| Versão | v2 — **[inserir data da revisão]** (v1: primeiro esboço da Entrega 1) |
+ 
+### 5.4 Por entidade: expressão formal, leitura, tipos físicos e índices
+ 
+**Cliente**
+- Expressão formal: `CLIENTE (id_cliente, nome, telefone, telefone_2, email, email_2, data_cadastro)`
+- Leitura: um cliente realiza de zero a vários agendamentos (0,n); cada agendamento é realizado por exatamente um cliente (1,1).
+| Atributo | Tipo físico | Restrições |
+|----------|-------------|------------|
+| id_cliente | INT | PK, auto incremento |
+| nome | VARCHAR(100) | NOT NULL |
+| telefone | VARCHAR(15) | NOT NULL |
+| telefone_2 | VARCHAR(15) | NULL |
+| email | VARCHAR(100) | NULL |
+| email_2 | VARCHAR(100) | NULL |
+| data_cadastro | DATE | DEFAULT data atual |
+ 
+Índices: PK em `id_cliente`; índice em `nome` (busca) e em `telefone`.
+ 
+**Profissional**
+- Expressão formal: `PROFISSIONAL (id_profissional, nome, telefone, ativo, data_cadastro)`
+- Leitura: um profissional atende de zero a vários agendamentos (0,n); cada agendamento é atendido por exatamente um profissional (1,1). Um profissional possui de zero a várias especialidades (0,n).
+| Atributo | Tipo físico | Restrições |
+|----------|-------------|------------|
+| id_profissional | INT | PK, auto incremento |
+| nome | VARCHAR(100) | NOT NULL |
+| telefone | VARCHAR(15) | NULL |
+| ativo | BOOLEAN | NOT NULL, DEFAULT verdadeiro |
+| data_cadastro | DATE | DEFAULT data atual |
+ 
+Índices: PK; índice em `ativo`.
+ 
+**Especialidade**
+- Expressão formal: `ESPECIALIDADE (id_especialidade, nome, descricao)`
+- Leitura: uma especialidade pode ser possuída por zero ou vários profissionais (0,n).
+| Atributo | Tipo físico | Restrições |
+|----------|-------------|------------|
+| id_especialidade | INT | PK, auto incremento |
+| nome | VARCHAR(60) | NOT NULL, UNIQUE |
+| descricao | VARCHAR(255) | NULL |
+ 
+Índices: PK; índice único em `nome`.
+ 
+**Profissional_Especialidade**
+- Expressão formal: `PROFISSIONAL_ESPECIALIDADE (id_profissional_especialidade, #id_profissional, #id_especialidade)`
+- Leitura: resolve o N:N entre Profissional e Especialidade; cada vínculo liga exatamente um profissional a exatamente uma especialidade.
+| Atributo | Tipo físico | Restrições |
+|----------|-------------|------------|
+| id_profissional_especialidade | INT | PK, auto incremento |
+| id_profissional | INT | FK → Profissional, NOT NULL |
+| id_especialidade | INT | FK → Especialidade, NOT NULL |
+ 
+Índices: PK; índice único composto (`id_profissional`, `id_especialidade`).
+ 
+**Procedimento**
+- Expressão formal: `PROCEDIMENTO (id_procedimento, nome, duracao_minutos, preco, descricao)`
+- Leitura: um procedimento pode constar em zero ou vários agendamentos (0,n); cada agendamento tem exatamente um procedimento (1,1).
+| Atributo | Tipo físico | Restrições |
+|----------|-------------|------------|
+| id_procedimento | INT | PK, auto incremento |
+| nome | VARCHAR(80) | NOT NULL |
+| duracao_minutos | INT | NOT NULL, CHECK > 0 |
+| preco | DECIMAL(8,2) | NULL (valor de referência) |
+| descricao | VARCHAR(255) | NULL |
+ 
+Índices: PK; índice em `nome`.
+ 
+**Agendamento**
+- Expressão formal: `AGENDAMENTO (id_agendamento, data_agendamento, hora_inicio, hora_fim, status, observacoes, data_criacao, #id_cliente, #id_profissional, #id_procedimento)`
+- Leitura: cada agendamento é realizado por exatamente um cliente, atendido por exatamente um profissional e refere-se a exatamente um procedimento.
+| Atributo | Tipo físico | Restrições |
+|----------|-------------|------------|
+| id_agendamento | INT | PK, auto incremento |
+| data_agendamento | DATE | NOT NULL |
+| hora_inicio | TIME | NOT NULL |
+| hora_fim | TIME | NOT NULL, calculado (hora_inicio + duração) |
+| status | VARCHAR(15) | NOT NULL, valores: marcado, concluído, cancelado |
+| observacoes | VARCHAR(255) | NULL |
+| data_criacao | DATETIME | DEFAULT data/hora atual |
+| id_cliente | INT | FK → Cliente, NOT NULL |
+| id_profissional | INT | FK → Profissional, NOT NULL (deve estar ativo) |
+| id_procedimento | INT | FK → Procedimento, NOT NULL |
+ 
+Índices: PK; índice composto (`id_profissional`, `data_agendamento`, `hora_inicio`) para a verificação de conflito e a consulta de agenda; índice em `id_cliente` para o histórico.
+ 
+### 5.5 Log de acesso e acesso por operação (LGPD)
+ 
+**Log de acesso** (requisito de rastreabilidade para dados pessoais). Cada acesso a dados de cliente registra:
+ 
+| Campo | Descrição |
+|-------|-----------|
+| usuario | Quem acessou **[CONFIRMAR como os usuários serão identificados]** |
+| data_hora | Quando |
+| operacao | Criar, consultar, alterar ou excluir |
+| entidade | Tabela acessada |
+| id_registro | Registro afetado |
+ 
+> Se o grupo quiser que o log apareça no DER, será preciso incluí-lo como entidade (e uma entidade Usuário).
+ 
+**Acesso por operação** (C = criar, L = ler, A = alterar, E = excluir). Perfis **[CONFIRMAR]**:
+ 
+| Entidade | Responsável (Alaide) | Profissional |
+|----------|----------------------|--------------|
+| Cliente | C L A E | C L |
+| Profissional | C L A E | L |
+| Especialidade | C L A E | L |
+| Profissional_Especialidade | C L A E | L |
+| Procedimento | C L A E | L |
+| Agendamento | C L A E | C L A (os próprios) |
+ 
+**LGPD:** telefone e e-mail são **dados pessoais**; ficam visíveis apenas aos perfis acima, são usados só para agendamento e contato, e o cliente pode pedir correção ou exclusão (exclusão do cadastro preserva o histórico apenas de forma anonimizada **[CONFIRMAR abordagem]**).
+ 
 ---
-
 ## 6. Modelagem Conceitual (Entidades, Atributos, Relacionamentos)
-
-- **Entidades reconhecidas:**
-  - **Cliente** — pessoa que agenda e recebe o serviço; entidade central do negócio, mencionada diretamente pela responsável como algo que precisa ser registrado.
-  - **Profissional** — quem executa o procedimento; necessário para controlar a agenda individual e evitar conflitos de horário por profissional.
-  - **Procedimento** — o serviço oferecido pelo salão; necessário porque sua duração determina diretamente as regras de agendamento relatadas na entrevista.
-  - **Agendamento** — entidade associativa que conecta Cliente, Profissional e Procedimento em uma data/horário específico; é o núcleo do problema relatado (controle de horários hoje feito em papel).
-  - **Especialidade** — especialidades que cada profissional domina, para melhorar as escolhas do cliente.
-- **Atributos e classificações:** detalhados no dicionário de dados (Seção 5).
-- **Relacionamentos pertinentes** *(cardinalidades no formato (mínimo, máximo), lidas a partir de cada entidade)*:
-  - **Cliente realiza Agendamento:** um Cliente realiza de zero a vários Agendamentos — (0,n) — e cada Agendamento é realizado por exatamente um Cliente — (1,1). Relacionamento 1:N.
-  - **Profissional atende Agendamento:** um Profissional atende de zero a vários Agendamentos — (0,n) — e cada Agendamento é atendido por exatamente um Profissional — (1,1). Relacionamento 1:N.
-  - **Procedimento tem Agendamento:** um Procedimento pode constar em zero ou vários Agendamentos — (0,n) — e cada Agendamento tem exatamente um Procedimento — (1,1). Relacionamento 1:N.
-  - **Profissional possui Especialidade:** um Profissional pode possuir zero ou várias Especialidades — (0,n) — e uma Especialidade pode ser possuída por zero ou vários Profissionais — (0,n). Relacionamento N:N, resolvido no modelo lógico pela tabela associativa Profissional_Especialidade.
-  - **Agendamento** é o elo que une as três entidades acima em um único evento (cliente + profissional + procedimento + data/horário).
-- **Restrições e políticas organizacionais aplicadas ao modelo:**
-  - Um Agendamento só é válido se o intervalo de tempo (hora_inicio até hora_fim) não colidir com outro Agendamento do mesmo Profissional — reflete diretamente a regra de negócio de que nenhum cliente pode perder seu horário para outro.
-  - A duração do Procedimento é o que define o "tamanho" do bloco de tempo reservado no Agendamento.
-
+ 
+- **Entidades:**
+  - **Cliente:** pessoa que agenda e recebe o serviço.
+  - **Profissional:** quem executa o procedimento; necessário para a agenda individual e para evitar conflitos.
+  - **Procedimento:** serviço oferecido; sua duração determina as regras de agendamento relatadas na entrevista.
+  - **Agendamento:** evento no tempo que conecta Cliente, Profissional e Procedimento; núcleo do problema (controle de horários hoje feito em papel).
+  - **Especialidade:** áreas de atuação dos profissionais, para orientar a escolha do cliente.
+- **Atributos:** ver Seção 6.
+- **Relacionamentos** (cardinalidades (mín,máx), lidas a partir de cada entidade):
+| Relacionamento | Lado A | Lado B | Tipo |
+|----------------|--------|--------|------|
+| Cliente **realiza** Agendamento | Cliente (0,n) | Agendamento (1,1) | 1:N |
+| Profissional **atende** Agendamento | Profissional (0,n) | Agendamento (1,1) | 1:N |
+| Procedimento **tem** Agendamento | Procedimento (0,n) | Agendamento (1,1) | 1:N |
+| Profissional **possui** Especialidade | Profissional (0,n) | Especialidade (0,n) | N:N (resolvido por Profissional_Especialidade) |
+ 
+- **Restrições aplicadas ao modelo:**
+  - O intervalo `hora_inicio` a `hora_fim` de um agendamento não pode colidir com outro do mesmo profissional.
+  - A duração do Procedimento define o tamanho do bloco de tempo reservado.
 ---
-
+ 
 ## 7. Diagrama Entidade-Relacionamento (DER)
+
+- **Entidades:**
+  - **Cliente:** pessoa que agenda e recebe o serviço.
+  - **Profissional:** quem executa o procedimento; necessário para a agenda individual e para evitar conflitos.
+  - **Procedimento:** serviço oferecido; sua duração determina as regras de agendamento relatadas na entrevista.
+  - **Agendamento:** evento no tempo que conecta Cliente, Profissional e Procedimento; núcleo do problema (controle de horários hoje feito em papel).
+  - **Especialidade:** áreas de atuação dos profissionais, para orientar a escolha do cliente.
+- **Atributos:** ver Seção 6.
+- **Relacionamentos** (cardinalidades (mín,máx), lidas a partir de cada entidade):
+| Relacionamento | Lado A | Lado B | Tipo |
+|----------------|--------|--------|------|
+| Cliente **realiza** Agendamento | Cliente (0,n) | Agendamento (1,1) | 1:N |
+| Profissional **atende** Agendamento | Profissional (0,n) | Agendamento (1,1) | 1:N |
+| Procedimento **tem** Agendamento | Procedimento (0,n) | Agendamento (1,1) | 1:N |
+| Profissional **possui** Especialidade | Profissional (0,n) | Especialidade (0,n) | N:N (resolvido por Profissional_Especialidade) |
+ 
+- **Restrições aplicadas ao modelo:**
+  - O intervalo `hora_inicio` a `hora_fim` de um agendamento não pode colidir com outro do mesmo profissional.
+  - A duração do Procedimento define o tamanho do bloco de tempo reservado.
+---
 
 **DER Conceitual** (`DER Conceitual.png`):
 
@@ -197,14 +367,16 @@ RF01. Permitir **cadastrar clientes**, com dados básicos de contato.
 
 ## 8. Justificativa Técnica
 
-O modelo optou por **separar Cliente, Profissional e Procedimento como entidades independentes**, em vez de misturar esses dados dentro do próprio Agendamento, porque cada um tem ciclo de vida e atributos próprios que são reutilizados em múltiplos agendamentos (um mesmo cliente volta várias vezes; um mesmo procedimento é feito por vários clientes). Modelar cada um separadamente evita repetição de dados e permite consultas como "histórico de um cliente" ou "agenda de um profissional" sem redundância.
-
-A entidade **Agendamento** foi criada como entidade associativa (e não como um simples atributo de Cliente ou Profissional) porque ela representa um **evento no tempo** com atributos próprios (data, hora de início, hora de fim, status) e é exatamente o ponto onde as regras de negócio mais críticas se aplicam — o conflito de horários relatado na entrevista. Cardinalidades 1:N (Cliente→Agendamento, Profissional→Agendamento, Procedimento→Agendamento) foram escolhidas porque, na prática observada, cada agendamento envolve exatamente um cliente, um profissional e um procedimento por vez — não havendo, pelo relato de campo, atendimentos simultâneos de múltiplos clientes por um mesmo profissional. Por isso, do lado do Agendamento a cardinalidade é sempre (1,1), e do lado das demais entidades é (0,n), já que um cliente novo, um profissional recém-contratado ou um procedimento ainda não realizado podem existir sem nenhum agendamento.
-
-**Especialidade** foi modelada como entidade própria (e não como um campo de texto dentro de Profissional) para padronizar os nomes das áreas de atuação, evitar variações de escrita e permitir, no futuro, filtrar profissionais por especialidade na hora do agendamento. O relacionamento com Profissional é **N:N** porque um mesmo profissional pode dominar várias especialidades (ex.: corte e coloração) e uma mesma especialidade é compartilhada por vários profissionais; no modelo lógico isso é resolvido pela tabela associativa Profissional_Especialidade, evitando atributos multivalorados.
-
-Como alternativa, o grupo considerou modelar "duração" como atributo fixo do Agendamento em vez de herdá-lo do Procedimento; optou-se por manter a duração no Procedimento porque ela é uma característica do serviço em si (ex.: coloração para loiro sempre leva o dobro do tempo), e não algo que varia agendamento a agendamento — isso mantém a regra de negócio central (tempo necessário por tipo de procedimento) centralizada em um único lugar, facilitando manutenção futura.
-
+O modelo **separa Cliente, Profissional e Procedimento como entidades independentes**, em vez de misturar esses dados no Agendamento, porque cada um tem ciclo de vida e atributos próprios, reutilizados em muitos agendamentos (um cliente volta várias vezes; um procedimento é feito por vários clientes). Isso evita repetição de dados e permite consultas como "histórico de um cliente" ou "agenda de um profissional".
+ 
+**Agendamento** é uma entidade, e não um atributo de Cliente ou Profissional, porque representa um **evento no tempo** com atributos próprios (data, hora de início, hora de fim, status) e é onde se aplicam as regras mais críticas, como o conflito de horários relatado na entrevista. As cardinalidades 1:N foram escolhidas porque, pela observação de campo, cada agendamento envolve exatamente um cliente, um profissional e um procedimento, sem atendimentos simultâneos de vários clientes pelo mesmo profissional. Por isso, do lado do Agendamento a cardinalidade é (1,1) e, do lado das demais entidades, (0,n): um cliente novo, um profissional recém-contratado ou um procedimento ainda não realizado podem existir sem agendamentos.
+ 
+**Especialidade** é entidade própria, e não um campo de texto em Profissional, para padronizar os nomes e permitir filtrar profissionais por especialidade no futuro. O relacionamento é **N:N** porque um profissional pode dominar várias especialidades e uma especialidade é compartilhada por vários profissionais; no modelo lógico, a tabela associativa Profissional_Especialidade evita atributos multivalorados.
+ 
+**Duração no Procedimento, e não no Agendamento:** o grupo considerou guardar a duração no agendamento, mas manteve-a no Procedimento porque é característica do serviço (coloração para loiro sempre leva o dobro do tempo) e não varia de agendamento para agendamento. Isso concentra a regra central em um só lugar.
+ 
+**Pagamento e insumos fora do modelo:** o valor cobrado depende das características do cabelo e é acertado presencialmente, e o material é escolhido pelos profissionais, sem controle de estoque hoje. Como o problema relatado é a agenda, o grupo priorizou o núcleo do agendamento e deixou esses assuntos como extensão (Seção 2).
+ 
 ---
 
 ## 9. Uso de Inteligência Artificial
