@@ -56,9 +56,6 @@
  
 **Extensão prevista:** o modelo foi pensado para crescer. `Pagamento`, `Produto/Insumo` e `Fornecedor` poderiam se ligar a `Agendamento` sem alterar a estrutura atual.
  
-> **[DECISÃO DO GRUPO]** Para registrar o valor realmente cobrado sem criar uma entidade nova, o grupo pode incluir `valor_cobrado` (opcional) em `Agendamento`, mantendo `preco` em `Procedimento` como valor de referência. Se adotado, atualizar dicionário e DER.
- 
-
 ---
 ### 2.1 Processos centrais (modelados)
  
@@ -75,7 +72,7 @@
 |---|----------|-----------|----------------------|
 | P5 | **Cancelamento e remarcação** | O cliente avisa que não virá ou pede outro horário; o horário liberado volta a ficar disponível.| Modelado: `status` do Agendamento (RF06, RF07). |
 | P6 | **Cadastro de clientes** | Coleta de nome e contato na primeira visita ou no primeiro agendamento. | Modelado: entidade Cliente (RF01). |
-| P7 | **Recebimento do pagamento** | Feito presencialmente, ao final do atendimento, com valor definido conforme o cabelo. **[CONFIRMAR formas de pagamento]** | Fora do escopo (Seção 2). |
+| P7 | **Recebimento do pagamento** | Feito presencialmente, ao final do atendimento, com valor definido conforme o cabelo. | Fora do escopo (Seção 2). |
 | P8 | **Venda de produtos no salão** | O salão não faz venda de produtos | Fora do escopo (Seção 2). |
 | P9 | **Comissão dos profissionais** | A comissão é feita após retirada dos 30% destinado ao salão | Fora do escopo (Seção 2). |
 | P10 | **Fechamento de caixa** | Não possui fechamento do caixa de forma diaria | Fora do escopo (Seção 2). |
@@ -119,20 +116,20 @@
 | RN02 | O tempo reservado no agendamento é a **duração do procedimento** (ex.: coloração para loiro = tempo padrão × 2, pela cor natural do cabelo). |
 | RN03 | Um horário reservado não pode ser tomado por outro cliente, mesmo que o procedimento de outro seja mais longo. |
 | RN04 | Profissional **inativo** não recebe novos agendamentos. |
-| RN05 | Cancelamento com antecedência mínima de **[CONFIRMAR: X horas]**, para o horário poder ser reaproveitado. |
-| RN06 | Tolerância de atraso do cliente de **[CONFIRMAR: X minutos]**; passado o prazo, o agendamento pode ser cancelado ou ajustado. |
-| RN07 | O valor final cobrado depende das características do cabelo e é definido no atendimento; o pagamento é feito presencialmente. **[CONFIRMAR]** |
-| RN08 | Formas de pagamento aceitas: **[CONFIRMAR: dinheiro, Pix, cartão…]**. |
-| RN09 | Sinal ou pagamento antecipado: **[CONFIRMAR: não é exigido?]**. |
-| RN10 | Comissão do profissional: **[CONFIRMAR se existe e qual o percentual]**. |
+| RN05 | Cancelamento com antecedência mínima de 1 dia, para o horário poder ser reaproveitado. |
+| RN06 | Tolerância de atraso do cliente de 20 minutos; passado o prazo, o agendamento pode ser cancelado ou ajustado. |
+| RN07 | O valor final cobrado depende das características do cabelo e é definido no atendimento; o pagamento é feito presencialmente. |
+| RN08 | Formas de pagamento aceitas: Debito, Credito e Pix. |
+| RN09 | Sinal ou pagamento antecipado: Não possui sinal. |
+| RN10 | Comissão do profissional: 70% . |
  
 ### 4.2 Restrições organizacionais e legais
  
 | Código | Restrição |
 |--------|-----------|
 | RS01 | **LGPD (Lei 13.709/2018):** telefone e e-mail do cliente são dados pessoais; devem ser coletados só para fins de agendamento e contato, com acesso restrito e possibilidade de correção e exclusão a pedido do titular. |
-| RS02 | **Normas sanitárias (vigilância sanitária):** esterilização de instrumentos e manuseio de produtos químicos. Não geram dados no modelo atual, mas condicionam o tempo de preparo entre atendimentos. **[CONFIRMAR]** |
-| RS03 | **Nota fiscal:** **[CONFIRMAR se o salão emite e em que situações]**. Fora do escopo do modelo atual. |
+| RS02 | **Normas sanitárias (vigilância sanitária):** esterilização de instrumentos e manuseio de produtos químicos. Não geram dados no modelo atual, mas condicionam o tempo de preparo entre atendimentos. |
+| RS03 | **Nota fiscal: Emite nota fiscal. Fora do escopo do modelo atual. |
  
 ### 4.3 Motivo das regras principais
  
@@ -188,7 +185,7 @@ Resumo (detalhe em `dicionario_de_dados.html`):
  
 | Item | Convenção |
 |------|-----------|
-| SGBD alvo | **[CONFIRMAR: ex. MySQL 8 ou PostgreSQL]** |
+| SGBD alvo | MySQL |
 | Collation / charset | UTF-8 (ex.: `utf8mb4_0900_ai_ci` no MySQL) **[ajustar ao SGBD escolhido]** |
 | Notação do DER | Cardinalidades no formato (mínimo, máximo), lidas a partir de cada entidade |
 | Nomes | minúsculas, sem acento, palavras separadas por `_` |
@@ -285,7 +282,7 @@ Resumo (detalhe em `dicionario_de_dados.html`):
  
 | Campo | Descrição |
 |-------|-----------|
-| usuario | Quem acessou **[CONFIRMAR como os usuários serão identificados]** |
+| usuario | Quem acessou pelo número de telefone |
 | data_hora | Quando |
 | operacao | Criar, consultar, alterar ou excluir |
 | entidade | Tabela acessada |
@@ -293,7 +290,7 @@ Resumo (detalhe em `dicionario_de_dados.html`):
  
 > Se o grupo quiser que o log apareça no DER, será preciso incluí-lo como entidade (e uma entidade Usuário).
  
-**Acesso por operação** (C = criar, L = ler, A = alterar, E = excluir). Perfis **[CONFIRMAR]**:
+**Acesso por operação** (C = criar, L = ler, A = alterar, E = excluir). Perfis:
  
 | Entidade | Responsável (Alaide) | Profissional |
 |----------|----------------------|--------------|
@@ -304,7 +301,7 @@ Resumo (detalhe em `dicionario_de_dados.html`):
 | Procedimento | C L A E | L |
 | Agendamento | C L A E | C L A (os próprios) |
  
-**LGPD:** telefone e e-mail são **dados pessoais**; ficam visíveis apenas aos perfis acima, são usados só para agendamento e contato, e o cliente pode pedir correção ou exclusão (exclusão do cadastro preserva o histórico apenas de forma anonimizada **[CONFIRMAR abordagem]**).
+**LGPD:** telefone e e-mail são **dados pessoais**; ficam visíveis apenas aos perfis acima, são usados só para agendamento e contato, e o cliente pode pedir correção ou exclusão (exclusão do cadastro preserva o histórico apenas de forma anonimizada).
  
 ---
 ## 6. Modelagem Conceitual (Entidades, Atributos, Relacionamentos)
