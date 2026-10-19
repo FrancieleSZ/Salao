@@ -87,16 +87,16 @@
 
 ### 3.1 Requisitos Funcionais
 
-- RNF01. Cadastrar **clientes**, com dados básicos de contato.
-- RNF02. Cadastrar **procedimentos** oferecidos pelo salão, incluindo a duração estimada e o preço de referência.
-- RNF03. Cadastrar **profissionais**, suas **especialidades** e se estão ativos.
-- RNF04. **Registrar um agendamento** (cliente, profissional, procedimento, data e hora de início), calculando automaticamente a hora de término pela duração do procedimento.
-- RNF05. **Impedir conflitos de agenda:** recusar agendamento cujo intervalo se sobreponha a outro do mesmo profissional ou envolva profissional inativo.
-- RNF06. **Cancelar** um agendamento existente, liberando o horário.
-- RNF07. **Remarcar** um agendamento existente, validando o novo horário como no RF05.
-- RNF08. **Consultar a agenda** por dia e por profissional, para saber quais horários estão livres — substituindo a ida do cliente ao salão.
-- RNF09. **Registrar a conclusão** do atendimento (atualizar o status do agendamento).
-- RNF10. Consultar o **histórico de atendimentos** de um cliente. 
+- RF01. Cadastrar **clientes**, com dados básicos de contato.
+- RF02. Cadastrar **procedimentos** oferecidos pelo salão, incluindo a duração estimada e o preço de referência.
+- RF03. Cadastrar **profissionais**, suas **especialidades** e se estão ativos.
+- RF04. **Registrar um agendamento** (cliente, profissional, procedimento, data e hora de início), calculando automaticamente a hora de término pela duração do procedimento.
+- RF05. **Impedir conflitos de agenda:** recusar agendamento cujo intervalo se sobreponha a outro do mesmo profissional ou envolva profissional inativo.
+- RF06. **Cancelar** um agendamento existente, liberando o horário.
+- RF07. **Remarcar** um agendamento existente, validando o novo horário como no RF05.
+- RF08. **Consultar a agenda** por dia e por profissional, para saber quais horários estão livres — substituindo a ida do cliente ao salão.
+- RF09. **Registrar a conclusão** do atendimento (atualizar o status do agendamento).
+- RF10. Consultar o **histórico de atendimentos** de um cliente. 
   
 
 ### 3.2 Requisitos Não Funcionais
