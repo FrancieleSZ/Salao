@@ -50,9 +50,9 @@
  
 | Assunto                | Decisão nesta entrega                    | Justificativa (vinda da observação no salão)                                                                                                                                                                                                                                  |
 | ---------------------- | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Pagamento              | Fora do banco; recebido presencialmente  | O valor não é tabelado: depende do tamanho e das características do cabelo (ex.: uma progressiva em cabelo curto não custa o mesmo que em cabelo longo) e é definido no atendimento. O pagamento é feito no próprio salão, sem cobrança antecipada. **[CONFIRMAR com Alaide]** |
-| Material/insumos       | Fora do banco; sem controle de estoque   | O material é escolhido pelo profissional e é pré-requisito para qualquer atendimento; hoje não há controle de estoque a ser substituído. **[CONFIRMAR com Alaide]**                                                                                                            |
-| Comissão e caixa       | Fora do banco                            | Dependem do pagamento, que está fora do escopo. **[CONFIRMAR com Alaide]**                                                                                                                                                                                                    |
+| Pagamento              | Fora do banco; recebido presencialmente  | O valor não é tabelado: depende do tamanho e das características do cabelo (ex.: uma progressiva em cabelo curto não custa o mesmo que em cabelo longo) e é definido no atendimento. O pagamento é feito no próprio salão, sem cobrança antecipada. |
+| Material/insumos       | Fora do banco; sem controle de estoque   | O material é escolhido pelo profissional e é pré-requisito para qualquer atendimento; hoje não há controle de estoque a ser substituído.                                                                                                            |
+| Comissão e caixa       | Fora do banco                            | Dependem do pagamento, que está fora do escopo.                                                                                                                                                                                                   |
  
 **Extensão prevista:** o modelo foi pensado para crescer. `Pagamento`, `Produto/Insumo` e `Fornecedor` poderiam se ligar a `Agendamento` sem alterar a estrutura atual.
  
@@ -73,15 +73,15 @@
  
 | # | Processo | Descrição | Relação com o modelo |
 |---|----------|-----------|----------------------|
-| P5 | **Cancelamento e remarcação** | O cliente avisa que não virá ou pede outro horário; o horário liberado volta a ficar disponível. **[CONFIRMAR prazo e como é feito hoje]** | Modelado: `status` do Agendamento (RF06, RF07). |
+| P5 | **Cancelamento e remarcação** | O cliente avisa que não virá ou pede outro horário; o horário liberado volta a ficar disponível.| Modelado: `status` do Agendamento (RF06, RF07). |
 | P6 | **Cadastro de clientes** | Coleta de nome e contato na primeira visita ou no primeiro agendamento. | Modelado: entidade Cliente (RF01). |
 | P7 | **Recebimento do pagamento** | Feito presencialmente, ao final do atendimento, com valor definido conforme o cabelo. **[CONFIRMAR formas de pagamento]** | Fora do escopo (Seção 2). |
-| P8 | **Venda de produtos no salão** | **[CONFIRMAR se o salão vende produtos; há produtos expostos nas fotos da visita]** | Fora do escopo (Seção 2). |
-| P9 | **Comissão dos profissionais** | **[CONFIRMAR se existe e como é calculada]** | Fora do escopo (Seção 2). |
-| P10 | **Fechamento de caixa** | **[CONFIRMAR como é feito]** | Fora do escopo (Seção 2). |
-| P11 | **Compra de produtos e insumos** | O material é escolhido pelos profissionais. **[CONFIRMAR quem compra e de onde]** | Fora do escopo (Seção 2). |
-| P12 | **Cadastro de fornecedores** | **[CONFIRMAR]** | Fora do escopo (Seção 2). |
-| P13 | **Controle de estoque de insumos** | Não há controle formal hoje. **[CONFIRMAR]** | Fora do escopo (Seção 2). |
+| P8 | **Venda de produtos no salão** | O salão não faz venda de produtos | Fora do escopo (Seção 2). |
+| P9 | **Comissão dos profissionais** | A comissão é feita após retirada dos 30% destinado ao salão | Fora do escopo (Seção 2). |
+| P10 | **Fechamento de caixa** | Não possui fechamento do caixa de forma diaria | Fora do escopo (Seção 2). |
+| P11 | **Compra de produtos e insumos** | O material é escolhido pelos profissionais. E as vezes pelos próprios clientes | Fora do escopo (Seção 2). |
+| P12 | **Cadastro de fornecedores** | Não possui fornecedores | Fora do escopo (Seção 2). |
+| P13 | **Controle de estoque de insumos** | Não há controle formal hoje. | Fora do escopo (Seção 2). |
 
 ## 3. Requisitos do Sistema
 
@@ -90,7 +90,7 @@
 - RF01. Cadastrar **clientes**, com dados básicos de contato.
 - RF02. Cadastrar **procedimentos** oferecidos pelo salão, incluindo a duração estimada e o preço de referência.
 - RF03. Cadastrar **profissionais**, suas **especialidades** e se estão ativos.
-- RF04. **Registrar um agendamento** (cliente, profissional, procedimento, data e hora de início), calculando automaticamente a hora de término pela duração do procedimento.
+- RF04. **Registrar um agendamento** (cliente, profissional, procedimento, data e hora de início), a hora de término pela duração do procedimento.
 - RF05. **Impedir conflitos de agenda:** recusar agendamento cujo intervalo se sobreponha a outro do mesmo profissional ou envolva profissional inativo.
 - RF06. **Cancelar** um agendamento existente, liberando o horário.
 - RF07. **Remarcar** um agendamento existente, validando o novo horário como no RF05.
@@ -331,25 +331,9 @@ Resumo (detalhe em `dicionario_de_dados.html`):
  
 ## 7. Diagrama Entidade-Relacionamento (DER)
 
-- **Entidades:**
-  - **Cliente:** pessoa que agenda e recebe o serviço.
-  - **Profissional:** quem executa o procedimento; necessário para a agenda individual e para evitar conflitos.
-  - **Procedimento:** serviço oferecido; sua duração determina as regras de agendamento relatadas na entrevista.
-  - **Agendamento:** evento no tempo que conecta Cliente, Profissional e Procedimento; núcleo do problema (controle de horários hoje feito em papel).
-  - **Especialidade:** áreas de atuação dos profissionais, para orientar a escolha do cliente.
-- **Atributos:** ver Seção 6.
-- **Relacionamentos** (cardinalidades (mín,máx), lidas a partir de cada entidade):
-| Relacionamento | Lado A | Lado B | Tipo |
-|----------------|--------|--------|------|
-| Cliente **realiza** Agendamento | Cliente (0,n) | Agendamento (1,1) | 1:N |
-| Profissional **atende** Agendamento | Profissional (0,n) | Agendamento (1,1) | 1:N |
-| Procedimento **tem** Agendamento | Procedimento (0,n) | Agendamento (1,1) | 1:N |
-| Profissional **possui** Especialidade | Profissional (0,n) | Especialidade (0,n) | N:N (resolvido por Profissional_Especialidade) |
- 
-- **Restrições aplicadas ao modelo:**
-  - O intervalo `hora_inicio` a `hora_fim` de um agendamento não pode colidir com outro do mesmo profissional.
-  - A duração do Procedimento define o tamanho do bloco de tempo reservado.
----
+O DER conceitual representa as 5 entidades, seus atributos e as cardinalidades da Seção 6.
+- O DER lógico deriva do conceitual: cada relacionamento 1:N vira chave estrangeira na tabela do lado N (todas em Agendamento) e o N:N entre Profissional e Especialidade vira a tabela associativa Profissional_Especialidade.
+- Pagamento, produtos/insumos e fornecedores ficaram fora do DER por decisão de escopo (Seção 2).
 
 **DER Conceitual** (`DER Conceitual.png`):
 
