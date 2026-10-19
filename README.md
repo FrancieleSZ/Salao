@@ -29,8 +29,8 @@
   - Telefone: (11) 94400-0738
   - Responsável: Alaide
   - Fotos da visita de campo:
-  - ![Foto da visita](.github/workflows/Imagem1.jpeg)
-  - ![Foto da visita](.github/workflows/Imagem2.jpeg)
+  - ![Foto da visita](Imagem1.jpeg)
+  - ![Foto da visita](Imagem2.jpeg)
 
 ---
 
