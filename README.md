@@ -42,12 +42,12 @@
   2. **Marcação de horário** — registro do agendamento do cliente (hoje em caderno).
   3. **Organização da agenda** — manutenção do caderno com nomes e horários, evitando conflitos.
   4. **Contato e confirmação com o cliente** — presencial e por WhatsApp, para marcar, confirmar ou tirar dúvidas.
-  5. **Cancelamento e remarcação** — alteração de um horário já marcado. <!-- CONFIRMAR COM A ALAIDE: como funciona hoje (aviso por WhatsApp? presencial? há prazo?) -->
+  5. **Cancelamento e remarcação** — alteração de um horário já marcado feito pelo WhatsApp com antecedencia.
   6. **Atendimento / execução do procedimento** — realização do serviço (corte, coloração, progressiva etc.), cada um com duração própria.
-  7. **Recebimento do pagamento** — feito presencialmente, ao final do atendimento; o valor varia com o tamanho do cabelo do cliente, por isso é combinado no salão. Este processo foi mapeado, mas **não é modelado nesta entrega** (ver Seção 8). <!-- CONFIRMAR COM A ALAIDE: formas de pagamento aceitas -->
-  8. **Venda de produtos no salão** — há prateleiras de produtos no salão (visíveis nas fotos). Não modelado nesta entrega. <!-- CONFIRMAR COM A ALAIDE: o salão vende produtos? Se não, apagar este item -->
-  9. **Compra de produtos e insumos** — reposição de tintas e produtos químicos usados pelos profissionais. Não modelado nesta entrega. <!-- CONFIRMAR COM A ALAIDE: quem compra, de quem, com que frequência. Se não for controlado, apagar -->
-  10. **Comissão dos profissionais e fechamento de caixa** — apuração do que cada profissional recebe e do que entrou no dia. Não modelado nesta entrega. <!-- CONFIRMAR COM A ALAIDE: como os profissionais são pagos (comissão? aluguel de cadeira? salário?). Se não existir, apagar -->
+  7. **Recebimento do pagamento** — feito presencialmente, ao final do atendimento; o valor varia com o tamanho do cabelo do cliente, por isso é combinado no salão, aceita debito, credito, pix e dinheiro. 
+  8. **Venda de produtos no salão** — O salão não faz venda de produtos.
+  9. **Compra de produtos e insumos** — reposição de tintas e produtos químicos usados pelos profissionais através de fornecedores.
+  10. **Comissão dos profissionais e fechamento de caixa** — Todos os profissionais devem tirar 20% do que receberam para despesas do salão, os outros 70% são dos próprios profissionais.
 
 - **Fluxo de cada processo e integração entre eles:**
   * O **cadastro do cliente** vem antes da **marcação de horário**: todo agendamento pertence a um cliente.
@@ -55,7 +55,7 @@
   * O **contato com o cliente** alimenta a marcação, a confirmação e o **cancelamento/remarcação**, e compete pela atenção do profissional com o **atendimento em andamento**.
   * O **atendimento** consome o tempo reservado na agenda; procedimentos longos (ex.: coloração para loiro, que leva o dobro do tempo por causa da cor natural do cabelo) precisam ser considerados já na marcação.
   * Ao fim do atendimento ocorre o **recebimento do pagamento**, que alimenta o fechamento de caixa e a comissão dos profissionais.
-  * Os **insumos** usados no atendimento dependem da compra e do controle de estoque. <!-- apagar esta linha se o item 9 for apagado -->
+  * Os **insumos** usados no atendimento dependem da compra e do controle de estoque.
 
 - **Fluxogramas (opcional)** (renderizados pelo GitHub):
 
@@ -133,12 +133,12 @@ flowchart TD
   * RN05. Todo agendamento pertence a exatamente um cliente, um profissional e um procedimento.
   * RN06. O preço cadastrado no procedimento é apenas um valor de referência: o valor final varia com o tamanho do cabelo e é combinado e pago presencialmente no salão.
   * RN07. Um agendamento cancelado libera o horário na agenda do profissional.
-  * RN08. <!-- CONFIRMAR COM A ALAIDE: há antecedência mínima para cancelar? Tolerância de atraso do cliente? Sinal ou pagamento antecipado? Se existirem, escrever aqui; se não, apagar esta linha -->
+  * RN08. Cancelamento com antecedencia por WhatsApp.
 - **Restrições organizacionais:**
   * **LGPD (Lei 13.709/2018):** telefone e e-mail dos clientes são dados pessoais; o modelo deve permitir proteger esses dados e limitar quem pode vê-los. Por isso o dicionário marca esses atributos como protegidos.
-  * **Normas sanitárias:** o salão usa produtos químicos e instrumentos que exigem higienização, conforme as exigências da vigilância sanitária. <!-- CONFIRMAR COM A ALAIDE: se há alguma regra de higienização/esterilização que ela controle por registro. Se não afeta o banco de dados, citar apenas como restrição legal da organização -->
+  * **Normas sanitárias:** o salão usa produtos químicos e instrumentos que exigem higienização, conforme as exigências da vigilância sanitária. 
   * **Equipe pequena e pouco familiarizada com tecnologia:** o sistema precisa ser simples e rápido de usar durante o expediente, o que limita o número de campos obrigatórios nos cadastros.
-  * **Nota fiscal:** <!-- CONFIRMAR COM A ALAIDE: o salão emite nota fiscal? Se sim, acrescentar a restrição; se não, apagar esta linha -->
+  * **Nota fiscal:** O salão emite nota fiscal.
 
 ---
 
@@ -269,7 +269,7 @@ O modelo **separa Cliente, Profissionais e Procedimentos** em entidades independ
 
 A **duração** fica em Procedimentos, e não em Agendamentos, porque é característica do serviço (coloração para loiro sempre leva o dobro do tempo) e não varia a cada agendamento; assim a regra central fica em um único lugar, facilitando a manutenção. Já o `preco` em Procedimentos é só um valor de referência, pois o valor final varia com o tamanho do cabelo.
 
-**Decisões de escopo desta entrega:** o grupo optou por modelar nesta etapa apenas o núcleo da agenda. O **pagamento** é feito presencialmente e o valor varia com o tamanho do cabelo, e os **materiais e insumos** (tintas, produtos químicos) são escolhidos pelos profissionais conforme cada cliente; por isso Pagamento, Produto/Insumo e Fornecedor ficaram fora desta primeira versão do DER. Os processos correspondentes foram mapeados na Seção 2, e o modelo foi pensado para recebê-los depois como novas entidades ligadas a Agendamentos, sem alterar o que já existe. <!-- AJUSTAR conforme o que a Alaide confirmar sobre pagamento, compra e estoque -->
+**Decisões de escopo desta entrega:** o grupo optou por modelar nesta etapa apenas o núcleo da agenda. O **pagamento** é feito presencialmente e o valor varia com o tamanho do cabelo, e os **materiais e insumos** (tintas, produtos químicos) são escolhidos pelos profissionais conforme cada cliente; por isso Pagamento, Produto/Insumo e Fornecedor ficaram fora desta primeira versão do DER. Os processos correspondentes foram mapeados na Seção 2, e o modelo foi pensado para recebê-los depois como novas entidades ligadas a Agendamentos, sem alterar o que já existe. 
 
 ---
 
