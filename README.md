@@ -85,9 +85,12 @@ O Salão dos Primos é um salão de beleza feminino e masculino, com fins lucrat
 - **RF15.** Registrar compras de insumos, com fornecedor, data e itens comprados, caso esse controle seja aprovado pelo salão.
 - **RF16.** Consultar entradas e saldo de insumos, caso o controle de estoque seja confirmado.
 - **RF17.** Cadastrar e consultar fornecedores de insumos, caso o salão deseje manter esse cadastro no sistema.
-- **RF18.** Não incluir venda de produtos como função do sistema nesta versão, pois a responsável informou que o salão não vende produtos.
 
-### 3.2 Requisitos não funcionais
+### 3.2 Restrição de escopo
+
+O sistema não inclui venda de produtos nesta versão, pois a responsável informou que o salão não comercializa produtos. Isso é uma decisão de escopo, não uma funcionalidade do sistema.
+
+### 3.3 Requisitos não funcionais
 
 - **RNF01 — Usabilidade:** interface simples e rápida para uso durante o expediente.
 - **RNF02 — Desempenho:** consulta de disponibilidade deve responder rapidamente.
@@ -142,11 +145,13 @@ As compras, fornecedores e controle de insumos aparecem nos processos e requisit
 
 ### 6.3 Relacionamentos e cardinalidades
 
-- **Cliente — Agendamentos:** um cliente pode ter zero ou vários agendamentos; cada agendamento pertence a exatamente um cliente.
-- **Profissionais — Agendamentos:** um profissional pode ter zero ou vários agendamentos; cada agendamento tem exatamente um profissional.
-- **Procedimentos — Agendamentos:** um procedimento pode constar em zero ou vários agendamentos; cada agendamento tem exatamente um procedimento.
-- **Profissionais — Especialidades:** relacionamento N:N, com participação opcional em ambos os lados, resolvido no modelo lógico por tabela associativa Profissional_Especialidade.
-- **Agendamentos — Pagamento:** o diagrama assume zero ou um pagamento por agendamento e cada pagamento pertence a exatamente um agendamento. Confirmar se há pagamentos parciais ou múltiplos antes da implementação.
+No diagrama conceitual, cada par (mínimo, máximo) é colocado junto à entidade que está sendo contada: o par junto a Cliente indica quantos clientes se relacionam com uma ocorrência de Agendamento; o par junto a Agendamento indica quantos agendamentos se relacionam com uma ocorrência de Cliente.
+
+- **Cliente — Agendamentos:** junto a Cliente, (1,1), pois cada agendamento tem exatamente um cliente; junto a Agendamentos, (0,n), pois um cliente pode ter nenhum ou vários agendamentos.
+- **Profissionais — Agendamentos:** junto a Profissionais, (1,1), pois cada agendamento tem exatamente um profissional; junto a Agendamentos, (0,n), pois um profissional pode ter nenhum ou vários agendamentos.
+- **Procedimentos — Agendamentos:** junto a Procedimentos, (1,1), pois cada agendamento tem exatamente um procedimento; junto a Agendamentos, (0,n), pois um procedimento pode constar em nenhum ou vários agendamentos.
+- **Profissionais — Especialidades:** relacionamento N:N, com (0,n) em ambos os lados, resolvido no modelo lógico por tabela associativa Profissional_Especialidade.
+- **Agendamentos — Pagamento:** junto a Agendamentos, (0,1), e junto a Pagamento, (1,1): o desenho assume no máximo um pagamento por agendamento e cada pagamento pertence a exatamente um agendamento. Confirmar se há pagamentos parciais ou múltiplos antes da implementação.
 
 ### 6.4 Chaves e integridade
 
@@ -164,7 +169,16 @@ Compra, fornecedor e estoque são processos reais descritos no trabalho, mas a e
 
 ## 8. Uso de inteligência artificial
 
-O grupo deve manter um registro verdadeiro das ferramentas usadas, dos prompts e das revisões humanas. Esta versão foi revisada com apoio de IA para organizar requisitos, regras, consistência do dicionário e diagramas. O grupo precisa conferir todos os detalhes com a entrevista, a responsável e o enunciado da disciplina antes da entrega; sugestões não confirmadas foram marcadas como pendências, e não como fatos estabelecidos.
+| Item | Registro |
+|---|---|
+| **Ferramenta e etapa** | O histórico do projeto registra uso de Claude (Anthropic) no esboço inicial do README. Nesta revisão, foi utilizado ChatGPT (OpenAI) para comparar os arquivos, organizar requisitos e regras, revisar o dicionário e corrigir os SVGs. |
+| **Motivação** | Organizar o material da entrevista e corrigir as divergências apontadas na avaliação do professor entre processos, requisitos, regras, dicionário e DER. |
+| **Prompts utilizados nesta revisão** | “eu n arumei o html faz ele para mim de modo certo”; “agora faz a correção de tudo novamente”. |
+| **Resposta recebida** | Revisão do README, ampliação dos processos e requisitos, explicitação das regras confirmadas e pendentes, atualização do dicionário e correção dos diagramas SVG para incluir Pagamento e alinhar as cardinalidades. |
+| **Fontes consultadas** | README e dicionário do repositório, DERs existentes e correção do professor na issue #19. Não foram consultadas fontes externas nesta revisão. |
+| **Trechos rejeitados ou corrigidos** | Foram corrigidas a classificação de telefone/e-mail como dados sensíveis, a divergência de chave primária em Profissional_Especialidade, a ausência de Pagamento nos diagramas e a leitura das cardinalidades. Regras não confirmadas, como prazo de cancelamento e base de cálculo da comissão, foram mantidas como pendências. |
+| **Justificativa da escolha final** | A versão atual prioriza os fatos documentados na entrevista e a correção do professor, separando o que está descrito do que ainda precisa ser validado. |
+| **Reflexão crítica** | A IA pode propor estruturas plausíveis que não correspondem ao funcionamento real do salão. Por isso, a divisão 30%/70%, a cardinalidade de Pagamento e o escopo de estoque precisam ser confirmados pela equipe com a responsável antes da entrega final. Os SVGs revisados representam o escopo central; compras, fornecedores e estoque ainda precisam ser incorporados aos diagramas caso a disciplina exija que esses processos estejam modelados como entidades nesta entrega. |
 
 ## 9. Pendências antes da entrega
 
