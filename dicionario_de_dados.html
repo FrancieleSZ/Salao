@@ -23,7 +23,7 @@
 <h1>Dicionário de Dados — Salão dos Primos</h1>
 <p class="muted">Documento de referência para as entidades, atributos, relacionamentos, regras e controles de dados do sistema de agendamento do salão.</p>
 <p><strong>Integrantes:</strong> Emilly Rodrigues de Souza, Franciele Souza de Jesus, Julia Parra e Kamilly Vitória Alves da Silva.</p>
-<div class="meta"><span class="pill">Versão 1.1</span><span class="pill">Data: 24/10/2026</span><span class="pill">PK = chave primária</span><span class="pill">FK = chave estrangeira</span></div>
+<div class="meta"><span class="pill">Versão 2.0</span><span class="pill">Data: 24/10/2026</span><span class="pill">PK = chave primária</span><span class="pill">FK = chave estrangeira</span></div>
 <div class="notice"><strong>Nota sobre a implementação:</strong> o SGBD ainda não foi especificado no material consultado. Por isso, os tipos físicos abaixo são propostas SQL genéricas e devem ser adaptados ao SGBD escolhido. O dicionário não afirma que um banco já foi implementado.</div>
 </header>
 
@@ -113,8 +113,8 @@
 </section>
 
 <section class="section" id="pagamento">
-<h2>3.7 Pagamento — entidade recomendada, pendente de inclusão no DER</h2>
-<div class="notice">A correção do professor considera Pagamento uma entidade essencial. O README informa pagamento presencial ao final do atendimento, com débito, crédito, Pix ou dinheiro. A tabela abaixo é uma proposta para completar o modelo; ela <strong>ainda não corresponde ao DER atual</strong> e precisa ser validada e desenhada no DER conceitual e lógico antes de ser tratada como parte implementada do modelo.</div>
+<h2>3.7 Pagamento — entidade incluída na revisão do DER</h2>
+<div class="notice">A correção do professor considera Pagamento uma entidade essencial. O README informa pagamento presencial ao final do atendimento, com débito, crédito, Pix ou dinheiro. Pagamento foi incluído nos diagramas SVG revisados como parte do modelo conceitual e lógico. A cardinalidade adotada é uma hipótese de zero ou um pagamento por agendamento e deve ser confirmada com a responsável.</div>
 <div class="panel"><div class="table-wrap"><table><thead><tr><th>Atributo proposto</th><th>Descrição</th><th>Regra / tipo físico sugerido</th></tr></thead><tbody>
 <tr><td><code>id_pagamento</code><span class="tag">PK</span></td><td>Identificador do pagamento.</td><td>Gerado pelo sistema; <code>INTEGER</code>.</td></tr>
 <tr><td><code>id_agendamento</code><span class="tag fk">FK</span></td><td>Atendimento ao qual o pagamento está associado.</td><td>Obrigatório; <code>INTEGER</code>. Confirmar se será permitido mais de um pagamento por agendamento.</td></tr>
@@ -191,11 +191,11 @@
 
 <section class="section" id="pendencias">
 <h2>8. Pendências para manter os documentos consistentes</h2>
-<div class="callout"><strong>Pagamento:</strong> a avaliação do professor aponta essa entidade como essencial. Validar a cardinalidade com a responsável e acrescentar a entidade aos DER conceitual e lógico caso faça parte do escopo exigido.</div>
-<div class="callout"><strong>Comissão e caixa:</strong> o README descreve uma divisão de 30% para despesas do salão e 70% para os profissionais. Confirmar com a responsável se a regra é aplicada ao valor recebido de cada atendimento e documentar a origem do valor usado no cálculo. A divisão não está representada nas entidades atuais.</div>
+<div class="callout"><strong>Pagamento:</strong> já foi incluído nos diagramas SVG revisados. Confirmar com a responsável se um atendimento pode ter pagamentos parciais ou mais de um pagamento; se sim, revisar a cardinalidade e remover a restrição de unicidade da FK.</div>
+<div class="callout"><strong>Comissão e caixa:</strong> o README descreve uma divisão de 30% para despesas do salão e 70% para os profissionais. Confirmar com a responsável se a regra é aplicada ao valor recebido de cada atendimento e documentar a origem do valor usado no cálculo. A regra financeira ainda não está representada como entidade própria no DER.</div>
 <div class="callout"><strong>Cancelamento:</strong> a antecedência mínima citada em RN08 não tem número definido no material. Confirmar o prazo com a responsável antes de preencher a regra.</div>
-<div class="callout"><strong>Tipos físicos:</strong> confirmar os tipos e a collation quando o SGBD for escolhido. Os tipos deste documento são sugestões, não configuração já realizada.</div>
-<div class="callout"><strong>DER lógico:</strong> manter os nomes de atributos e a chave composta de Profissional_Especialidade iguais neste documento, no README e no diagrama. A entidade Pagamento e a proposta Log_Acesso acima não devem ser consideradas existentes no DER até que os desenhos sejam atualizados.</div>
+<div class="callout"><strong>Compras, fornecedores e estoque:</strong> esses processos aparecem no README, mas as entidades Fornecedor, Compra, Item_Compra e Insumo ainda não foram incluídas nos diagramas. Confirmar com a responsável e com o enunciado se devem integrar esta entrega; se sim, acrescentá-las de forma consistente ao DER conceitual, lógico e ao dicionário.<br><br><strong>Tipos físicos:</strong> confirmar os tipos e a collation quando o SGBD for escolhido. Os tipos deste documento são sugestões, não configuração já realizada.</div>
+<div class="callout"><strong>DER lógico:</strong> manter os nomes dos atributos e a chave composta de Profissional_Especialidade iguais neste documento, no README e no diagrama. Pagamento está incluído nos SVGs revisados. Log_Acesso continua sendo uma proposta de auditoria e não faz parte do DER atual.</div>
 </section>
 
 <footer>
