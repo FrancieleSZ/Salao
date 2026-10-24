@@ -129,11 +129,11 @@
 <h2>4. Relacionamentos e cardinalidades</h2>
 <p class="intro">Formato (mínimo, máximo), conforme a convenção declarada no README. Os rótulos do DER, do dicionário e do modelo lógico precisam ser idênticos.</p>
 <div class="panel"><div class="table-wrap"><table><thead><tr><th>Relacionamento</th><th>Cardinalidade</th><th>Interpretação</th><th>Implementação lógica</th></tr></thead><tbody>
-<tr><td>Cliente realiza Agendamentos</td><td>Cliente (0,n); Agendamento (1,1)</td><td>Um cliente pode ter nenhum ou vários agendamentos; cada agendamento pertence a um cliente.</td><td><code>Agendamentos.id_cliente</code> referencia <code>Cliente.id_cliente</code>.</td></tr>
-<tr><td>Profissional atende Agendamentos</td><td>Profissional (0,n); Agendamento (1,1)</td><td>Um profissional pode atender nenhum ou vários agendamentos; cada agendamento tem um profissional.</td><td><code>Agendamentos.id_profissional</code> referencia <code>Profissionais.id_profissional</code>.</td></tr>
-<tr><td>Procedimento consta em Agendamentos</td><td>Procedimento (0,n); Agendamento (1,1)</td><td>Um procedimento pode constar em nenhum ou vários agendamentos; cada agendamento tem um procedimento.</td><td><code>Agendamentos.id_procedimento</code> referencia <code>Procedimentos.id_procedimento</code>.</td></tr>
+<tr><td>Cliente realiza Agendamentos</td><td>Cliente (1,1); Agendamento (0,n)</td><td>Um cliente pode ter nenhum ou vários agendamentos; cada agendamento pertence a um cliente.</td><td><code>Agendamentos.id_cliente</code> referencia <code>Cliente.id_cliente</code>.</td></tr>
+<tr><td>Profissional atende Agendamentos</td><td>Profissional (1,1); Agendamento (0,n)</td><td>Um profissional pode atender nenhum ou vários agendamentos; cada agendamento tem um profissional.</td><td><code>Agendamentos.id_profissional</code> referencia <code>Profissionais.id_profissional</code>.</td></tr>
+<tr><td>Procedimento consta em Agendamentos</td><td>Procedimento (1,1); Agendamento (0,n)</td><td>Um procedimento pode constar em nenhum ou vários agendamentos; cada agendamento tem um procedimento.</td><td><code>Agendamentos.id_procedimento</code> referencia <code>Procedimentos.id_procedimento</code>.</td></tr>
 <tr><td>Profissionais possuem Especialidades</td><td>Profissionais (0,n); Especialidades (0,n)</td><td>Um profissional pode ter várias especialidades; uma especialidade pode pertencer a vários profissionais.</td><td>Tabela associativa <code>Profissional_Especialidade</code> com PK composta.</td></tr>
-<tr><td>Agendamento possui Pagamento (proposta)</td><td>A definir na validação</td><td>Confirmar se cada atendimento tem exatamente um pagamento ou pode ter pagamentos parciais/múltiplos.</td><td>Proposta: <code>Pagamento.id_agendamento</code> como FK; cardinalidade deve ser definida antes de alterar os DERs.</td></tr>
+<tr><td>Agendamento possui Pagamento</td><td>Agendamento (0,1); Pagamento (1,1)</td><td>O modelo assume no máximo um pagamento por agendamento; confirmar se há pagamentos parciais/múltiplos.</td><td><code>Pagamento.id_agendamento</code> como FK com unicidade, caso a regra seja confirmada.</td></tr>
 </tbody></table></div></div>
 </section>
 
