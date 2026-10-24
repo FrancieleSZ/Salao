@@ -47,7 +47,7 @@
   7. **Recebimento do pagamento** — feito presencialmente, ao final do atendimento; o valor varia com o tamanho do cabelo do cliente, por isso é combinado no salão, aceita debito, credito, pix e dinheiro. 
   8. **Venda de produtos no salão** — O salão não faz venda de produtos.
   9. **Compra de produtos e insumos** — reposição de tintas e produtos químicos usados pelos profissionais através de fornecedores.
-  10. **Comissão dos profissionais e fechamento de caixa** — Todos os profissionais devem tirar 20% do que receberam para despesas do salão, os outros 70% são dos próprios profissionais.
+  10. **Comissão dos profissionais e fechamento de caixa** — Todos os profissionais devem tirar 30% do que receberam para despesas do salão, os outros 70% são dos próprios profissionais.
 
 - **Fluxo de cada processo e integração entre eles:**
   * O **cadastro do cliente** vem antes da **marcação de horário**: todo agendamento pertence a um cliente.
@@ -133,7 +133,7 @@ flowchart TD
   * RN05. Todo agendamento pertence a exatamente um cliente, um profissional e um procedimento.
   * RN06. O preço cadastrado no procedimento é apenas um valor de referência: o valor final varia com o tamanho do cabelo e é combinado e pago presencialmente no salão.
   * RN07. Um agendamento cancelado libera o horário na agenda do profissional.
-  * RN08. Cancelamento com antecedencia por WhatsApp.
+  * RN08. O cliente deve solicitar o cancelamento do agendamento pelo WhatsApp com a antecedência mínima definida pelo salão.
 - **Restrições organizacionais:**
   * **LGPD (Lei 13.709/2018):** telefone e e-mail dos clientes são dados pessoais; o modelo deve permitir proteger esses dados e limitar quem pode vê-los. Por isso o dicionário marca esses atributos como protegidos.
   * **Normas sanitárias:** o salão usa produtos químicos e instrumentos que exigem higienização, conforme as exigências da vigilância sanitária. 
@@ -245,7 +245,7 @@ Evento no tempo que une cliente, profissional e procedimento.
 
 ![DER Conceitual](DER_Conceitual.png)
 
-**DER Lógico:** [DER_Logico.png](DER_Lógico.png)
+**DER Lógico:** [DER_Lógico.png](DER_Lógico.png)
 
 ![DER Lógico](DER_Lógico.png)
 
