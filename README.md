@@ -245,9 +245,9 @@ Evento no tempo que une cliente, profissional e procedimento.
 
 ![DER Conceitual](DER_Conceitual.png)
 
-**DER Lógico:** [DER_Logico.png](DER_Logico.png)
+**DER Lógico:** [DER_Logico.png](DER_Lógico.png)
 
-![DER Lógico](DER_Logico.png)
+![DER Lógico](DER_Lógico.png)
 
 - O DER conceitual (feito no BRModelo) representa as 5 entidades (Cliente, Agendamentos, Profissionais, Procedimentos, Especialidades), todos os atributos com os identificadores marcados e as cardinalidades (mín,máx) dos dois lados, **idênticas às da Seção 6 e do dicionário**.
 - **Como ler as cardinalidades:** o par escrito ao lado de uma entidade indica quantas ocorrências dela se relacionam com uma ocorrência da outra entidade. Exemplo: `(1, 1)` ao lado de Cliente e `(0, n)` ao lado de Agendamentos em `realiza` significa que cada agendamento tem exatamente um cliente e que um cliente pode ter de zero a vários agendamentos.
