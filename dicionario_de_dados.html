@@ -3,409 +3,205 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Dicionário de dados do sistema de agendamento do Salão dos Primos.">
 <title>Dicionário de Dados — Salão dos Primos</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --paper: #FAF9FB;
-    --surface: #FFFFFF;
-    --ink: #2A2430;
-    --ink-soft: #5C5566;
-    --line: #E3DEE8;
-    --head-font: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
-    --body-font: "Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
-  }
-
-  * { box-sizing: border-box; }
-
-  html { scroll-behavior: smooth; scroll-padding-top: 1.5rem; }
-
-  body {
-    margin: 0;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: var(--body-font);
-    font-size: 1rem;
-    line-height: 1.55;
-  }
-
-  .layout {
-    display: grid;
-    grid-template-columns: 250px minmax(0, 1fr);
-    max-width: 1180px;
-    margin: 0 auto;
-  }
-
-  /* Navegação lateral */
-  .side {
-    position: sticky;
-    top: 0;
-    align-self: start;
-    height: 100vh;
-    padding: 2rem 1.25rem 2rem 1.5rem;
-    border-right: 1px solid var(--line);
-    overflow-y: auto;
-  }
-  .side h2 {
-    font-family: var(--head-font);
-    font-size: 1rem;
-    font-weight: 700;
-    margin: 0 0 0.75rem;
-  }
-  .side ul { list-style: none; margin: 0 0 1.5rem; padding: 0; }
-  .side li { margin: 0; }
-  .side a {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.4rem 0.5rem;
-    border-radius: 6px;
-    color: var(--ink);
-    text-decoration: none;
-    font-size: 0.95rem;
-  }
-  .side a:hover { background: #EFEAF3; }
-  .side a:focus-visible, .tag:focus-visible {
-    outline: 2px solid #6B3FA0;
-    outline-offset: 2px;
-  }
-  .swatch {
-    width: 0.8rem;
-    height: 0.8rem;
-    border-radius: 3px;
-    flex: none;
-    border: 1px solid rgba(0,0,0,0.15);
-  }
-
-  /* Conteúdo */
-  main { padding: 2.5rem 2.25rem 4rem; min-width: 0; }
-
-  header.top { margin-bottom: 2.5rem; }
-  header.top h1 {
-    font-family: var(--head-font);
-    font-size: clamp(1.9rem, 4vw, 2.6rem);
-    line-height: 1.1;
-    letter-spacing: -0.01em;
-    margin: 0 0 0.6rem;
-  }
-  header.top p { margin: 0.2rem 0; color: var(--ink-soft); max-width: 62ch; }
-  header.top .group { color: var(--ink); font-weight: 600; margin-top: 0.9rem; }
-
-  .legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.25rem;
-    margin: 1.25rem 0 0;
-    padding: 0.75rem 1rem;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    font-size: 0.92rem;
-  }
-  .legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
-
-  h2.section-title {
-    font-family: var(--head-font);
-    font-size: 1.5rem;
-    margin: 0 0 0.4rem;
-  }
-  .intro { color: var(--ink-soft); margin: 0 0 1rem; max-width: 64ch; }
-
-  /* Entidades */
-  section.entity {
-    --tint: #eee;
-    --accent: #999;
-    margin: 0 0 2.5rem;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-left: 6px solid var(--accent);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .entity-head {
-    padding: 1rem 1.25rem 0.9rem;
-    background: var(--tint);
-    border-bottom: 1px solid var(--line);
-  }
-  .entity-head h3 {
-    font-family: var(--head-font);
-    font-size: 1.35rem;
-    margin: 0 0 0.2rem;
-  }
-  .entity-head p { margin: 0; max-width: 70ch; }
-
-  .cliente  { --tint: #FFF1DD; --accent: #F0A24B; }
-  .profissional { --tint: #FFFBD1; --accent: #E6D93A; }
-  .especialidade { --tint: #F1E8FF; --accent: #B58BE6; }
-  .vinculo { --tint: #E2F1FD; --accent: #5AAEEA; }
-  .procedimento { --tint: #FDE6F4; --accent: #EE7DC2; }
-  .agendamento { --tint: #FDE7E2; --accent: #F08672; }
-
-  .table-wrap { overflow-x: auto; }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.95rem;
-  }
-  th, td {
-    padding: 0.65rem 1rem;
-    text-align: left;
-    vertical-align: top;
-    border-bottom: 1px solid var(--line);
-  }
-  thead th {
-    font-weight: 600;
-    background: #FBFAFC;
-    white-space: nowrap;
-  }
-  tbody tr:last-child td { border-bottom: none; }
-  td:first-child { white-space: nowrap; }
-  td:nth-child(2) { min-width: 15rem; }
-  td:nth-child(3) { min-width: 15rem; }
-
-  code {
-    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-    font-size: 0.9em;
-    background: #F3EFF6;
-    padding: 0.1rem 0.35rem;
-    border-radius: 4px;
-  }
-
-  .tag {
-    display: inline-block;
-    margin-left: 0.35rem;
-    padding: 0 0.4rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    line-height: 1.5;
-    vertical-align: middle;
-    border: 1px solid;
-  }
-  .pk { background: #FFF3C4; border-color: #C9A400; color: #5C4A00; }
-  .fk { background: #E6F0FF; border-color: #4A7BD0; color: #1B3F7A; }
-
-  /* Relacionamentos */
-  .rel { margin-bottom: 2.5rem; }
-  .rel .box {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .rel td:first-child { white-space: normal; }
-
-  footer {
-    margin-top: 3rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--line);
-    color: var(--ink-soft);
-    font-size: 0.9rem;
-  }
-
-  @media (max-width: 860px) {
-    .layout { grid-template-columns: 1fr; }
-    .side {
-      position: static;
-      height: auto;
-      border-right: none;
-      border-bottom: 1px solid var(--line);
-      padding: 1.25rem 1.25rem 0.5rem;
-    }
-    .side ul { display: flex; flex-wrap: wrap; gap: 0.25rem; }
-    main { padding: 1.5rem 1.25rem 3rem; }
-  }
-
-  @media print {
-    body { background: #fff; }
-    .side { display: none; }
-    .layout { display: block; }
-    main { padding: 0; }
-    section.entity { break-inside: avoid; }
-  }
+:root{--bg:#f7f5fa;--paper:#fff;--ink:#292334;--muted:#625b70;--line:#e4deeb;--accent:#68449a;--soft:#f0eaf8;--blue:#e8f2ff;--gold:#fff3c4}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:1rem}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}.layout{display:grid;grid-template-columns:245px minmax(0,1fr);max-width:1320px;margin:auto}.side{position:sticky;top:0;height:100vh;overflow:auto;padding:1.5rem 1rem;border-right:1px solid var(--line);background:#fbfaff}.side h2{font-size:.95rem;margin:1rem 0 .4rem}.side ul{list-style:none;padding:0;margin:0 0 1rem}.side a{display:block;padding:.32rem .45rem;color:var(--ink);text-decoration:none;border-radius:6px;font-size:.9rem}.side a:hover{background:var(--soft)}main{min-width:0;padding:2.5rem clamp(1rem,4vw,3rem) 4rem}.hero{padding:1.5rem;background:var(--paper);border:1px solid var(--line);border-radius:14px;margin-bottom:2rem}.eyebrow{color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:.75rem}.hero h1{font-size:clamp(1.8rem,4vw,2.7rem);line-height:1.12;margin:.3rem 0 .7rem}.muted,.intro{color:var(--muted)}.meta{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}.pill{background:var(--soft);border-radius:999px;padding:.25rem .7rem;font-size:.82rem}.notice{border-left:4px solid #b98729;background:#fff9e9;padding:.8rem 1rem;border-radius:0 8px 8px 0;margin:1rem 0}.section{margin:2.5rem 0;scroll-margin-top:1rem}.section h2{font-size:1.55rem;margin:0 0 .4rem}.section h3{font-size:1.1rem;margin:1.4rem 0 .4rem}.panel{background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:1rem 0}.panel-head{padding:1rem 1.2rem;background:var(--soft);border-bottom:1px solid var(--line)}.panel-head h3{margin:0;font-size:1.2rem}.panel-head p{margin:.25rem 0 0;color:var(--muted)}.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:.92rem}th,td{text-align:left;vertical-align:top;padding:.65rem .8rem;border-bottom:1px solid var(--line)}th{background:#faf9fc;white-space:nowrap}tbody tr:last-child td{border-bottom:0}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#f2eef7;border-radius:4px;padding:.08rem .28rem;font-size:.9em}.tag{display:inline-block;font-size:.72rem;font-weight:700;border-radius:4px;padding:.05rem .35rem;margin-left:.25rem;background:var(--gold)}.fk{background:var(--blue)}.callout{padding:1rem;border:1px solid var(--line);border-radius:9px;background:var(--paper);margin:.8rem 0}.callout strong{color:var(--accent)}.formula{display:block;white-space:normal;background:#f2eef7;padding:.7rem;border-radius:6px;margin:.4rem 0;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.88rem;overflow-wrap:anywhere}.small{font-size:.88rem;color:var(--muted)}footer{border-top:1px solid var(--line);padding-top:1rem;color:var(--muted);font-size:.88rem;margin-top:3rem}@media(max-width:850px){.layout{grid-template-columns:1fr}.side{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}.side ul{display:flex;flex-wrap:wrap;gap:.15rem}.side a{padding:.3rem .45rem}main{padding:1.2rem}}@media print{.layout{display:block}.side{display:none}body{background:white}main{padding:0}.panel,.callout{break-inside:avoid}}
 </style>
 </head>
 <body>
 <div class="layout">
+<nav class="side" aria-label="Índice do dicionário">
+<h2>Visão geral</h2><ul><li><a href="#identificacao">Identificação e convenções</a></li><li><a href="#fluxo">Fluxo de dados</a></li></ul>
+<h2>Entidades</h2><ul><li><a href="#cliente">Cliente</a></li><li><a href="#profissionais">Profissionais</a></li><li><a href="#especialidades">Especialidades</a></li><li><a href="#vinculo">Profissional_Especialidade</a></li><li><a href="#procedimentos">Procedimentos</a></li><li><a href="#agendamentos">Agendamentos</a></li><li><a href="#pagamento">Pagamento — pendência de escopo</a></li></ul>
+<h2>Regras e controles</h2><ul><li><a href="#relacionamentos">Relacionamentos</a></li><li><a href="#regras">Expressões formais</a></li><li><a href="#indices">Índices propostos</a></li><li><a href="#acessos">Acesso, LGPD e auditoria</a></li><li><a href="#pendencias">Pendências de validação</a></li></ul>
+</nav>
+<main>
+<header class="hero" id="identificacao">
+<div class="eyebrow">Entrega 1 · Modelagem de dados</div>
+<h1>Dicionário de Dados — Salão dos Primos</h1>
+<p class="muted">Documento de referência para as entidades, atributos, relacionamentos, regras e controles de dados do sistema de agendamento do salão.</p>
+<p><strong>Integrantes:</strong> Emilly Rodrigues de Souza, Franciele Souza de Jesus, Julia Parra e Kamilly Vitória Alves da Silva.</p>
+<div class="meta"><span class="pill">Versão 1.1</span><span class="pill">Data: 24/10/2026</span><span class="pill">PK = chave primária</span><span class="pill">FK = chave estrangeira</span></div>
+<div class="notice"><strong>Nota sobre a implementação:</strong> o SGBD ainda não foi especificado no material consultado. Por isso, os tipos físicos abaixo são propostas SQL genéricas e devem ser adaptados ao SGBD escolhido. O dicionário não afirma que um banco já foi implementado.</div>
+</header>
 
-  <nav class="side" aria-label="Índice do dicionário">
-    <h2>Entidades</h2>
-    <ul>
-      <li><a href="#cliente"><span class="swatch" style="background:#F0A24B"></span>Cliente</a></li>
-      <li><a href="#profissional"><span class="swatch" style="background:#E6D93A"></span>Profissional</a></li>
-      <li><a href="#especialidade"><span class="swatch" style="background:#B58BE6"></span>Especialidade</a></li>
-      <li><a href="#profissional-especialidade"><span class="swatch" style="background:#5AAEEA"></span>Profissional_Especialidade</a></li>
-      <li><a href="#procedimento"><span class="swatch" style="background:#EE7DC2"></span>Procedimento</a></li>
-      <li><a href="#agendamento"><span class="swatch" style="background:#F08672"></span>Agendamento</a></li>
-    </ul>
-    <h2>Relacionamentos</h2>
-    <ul>
-      <li><a href="#relacionamentos">Cardinalidades</a></li>
-    </ul>
-  </nav>
+<section class="section" id="identificacao-extra">
+<h2>1. Convenções e padrões</h2>
+<div class="panel"><div class="table-wrap"><table><thead><tr><th>Item</th><th>Convenção adotada neste documento</th></tr></thead><tbody>
+<tr><td>SGBD</td><td>Não definido na entrega. Definir antes da implementação física.</td></tr>
+<tr><td>Codificação e collation</td><td>Recomenda-se UTF-8 e uma collation compatível com português brasileiro, com comparação de texto definida explicitamente no SGBD escolhido. O nome exato da collation depende do SGBD e da versão.</td></tr>
+<tr><td>Notação</td><td>Nomes de entidades no singular/plural conforme o DER e nomes de atributos em <code>snake_case</code> minúsculo.</td></tr>
+<tr><td>Prefixos</td><td><code>id_</code> identifica atributos de chave; <code>PK</code> indica chave primária; <code>FK</code> indica chave estrangeira; <code>RN</code> indica regra de negócio e <code>RNF</code>, requisito não funcional.</td></tr>
+<tr><td>Versão e data</td><td>Versão 1.1 — 24/10/2026. Atualizar este registro quando houver alteração aprovada.</td></tr>
+<tr><td>Tipos físicos</td><td>Os tipos indicados nas tabelas são sugestões genéricas. Confirmar sintaxe, limites e comportamento no SGBD selecionado.</td></tr>
+</tbody></table></div></div>
+</section>
 
-  <main>
-    <header class="top">
-      <h1>Dicionário de Dados — Salão dos Primos</h1>
-      <p>Dicionário de dados conceitual (preliminar) da Entrega 1, com as entidades, os atributos e as regras de negócio do sistema de agendamento do salão.</p>
-      <p class="group">Franciele Souza, Julia Parra, Emilly Rodrigues e kamilly vitoria</p>
-      <div class="legend" aria-label="Legenda">
-        <span><span class="tag pk" style="margin:0">PK</span> chave primária</span>
-        <span><span class="tag fk" style="margin:0">FK</span> chave estrangeira</span>
-        <span>As cores seguem as tabelas do DER lógico.</span>
-      </div>
-    </header>
+<section class="section" id="fluxo">
+<h2>2. Fluxo de dados</h2>
+<p class="intro">Fluxo derivado dos processos descritos no README: cadastro, agendamento, execução do serviço, cancelamento/remarcação e pagamento presencial.</p>
+<div class="callout"><strong>1. Cadastro:</strong> os dados básicos de contato são registrados em Cliente. Profissionais, Procedimentos e Especialidades são cadastrados para permitir organizar a agenda.</div>
+<div class="callout"><strong>2. Agendamento:</strong> o usuário seleciona cliente, profissional, procedimento, data e hora de início. O sistema consulta a agenda do profissional e calcula o término com base na duração do procedimento antes de registrar a reserva.</div>
+<div class="callout"><strong>3. Alteração:</strong> cancelamento e remarcação atualizam o estado ou os dados do agendamento. Um agendamento cancelado não deve bloquear o horário.</div>
+<div class="callout"><strong>4. Atendimento:</strong> o profissional executa o procedimento e o agendamento pode ser marcado como concluído.</div>
+<div class="callout"><strong>5. Pagamento e fechamento:</strong> o README informa que o pagamento ocorre presencialmente ao final do atendimento e alimenta o fechamento de caixa e a comissão. Entretanto, a entidade Pagamento ainda não consta no DER atual; ver a seção de pendências.</div>
+</section>
 
-    <!-- CLIENTE -->
-    <section class="entity cliente" id="cliente">
-      <div class="entity-head">
-        <h3>Cliente</h3>
-        <p>Pessoa que agenda e recebe os serviços do salão.</p>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
-          <tbody>
-            <tr><td><code>id_cliente</code><span class="tag pk">PK</span></td><td>Identificador único do cliente</td><td>Obrigatório, gerado pelo sistema</td></tr>
-            <tr><td><code>nome</code></td><td>Nome do cliente</td><td>Obrigatório</td></tr>
-            <tr><td><code>telefone</code></td><td>Contato principal para confirmação de agendamentos</td><td>Obrigatório; dado sensível, deve ser protegido</td></tr>
-            <tr><td><code>telefone_2</code></td><td>Telefone alternativo do cliente</td><td>Opcional; dado sensível, deve ser protegido</td></tr>
-            <tr><td><code>email</code></td><td>E-mail principal do cliente</td><td>Opcional; dado sensível, deve ser protegido</td></tr>
-            <tr><td><code>email_2</code></td><td>E-mail alternativo do cliente</td><td>Opcional; dado sensível, deve ser protegido</td></tr>
-            <tr><td><code>data_cadastro</code></td><td>Data em que o cliente foi cadastrado</td><td>Gerado automaticamente</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+<section class="section" id="cliente">
+<div class="panel"><div class="panel-head"><h3>3.1 Cliente</h3><p>Pessoa que agenda e recebe os serviços do salão.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico sugerido</th></tr></thead><tbody>
+<tr><td><code>id_cliente</code><span class="tag">PK</span></td><td>Identificador único do cliente.</td><td>Sim; gerado pelo sistema.</td><td><code>INTEGER</code> ou inteiro auto-gerado</td></tr>
+<tr><td><code>nome</code></td><td>Nome do cliente.</td><td>Sim.</td><td><code>VARCHAR(120)</code></td></tr>
+<tr><td><code>telefone</code></td><td>Contato principal para confirmação de agendamentos.</td><td>Sim; dado pessoal, restringir acesso.</td><td><code>VARCHAR(20)</code></td></tr>
+<tr><td><code>telefone_2</code></td><td>Telefone alternativo.</td><td>Não; dado pessoal, restringir acesso.</td><td><code>VARCHAR(20)</code></td></tr>
+<tr><td><code>email</code></td><td>E-mail principal.</td><td>Não; dado pessoal, restringir acesso.</td><td><code>VARCHAR(254)</code></td></tr>
+<tr><td><code>email_2</code></td><td>E-mail alternativo.</td><td>Não; dado pessoal, restringir acesso.</td><td><code>VARCHAR(254)</code></td></tr>
+<tr><td><code>data_cadastro</code></td><td>Data de cadastro.</td><td>Sim; preenchida automaticamente.</td><td><code>TIMESTAMP</code></td></tr>
+</tbody></table></div></div>
+</section>
 
-    <!-- PROFISSIONAL -->
-    <section class="entity profissional" id="profissional">
-      <div class="entity-head">
-        <h3>Profissional</h3>
-        <p>Quem executa o procedimento; a agenda é controlada por profissional.</p>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
-          <tbody>
-            <tr><td><code>id_profissional</code><span class="tag pk">PK</span></td><td>Identificador único do profissional</td><td>Obrigatório, gerado pelo sistema</td></tr>
-            <tr><td><code>nome</code></td><td>Nome do profissional</td><td>Obrigatório</td></tr>
-            <tr><td><code>telefone</code></td><td>Contato do profissional</td><td>Opcional; dado sensível, deve ser protegido</td></tr>
-            <tr><td><code>ativo</code></td><td>Indica se o profissional está atuando no salão (verdadeiro/falso)</td><td>Obrigatório; profissional inativo não pode receber novos agendamentos</td></tr>
-            <tr><td><code>data_cadastro</code></td><td>Data em que o profissional foi cadastrado</td><td>Gerado automaticamente</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+<section class="section" id="profissionais">
+<div class="panel"><div class="panel-head"><h3>3.2 Profissionais</h3><p>Pessoas que executam os procedimentos. A agenda é controlada por profissional.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico sugerido</th></tr></thead><tbody>
+<tr><td><code>id_profissional</code><span class="tag">PK</span></td><td>Identificador único do profissional.</td><td>Sim; gerado pelo sistema.</td><td><code>INTEGER</code> ou inteiro auto-gerado</td></tr>
+<tr><td><code>nome</code></td><td>Nome do profissional.</td><td>Sim.</td><td><code>VARCHAR(120)</code></td></tr>
+<tr><td><code>telefone</code></td><td>Contato do profissional.</td><td>Não; dado pessoal, restringir acesso.</td><td><code>VARCHAR(20)</code></td></tr>
+<tr><td><code>ativo</code></td><td>Indica se o profissional está atuando no salão.</td><td>Sim; valor booleano. Profissional inativo não recebe novos agendamentos (RN04).</td><td><code>BOOLEAN</code></td></tr>
+<tr><td><code>data_cadastro</code></td><td>Data de cadastro do profissional.</td><td>Sim; preenchida automaticamente.</td><td><code>TIMESTAMP</code></td></tr>
+</tbody></table></div></div>
+</section>
 
-    <!-- ESPECIALIDADE -->
-    <section class="entity especialidade" id="especialidade">
-      <div class="entity-head">
-        <h3>Especialidade</h3>
-        <p>Área de atuação que um profissional domina, como corte ou coloração.</p>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
-          <tbody>
-            <tr><td><code>id_especialidade</code><span class="tag pk">PK</span></td><td>Identificador único da especialidade</td><td>Obrigatório, gerado pelo sistema</td></tr>
-            <tr><td><code>nome</code></td><td>Nome da especialidade (ex.: coloração, corte, tratamentos capilares)</td><td>Obrigatório; não pode se repetir</td></tr>
-            <tr><td><code>descricao</code></td><td>Descrição da especialidade</td><td>Opcional</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+<section class="section" id="especialidades">
+<div class="panel"><div class="panel-head"><h3>3.3 Especialidades</h3><p>Área de atuação que um profissional domina, como corte ou coloração.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico sugerido</th></tr></thead><tbody>
+<tr><td><code>id_especialidade</code><span class="tag">PK</span></td><td>Identificador único da especialidade.</td><td>Sim; gerado pelo sistema.</td><td><code>INTEGER</code> ou inteiro auto-gerado</td></tr>
+<tr><td><code>nome</code></td><td>Nome da especialidade.</td><td>Sim; deve ser único.</td><td><code>VARCHAR(100)</code></td></tr>
+<tr><td><code>descricao</code></td><td>Descrição da especialidade.</td><td>Não.</td><td><code>VARCHAR(500)</code></td></tr>
+</tbody></table></div></div>
+</section>
 
-    <!-- PROFISSIONAL_ESPECIALIDADE -->
-    <section class="entity vinculo" id="profissional-especialidade">
-      <div class="entity-head">
-        <h3>Profissional_Especialidade</h3>
-        <p>Entidade associativa que resolve o relacionamento N:N entre Profissional e Especialidade no modelo lógico.</p>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
-          <tbody>
-            <tr><td><code>id_profissional_especialidade</code><span class="tag pk">PK</span></td><td>Identificador único do vínculo</td><td>Obrigatório, gerado pelo sistema</td></tr>
-            <tr><td><code>id_profissional</code><span class="tag fk">FK</span></td><td>Profissional que possui a especialidade</td><td>Obrigatório</td></tr>
-            <tr><td><code>id_especialidade</code><span class="tag fk">FK</span></td><td>Especialidade que o profissional possui</td><td>Obrigatório; a mesma combinação profissional + especialidade não pode se repetir</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+<section class="section" id="vinculo">
+<div class="panel"><div class="panel-head"><h3>3.4 Profissional_Especialidade</h3><p>Tabela associativa do relacionamento N:N entre Profissionais e Especialidades no modelo lógico.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico sugerido</th></tr></thead><tbody>
+<tr><td><code>id_profissional</code><span class="tag">PK</span><span class="tag fk">FK</span></td><td>Profissional que possui a especialidade.</td><td>Sim; referencia Profissionais.</td><td><code>INTEGER</code></td></tr>
+<tr><td><code>id_especialidade</code><span class="tag">PK</span><span class="tag fk">FK</span></td><td>Especialidade que o profissional possui.</td><td>Sim; referencia Especialidades.</td><td><code>INTEGER</code></td></tr>
+</tbody></table></div></div>
+<p class="small">A chave primária é composta por <code>(id_profissional, id_especialidade)</code>, conforme descrito no README. Isso impede repetir a mesma combinação. O DER lógico e o dicionário devem usar exatamente os mesmos nomes.</p>
+</section>
 
-    <!-- PROCEDIMENTO -->
-    <section class="entity procedimento" id="procedimento">
-      <div class="entity-head">
-        <h3>Procedimento</h3>
-        <p>Serviço oferecido pelo salão; a duração define o tempo reservado na agenda.</p>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
-          <tbody>
-            <tr><td><code>id_procedimento</code><span class="tag pk">PK</span></td><td>Identificador único do procedimento</td><td>Obrigatório, gerado pelo sistema</td></tr>
-            <tr><td><code>nome</code></td><td>Nome do procedimento (ex.: corte, progressiva, coloração)</td><td>Obrigatório</td></tr>
-            <tr><td><code>duracao_minutos</code></td><td>Duração média do procedimento, em minutos</td><td>Obrigatório; usada para calcular disponibilidade de horário (ex.: coloração para loiro = tempo padrão x2)</td></tr>
-            <tr><td><code>preco</code></td><td>Valor cobrado pelo procedimento</td><td>Opcional na modelagem conceitual</td></tr>
-            <tr><td><code>descricao</code></td><td>Descrição do procedimento</td><td>Opcional</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+<section class="section" id="procedimentos">
+<div class="panel"><div class="panel-head"><h3>3.5 Procedimentos</h3><p>Serviços de beleza oferecidos pelo salão. A duração define o tempo reservado na agenda.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico sugerido</th></tr></thead><tbody>
+<tr><td><code>id_procedimento</code><span class="tag">PK</span></td><td>Identificador único do procedimento.</td><td>Sim; gerado pelo sistema.</td><td><code>INTEGER</code> ou inteiro auto-gerado</td></tr>
+<tr><td><code>nome</code></td><td>Nome do procedimento.</td><td>Sim.</td><td><code>VARCHAR(120)</code></td></tr>
+<tr><td><code>duracao_minutos</code></td><td>Duração estimada do procedimento, em minutos.</td><td>Sim; maior que zero; usada no cálculo de término (RN01).</td><td><code>INTEGER</code></td></tr>
+<tr><td><code>preco</code></td><td>Valor de referência do procedimento.</td><td>Não; o valor final pode variar com o tamanho do cabelo (RN06).</td><td><code>DECIMAL(10,2)</code></td></tr>
+<tr><td><code>descricao</code></td><td>Descrição do procedimento.</td><td>Não.</td><td><code>VARCHAR(500)</code></td></tr>
+</tbody></table></div></div>
+</section>
 
-    <!-- AGENDAMENTO -->
-    <section class="entity agendamento" id="agendamento">
-      <div class="entity-head">
-        <h3>Agendamento</h3>
-        <p>Evento no tempo que une cliente, profissional e procedimento em uma data e horário. É o núcleo do problema de controle de horários.</p>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Atributo</th><th>Descrição</th><th>Regra de negócio associada</th></tr></thead>
-          <tbody>
-            <tr><td><code>id_agendamento</code><span class="tag pk">PK</span></td><td>Identificador único do agendamento</td><td>Obrigatório, gerado pelo sistema</td></tr>
-            <tr><td><code>data_agendamento</code></td><td>Data do atendimento</td><td>Obrigatório</td></tr>
-            <tr><td><code>hora_inicio</code></td><td>Horário de início do procedimento</td><td>Obrigatório; não pode coincidir com outro agendamento do mesmo profissional</td></tr>
-            <tr><td><code>hora_fim</code></td><td>Horário previsto de término</td><td>Calculado a partir de hora_inicio + duracao_minutos do procedimento</td></tr>
-            <tr><td><code>status</code></td><td>Situação do agendamento (marcado, concluído, cancelado)</td><td>Obrigatório</td></tr>
-            <tr><td><code>observacoes</code></td><td>Observações sobre o atendimento</td><td>Opcional</td></tr>
-            <tr><td><code>data_criacao</code></td><td>Data e hora em que o agendamento foi registrado</td><td>Gerado automaticamente</td></tr>
-            <tr><td><code>id_cliente</code><span class="tag fk">FK</span></td><td>Cliente que realizou o agendamento</td><td>Obrigatório</td></tr>
-            <tr><td><code>id_profissional</code><span class="tag fk">FK</span></td><td>Profissional que realizará o atendimento</td><td>Obrigatório; deve estar ativo</td></tr>
-            <tr><td><code>id_procedimento</code><span class="tag fk">FK</span></td><td>Procedimento que será realizado</td><td>Obrigatório</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+<section class="section" id="agendamentos">
+<div class="panel"><div class="panel-head"><h3>3.6 Agendamentos</h3><p>Evento no tempo que associa um cliente, um profissional e um procedimento.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico sugerido</th></tr></thead><tbody>
+<tr><td><code>id_agendamento</code><span class="tag">PK</span></td><td>Identificador único do agendamento.</td><td>Sim; gerado pelo sistema.</td><td><code>INTEGER</code> ou inteiro auto-gerado</td></tr>
+<tr><td><code>data_agendamento</code></td><td>Data do atendimento.</td><td>Sim.</td><td><code>DATE</code></td></tr>
+<tr><td><code>hora_inicio</code></td><td>Horário de início do procedimento.</td><td>Sim; precisa ser validado contra outros agendamentos do profissional (RN02).</td><td><code>TIME</code></td></tr>
+<tr><td><code>hora_fim</code></td><td>Horário previsto para o término.</td><td>Calculado por hora de início + duração do procedimento.</td><td><code>TIME</code></td></tr>
+<tr><td><code>status</code></td><td>Situação do agendamento: marcado, concluído ou cancelado.</td><td>Sim; restringir aos valores permitidos.</td><td><code>VARCHAR(20)</code> ou domínio enumerado</td></tr>
+<tr><td><code>observacoes</code></td><td>Observações sobre o atendimento.</td><td>Não; evitar inserir dados pessoais desnecessários.</td><td><code>TEXT</code></td></tr>
+<tr><td><code>data_criacao</code></td><td>Data e hora em que o agendamento foi registrado.</td><td>Sim; preenchida automaticamente.</td><td><code>TIMESTAMP</code></td></tr>
+<tr><td><code>id_cliente</code><span class="tag fk">FK</span></td><td>Cliente associado ao agendamento.</td><td>Sim; referencia Cliente.</td><td><code>INTEGER</code></td></tr>
+<tr><td><code>id_profissional</code><span class="tag fk">FK</span></td><td>Profissional que realizará o atendimento.</td><td>Sim; referencia Profissionais e deve estar ativo para novos agendamentos.</td><td><code>INTEGER</code></td></tr>
+<tr><td><code>id_procedimento</code><span class="tag fk">FK</span></td><td>Procedimento que será realizado.</td><td>Sim; referencia Procedimentos.</td><td><code>INTEGER</code></td></tr>
+</tbody></table></div></div>
+</section>
 
-    <!-- RELACIONAMENTOS -->
-    <section class="rel" id="relacionamentos">
-      <h2 class="section-title">Relacionamentos e cardinalidades</h2>
-      <p class="intro">Cada cardinalidade está no formato (mínimo, máximo) e é lida a partir da entidade ao lado dela.</p>
-      <div class="box">
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Relacionamento</th><th>Entidade A</th><th>Entidade B</th><th>Tipo</th></tr></thead>
-            <tbody>
-              <tr><td>Cliente realiza Agendamento</td><td>Cliente (0,n)</td><td>Agendamento (1,1)</td><td>1:N</td></tr>
-              <tr><td>Profissional atende Agendamento</td><td>Profissional (0,n)</td><td>Agendamento (1,1)</td><td>1:N</td></tr>
-              <tr><td>Procedimento tem Agendamento</td><td>Procedimento (0,n)</td><td>Agendamento (1,1)</td><td>1:N</td></tr>
-              <tr><td>Profissional possui Especialidade</td><td>Profissional (0,n)</td><td>Especialidade (0,n)</td><td>N:N, resolvido por Profissional_Especialidade</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+<section class="section" id="pagamento">
+<h2>3.7 Pagamento — entidade recomendada, pendente de inclusão no DER</h2>
+<div class="notice">A correção do professor considera Pagamento uma entidade essencial. O README informa pagamento presencial ao final do atendimento, com débito, crédito, Pix ou dinheiro. A tabela abaixo é uma proposta para completar o modelo; ela <strong>ainda não corresponde ao DER atual</strong> e precisa ser validada e desenhada no DER conceitual e lógico antes de ser tratada como parte implementada do modelo.</div>
+<div class="panel"><div class="table-wrap"><table><thead><tr><th>Atributo proposto</th><th>Descrição</th><th>Regra / tipo físico sugerido</th></tr></thead><tbody>
+<tr><td><code>id_pagamento</code><span class="tag">PK</span></td><td>Identificador do pagamento.</td><td>Gerado pelo sistema; <code>INTEGER</code>.</td></tr>
+<tr><td><code>id_agendamento</code><span class="tag fk">FK</span></td><td>Atendimento ao qual o pagamento está associado.</td><td>Obrigatório; <code>INTEGER</code>. Confirmar se será permitido mais de um pagamento por agendamento.</td></tr>
+<tr><td><code>data_pagamento</code></td><td>Data e hora do recebimento.</td><td>Obrigatório; <code>TIMESTAMP</code>.</td></tr>
+<tr><td><code>valor_pago</code></td><td>Valor efetivamente recebido, combinado presencialmente.</td><td>Obrigatório e maior que zero; <code>DECIMAL(10,2)</code>.</td></tr>
+<tr><td><code>forma_pagamento</code></td><td>Meio usado para pagar.</td><td>Débito, crédito, Pix ou dinheiro, conforme o README; <code>VARCHAR(20)</code>.</td></tr>
+<tr><td><code>observacoes</code></td><td>Observação opcional sobre o recebimento.</td><td>Opcional; <code>TEXT</code>.</td></tr>
+</tbody></table></div></div>
+</section>
 
-    <footer>
-      Salão dos Primos — Entrega 1, Modelo Conceitual (DER). Versão preliminar do dicionário de dados.
-    </footer>
-  </main>
+<section class="section" id="relacionamentos">
+<h2>4. Relacionamentos e cardinalidades</h2>
+<p class="intro">Formato (mínimo, máximo), conforme a convenção declarada no README. Os rótulos do DER, do dicionário e do modelo lógico precisam ser idênticos.</p>
+<div class="panel"><div class="table-wrap"><table><thead><tr><th>Relacionamento</th><th>Cardinalidade</th><th>Interpretação</th><th>Implementação lógica</th></tr></thead><tbody>
+<tr><td>Cliente realiza Agendamentos</td><td>Cliente (0,n); Agendamento (1,1)</td><td>Um cliente pode ter nenhum ou vários agendamentos; cada agendamento pertence a um cliente.</td><td><code>Agendamentos.id_cliente</code> referencia <code>Cliente.id_cliente</code>.</td></tr>
+<tr><td>Profissional atende Agendamentos</td><td>Profissional (0,n); Agendamento (1,1)</td><td>Um profissional pode atender nenhum ou vários agendamentos; cada agendamento tem um profissional.</td><td><code>Agendamentos.id_profissional</code> referencia <code>Profissionais.id_profissional</code>.</td></tr>
+<tr><td>Procedimento consta em Agendamentos</td><td>Procedimento (0,n); Agendamento (1,1)</td><td>Um procedimento pode constar em nenhum ou vários agendamentos; cada agendamento tem um procedimento.</td><td><code>Agendamentos.id_procedimento</code> referencia <code>Procedimentos.id_procedimento</code>.</td></tr>
+<tr><td>Profissionais possuem Especialidades</td><td>Profissionais (0,n); Especialidades (0,n)</td><td>Um profissional pode ter várias especialidades; uma especialidade pode pertencer a vários profissionais.</td><td>Tabela associativa <code>Profissional_Especialidade</code> com PK composta.</td></tr>
+<tr><td>Agendamento possui Pagamento (proposta)</td><td>A definir na validação</td><td>Confirmar se cada atendimento tem exatamente um pagamento ou pode ter pagamentos parciais/múltiplos.</td><td>Proposta: <code>Pagamento.id_agendamento</code> como FK; cardinalidade deve ser definida antes de alterar os DERs.</td></tr>
+</tbody></table></div></div>
+</section>
 
+<section class="section" id="regras">
+<h2>5. Regras de negócio — expressão formal e leitura</h2>
+<div class="panel"><div class="table-wrap"><table><thead><tr><th>Regra</th><th>Expressão / condição formal</th><th>Leitura</th></tr></thead><tbody>
+<tr><td>RN01 — duração</td><td><span class="formula">hora_fim = hora_inicio + duracao_minutos(procedimento)</span></td><td>O término é calculado usando a duração do procedimento. A regra de duração dobrada para coloração loira deve ser aplicada conforme a descrição validada no README.</td></tr>
+<tr><td>RN02 — sem sobreposição</td><td><span class="formula">Para agendamentos A e B do mesmo profissional, se ambos não estiverem cancelados, então A.início &lt; B.fim implica B.início ≥ A.fim (ou A e B não se sobrepõem).</span></td><td>Dois intervalos ativos do mesmo profissional não podem ocupar o mesmo período. Essa validação exige considerar data, hora de início e hora de fim.</td></tr>
+<tr><td>RN03 — horário reservado</td><td><span class="formula">NovoAgendamento.início ≥ AgendamentoExistente.fim OU NovoAgendamento.fim ≤ AgendamentoExistente.início</span></td><td>Um novo atendimento só pode ser inserido se ficar antes ou depois dos intervalos existentes do mesmo profissional, na mesma data e sem sobreposição.</td></tr>
+<tr><td>RN04 — profissional ativo</td><td><span class="formula">NovoAgendamento.id_profissional → Profissionais.ativo = TRUE</span></td><td>Não permitir novos agendamentos com profissional inativo.</td></tr>
+<tr><td>RN05 — vínculos obrigatórios</td><td><span class="formula">Agendamento → exatamente 1 Cliente + 1 Profissional + 1 Procedimento</span></td><td>Cada agendamento deve referenciar uma ocorrência de cada entidade indicada.</td></tr>
+<tr><td>RN06 — preço de referência</td><td><span class="formula">valor_final é informado no atendimento; preco_procedimento é apenas referência</span></td><td>O valor final pode variar com o tamanho do cabelo e é combinado presencialmente; não assumir que o preço de referência é o valor efetivamente pago.</td></tr>
+<tr><td>RN07 — cancelamento</td><td><span class="formula">status = 'cancelado' ⇒ não bloquear disponibilidade do horário</span></td><td>O agendamento cancelado libera o intervalo para consulta de disponibilidade.</td></tr>
+<tr><td>RN08 — antecedência do cancelamento</td><td><span class="formula">instante_solicitação ≤ instante_agendamento − antecedência_mínima_definida_pelo_salão</span></td><td>O README não informa o número exato de horas de antecedência. O valor deve ser confirmado com a responsável; não inventar um prazo.</td></tr>
+</tbody></table></div></div>
+</section>
+
+<section class="section" id="indices">
+<h2>6. Índices e restrições sugeridos</h2>
+<p class="intro">Propostas para a implementação física. Devem ser avaliadas no SGBD escolhido e não significam que os índices já existam.</p>
+<div class="panel"><div class="table-wrap"><table><thead><tr><th>Entidade</th><th>Índice / restrição sugerida</th><th>Finalidade</th></tr></thead><tbody>
+<tr><td>Cliente</td><td>Índice em <code>nome</code>; avaliar índice em <code>telefone</code>.</td><td>Apoiar a busca de clientes. O telefone só deve ser indexado se houver necessidade real de consulta.</td></tr>
+<tr><td>Profissionais</td><td>Índice em <code>ativo</code> somente se o volume de consultas justificar.</td><td>Apoiar filtros de profissionais ativos; avaliar seletividade antes de criar.</td></tr>
+<tr><td>Especialidades</td><td>Restrição <code>UNIQUE(nome)</code>.</td><td>Evitar especialidades com nomes duplicados.</td></tr>
+<tr><td>Profissional_Especialidade</td><td>PK composta <code>(id_profissional, id_especialidade)</code> e índice reverso em <code>id_especialidade</code> se necessário.</td><td>Evitar vínculos duplicados e facilitar consultas por especialidade.</td></tr>
+<tr><td>Procedimentos</td><td>Índice em <code>nome</code> se houver pesquisa frequente.</td><td>Facilitar localizar procedimentos.</td></tr>
+<tr><td>Agendamentos</td><td>Índice composto em <code>(data_agendamento, id_profissional, hora_inicio)</code>; índices nas FKs.</td><td>Apoiar consulta de agenda por dia e profissional. A regra de não sobreposição exige validação transacional, não apenas um índice comum.</td></tr>
+<tr><td>Pagamento — proposta</td><td>Índice em <code>id_agendamento</code> e <code>data_pagamento</code>.</td><td>Apoiar consulta de pagamentos por atendimento e período, caso a entidade seja aprovada.</td></tr>
+</tbody></table></div></div>
+</section>
+
+<section class="section" id="acessos">
+<h2>7. Acesso aos dados, LGPD e log de auditoria</h2>
+<h3>7.1 Acesso por operação</h3>
+<div class="panel"><div class="table-wrap"><table><thead><tr><th>Operação</th><th>Acesso mínimo recomendado</th><th>Controle</th></tr></thead><tbody>
+<tr><td>Cadastrar e consultar cliente</td><td>Profissionais autorizados e responsável pelo salão.</td><td>Exibir somente os dados necessários para identificar e contatar o cliente.</td></tr>
+<tr><td>Consultar agenda</td><td>Profissionais autorizados.</td><td>Exibir os dados necessários ao atendimento; não tornar contatos públicos.</td></tr>
+<tr><td>Criar, remarcar ou cancelar agendamento</td><td>Profissionais autorizados e responsável.</td><td>Validar vínculos, estado do agendamento e conflito de horários.</td></tr>
+<tr><td>Alterar cadastro de profissional e procedimento</td><td>Responsável ou pessoa autorizada.</td><td>Registrar quem realizou a alteração quando houver mecanismo de auditoria.</td></tr>
+<tr><td>Consultar pagamento e fechamento de caixa</td><td>Responsável e pessoas autorizadas para essa função.</td><td>Restringir valores e relatórios financeiros conforme a função de cada usuário.</td></tr>
+</tbody></table></div></div>
+<p>Telefone e e-mail são <strong>dados pessoais</strong>. O acesso deve ser limitado ao necessário para as finalidades do salão, com medidas de segurança e sem exposição pública. A classificação legal de dado pessoal sensível não deve ser aplicada automaticamente a telefone e e-mail.</p>
+<h3>7.2 Registro de acesso (proposta técnica)</h3>
+<p>O modelo atual não apresenta uma entidade de auditoria. Para registrar operações relevantes, recomenda-se avaliar uma tabela separada, por exemplo <code>Log_Acesso</code>, com os seguintes campos propostos:</p>
+<div class="panel"><div class="table-wrap"><table><thead><tr><th>Atributo proposto</th><th>Finalidade</th><th>Tipo físico sugerido</th></tr></thead><tbody>
+<tr><td><code>id_log</code> (PK)</td><td>Identificador do evento.</td><td><code>INTEGER</code></td></tr>
+<tr><td><code>id_usuario</code></td><td>Identificador do usuário autenticado, conforme futura modelagem de usuários.</td><td>Tipo igual ao identificador da entidade Usuário, ainda não modelada.</td></tr>
+<tr><td><code>operacao</code></td><td>Tipo de ação realizada, como inserir, consultar, atualizar ou excluir.</td><td><code>VARCHAR(20)</code></td></tr>
+<tr><td><code>entidade_afetada</code></td><td>Entidade ou recurso sobre o qual ocorreu a ação.</td><td><code>VARCHAR(80)</code></td></tr>
+<tr><td><code>data_hora</code></td><td>Momento do evento.</td><td><code>TIMESTAMP</code></td></tr>
+<tr><td><code>resultado</code></td><td>Resultado da operação, sem copiar desnecessariamente dados pessoais para o log.</td><td><code>VARCHAR(20)</code></td></tr>
+</tbody></table></div></div>
+<p class="small">Log_Acesso é uma recomendação para atender ao requisito de auditoria; não faz parte do DER atual. Definir política de retenção, permissões e proteção contra alteração indevida antes da implementação. Evitar gravar senhas, tokens, dados completos de contato ou outros conteúdos desnecessários no log.</p>
+</section>
+
+<section class="section" id="pendencias">
+<h2>8. Pendências para manter os documentos consistentes</h2>
+<div class="callout"><strong>Pagamento:</strong> a avaliação do professor aponta essa entidade como essencial. Validar a cardinalidade com a responsável e acrescentar a entidade aos DER conceitual e lógico caso faça parte do escopo exigido.</div>
+<div class="callout"><strong>Comissão e caixa:</strong> o README descreve uma divisão de 30% para despesas do salão e 70% para os profissionais. Confirmar com a responsável se a regra é aplicada ao valor recebido de cada atendimento e documentar a origem do valor usado no cálculo. A divisão não está representada nas entidades atuais.</div>
+<div class="callout"><strong>Cancelamento:</strong> a antecedência mínima citada em RN08 não tem número definido no material. Confirmar o prazo com a responsável antes de preencher a regra.</div>
+<div class="callout"><strong>Tipos físicos:</strong> confirmar os tipos e a collation quando o SGBD for escolhido. Os tipos deste documento são sugestões, não configuração já realizada.</div>
+<div class="callout"><strong>DER lógico:</strong> manter os nomes de atributos e a chave composta de Profissional_Especialidade iguais neste documento, no README e no diagrama. A entidade Pagamento e a proposta Log_Acesso acima não devem ser consideradas existentes no DER até que os desenhos sejam atualizados.</div>
+</section>
+
+<footer>
+<strong>Salão dos Primos — Entrega 1.</strong> Dicionário revisado em 24/10/2026. As sugestões de tipos físicos, índices, Pagamento e Log_Acesso estão identificadas como propostas quando não constam do modelo atual.
+</footer>
+</main>
 </div>
 </body>
 </html>
