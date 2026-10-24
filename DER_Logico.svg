@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="1100" viewBox="0 0 1700 1100" role="img" aria-labelledby="title desc">
+<title id="title">DER lógico corrigido — Salão dos Primos</title><desc id="desc">Modelo lógico com tabelas, chaves primárias, chaves estrangeiras e tipos sugeridos.</desc>
+<defs><style>
+text{font-family:Arial,Helvetica,sans-serif;fill:#292438}.heading{font-size:31px;font-weight:700}.sub{font-size:16px;fill:#655e72}.table{fill:#fff;stroke:#62448c;stroke-width:2;rx:9}.bar{fill:#62448c}.th{font-size:20px;font-weight:700;fill:#fff}.row{font-size:16px}.pk{font-weight:700;fill:#7b5500}.fk{font-weight:700;fill:#2358a0}.edge{stroke:#827092;stroke-width:2.5;fill:none}.label{font-size:15px;font-weight:700;fill:#62448c}
+</style></defs><rect width="1700" height="1100" fill="#f8f6fb"/>
+<text x="50" y="48" class="heading">DER Lógico — Salão dos Primos</text><text x="50" y="76" class="sub">PK = chave primária · FK = chave estrangeira · Tipos SQL genéricos sugeridos, não vinculados a um SGBD específico</text>
+<!-- connectors -->
+<path class="edge" d="M370 200 C420 200 420 480 470 480"/><text class="label" x="390" y="330">1:N</text>
+<path class="edge" d="M760 200 L760 390"/><text class="label" x="770" y="300">1:N</text>
+<path class="edge" d="M1150 200 C1100 260 1050 350 970 435"/><text class="label" x="1065" y="310">1:N</text>
+<path class="edge" d="M1120 680 C1200 680 1200 800 1260 800"/><text class="label" x="1180" y="735">1:0..1</text>
+<path class="edge" d="M540 200 C480 250 460 680 520 720"/><text class="label" x="455" y="560">N:N via associação</text>
+<!-- CLIENTE -->
+<g transform="translate(50 110)"><rect class="table" width="320" height="260"/><rect class="bar" width="320" height="42" rx="9"/><rect class="bar" y="30" width="320" height="12"/><text class="th" x="14" y="28">Cliente</text>
+<text class="row pk" x="14" y="72">PK id_cliente INTEGER</text><text class="row" x="14" y="102">nome VARCHAR(120)</text><text class="row" x="14" y="132">telefone VARCHAR(20)</text><text class="row" x="14" y="162">telefone_2 VARCHAR(20)</text><text class="row" x="14" y="192">email VARCHAR(254)</text><text class="row" x="14" y="222">email_2 VARCHAR(254)</text><text class="row" x="14" y="248">data_cadastro TIMESTAMP</text></g>
+<!-- PROFISSIONAIS -->
+<g transform="translate(450 110)"><rect class="table" width="310" height="220"/><rect class="bar" width="310" height="42" rx="9"/><rect class="bar" y="30" width="310" height="12"/><text class="th" x="14" y="28">Profissionais</text><text class="row pk" x="14" y="72">PK id_profissional INTEGER</text><text class="row" x="14" y="102">nome VARCHAR(120)</text><text class="row" x="14" y="132">telefone VARCHAR(20)</text><text class="row" x="14" y="162">ativo BOOLEAN</text><text class="row" x="14" y="192">data_cadastro TIMESTAMP</text></g>
+<!-- ESPECIALIDADES -->
+<g transform="translate(850 110)"><rect class="table" width="310" height="180"/><rect class="bar" width="310" height="42" rx="9"/><rect class="bar" y="30" width="310" height="12"/><text class="th" x="14" y="28">Especialidades</text><text class="row pk" x="14" y="72">PK id_especialidade INTEGER</text><text class="row" x="14" y="102">nome VARCHAR(100) UNIQUE</text><text class="row" x="14" y="132">descricao VARCHAR(500)</text></g>
+<!-- ASSOCIATION -->
+<g transform="translate(850 350)"><rect class="table" width="360" height="150"/><rect class="bar" width="360" height="42" rx="9"/><rect class="bar" y="30" width="360" height="12"/><text class="th" x="14" y="28">Profissional_Especialidade</text><text class="row pk" x="14" y="72">PK, FK id_profissional INTEGER</text><text class="row pk" x="14" y="102">PK, FK id_especialidade INTEGER</text><text class="row" x="14" y="132">PK composta (2 FKs)</text></g>
+<!-- PROCEDIMENTOS -->
+<g transform="translate(50 500)"><rect class="table" width="350" height="220"/><rect class="bar" width="350" height="42" rx="9"/><rect class="bar" y="30" width="350" height="12"/><text class="th" x="14" y="28">Procedimentos</text><text class="row pk" x="14" y="72">PK id_procedimento INTEGER</text><text class="row" x="14" y="102">nome VARCHAR(120)</text><text class="row" x="14" y="132">duracao_minutos INTEGER</text><text class="row" x="14" y="162">preco DECIMAL(10,2)</text><text class="row" x="14" y="192">descricao VARCHAR(500)</text></g>
+<!-- AGENDAMENTOS -->
+<g transform="translate(470 390)"><rect class="table" width="500" height="330"/><rect class="bar" width="500" height="42" rx="9"/><rect class="bar" y="30" width="500" height="12"/><text class="th" x="14" y="28">Agendamentos</text><text class="row pk" x="14" y="72">PK id_agendamento INTEGER</text><text class="row" x="14" y="102">data_agendamento DATE</text><text class="row" x="14" y="132">hora_inicio TIME</text><text class="row" x="14" y="162">hora_fim TIME</text><text class="row" x="14" y="192">status VARCHAR(20)</text><text class="row" x="14" y="222">observacoes TEXT</text><text class="row" x="14" y="252">data_criacao TIMESTAMP</text><text class="row fk" x="14" y="282">FK id_cliente INTEGER</text><text class="row fk" x="14" y="307">FK id_profissional INTEGER; id_procedimento INTEGER</text></g>
+<!-- PAGAMENTO -->
+<g transform="translate(1260 590)"><rect class="table" width="380" height="250"/><rect class="bar" width="380" height="42" rx="9"/><rect class="bar" y="30" width="380" height="12"/><text class="th" x="14" y="28">Pagamento</text><text class="row pk" x="14" y="72">PK id_pagamento INTEGER</text><text class="row fk" x="14" y="102">FK id_agendamento INTEGER UNIQUE</text><text class="row" x="14" y="132">data_pagamento TIMESTAMP</text><text class="row" x="14" y="162">valor_pago DECIMAL(10,2)</text><text class="row" x="14" y="192">forma_pagamento VARCHAR(20)</text><text class="row" x="14" y="222">observacoes TEXT</text></g>
+<text x="50" y="800" class="sub">Integridade referencial: Agendamentos referencia Cliente, Profissionais e Procedimentos. Profissional_Especialidade tem PK composta.</text>
+<text x="50" y="830" class="sub">Pagamento.id_agendamento deve ser UNIQUE se for confirmado o limite de um pagamento por agendamento.</text>
+<text x="50" y="860" class="sub">A regra de não sobreposição de horários exige validação transacional da aplicação ou recurso específico do SGBD.</text>
+<text x="50" y="890" class="sub">Tipos e índices são sugestões para o modelo físico futuro; confirmar no SGBD escolhido.</text>
+</svg>
