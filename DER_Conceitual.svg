@@ -5,9 +5,9 @@
 <rect width="1600" height="900" fill="#f8f6fb"/>
 <text x="50" y="50" class="main">DER Conceitual — Salão dos Primos</text><text x="50" y="80" class="sub">Revisão 2.0 · Cardinalidades no formato (mínimo, máximo)</text>
 <!-- relationships behind entity boxes -->
-<path class="edge" d="M390 245 C455 260 485 420 570 455"/><text class="label" x="405" y="310">Cliente (0,n)</text><text class="label" x="445" y="400">Agendamento (1,1)</text>
-<path class="edge" d="M790 310 L790 420"/><text class="label" x="800" y="350">Profissional (0,n)</text><text class="label" x="800" y="405">Agendamento (1,1)</text>
-<path class="edge" d="M1120 245 C1060 280 1020 390 970 455"/><text class="label" x="1020" y="300">Procedimento (0,n)</text><text class="label" x="990" y="400">Agendamento (1,1)</text>
+<path class="edge" d="M390 245 C455 260 485 420 570 455"/><text class="label" x="405" y="310">Cliente (1,1)</text><text class="label" x="445" y="400">Agendamento (0,n)</text>
+<path class="edge" d="M790 310 L790 420"/><text class="label" x="800" y="350">Profissional (1,1)</text><text class="label" x="800" y="405">Agendamento (0,n)</text>
+<path class="edge" d="M1120 245 C1060 280 1020 390 970 455"/><text class="label" x="1020" y="300">Procedimento (1,1)</text><text class="label" x="990" y="400">Agendamento (0,n)</text>
 <path class="edge" d="M600 220 C490 260 390 455 340 570"/><text class="label" x="410" y="390">Profissionais (0,n)</text><text class="label" x="350" y="500">Especialidades (0,n)</text>
 <path class="edge" d="M970 525 C1035 540 1080 570 1140 610"/><text class="label" x="1000" y="550">Agendamento (0,1)</text><text class="label" x="1080" y="585">Pagamento (1,1)</text>
 <!-- entity cards -->
