@@ -28,13 +28,13 @@
 </header>
 
 <section class="section" id="identificacao-extra">
-<h2>1. Convenções e padrões</h2>
+<h2>1. Convenções e padrões</h2><p>Diagramas atualizados: <a href="DER_Conceitual.svg">DER conceitual revisado</a> e <a href="DER_Logico.svg">DER lógico revisado</a>.</p>
 <div class="panel"><div class="table-wrap"><table><thead><tr><th>Item</th><th>Convenção adotada neste documento</th></tr></thead><tbody>
 <tr><td>SGBD</td><td>Não definido na entrega. Definir antes da implementação física.</td></tr>
 <tr><td>Codificação e collation</td><td>Recomenda-se UTF-8 e uma collation compatível com português brasileiro, com comparação de texto definida explicitamente no SGBD escolhido. O nome exato da collation depende do SGBD e da versão.</td></tr>
 <tr><td>Notação</td><td>Nomes de entidades no singular/plural conforme o DER e nomes de atributos em <code>snake_case</code> minúsculo.</td></tr>
 <tr><td>Prefixos</td><td><code>id_</code> identifica atributos de chave; <code>PK</code> indica chave primária; <code>FK</code> indica chave estrangeira; <code>RN</code> indica regra de negócio e <code>RNF</code>, requisito não funcional.</td></tr>
-<tr><td>Versão e data</td><td>Versão 1.1 — 24/10/2026. Atualizar este registro quando houver alteração aprovada.</td></tr>
+<tr><td>Versão e data</td><td>Versão 2.0 — 24/10/2026. Atualizar este registro quando houver alteração aprovada.</td></tr>
 <tr><td>Tipos físicos</td><td>Os tipos indicados nas tabelas são sugestões genéricas. Confirmar sintaxe, limites e comportamento no SGBD selecionado.</td></tr>
 </tbody></table></div></div>
 </section>
@@ -141,7 +141,7 @@
 <h2>5. Regras de negócio — expressão formal e leitura</h2>
 <div class="panel"><div class="table-wrap"><table><thead><tr><th>Regra</th><th>Expressão / condição formal</th><th>Leitura</th></tr></thead><tbody>
 <tr><td>RN01 — duração</td><td><span class="formula">hora_fim = hora_inicio + duracao_minutos(procedimento)</span></td><td>O término é calculado usando a duração do procedimento. A regra de duração dobrada para coloração loira deve ser aplicada conforme a descrição validada no README.</td></tr>
-<tr><td>RN02 — sem sobreposição</td><td><span class="formula">Para agendamentos A e B do mesmo profissional, se ambos não estiverem cancelados, então A.início &lt; B.fim implica B.início ≥ A.fim (ou A e B não se sobrepõem).</span></td><td>Dois intervalos ativos do mesmo profissional não podem ocupar o mesmo período. Essa validação exige considerar data, hora de início e hora de fim.</td></tr>
+<tr><td>RN02 — sem sobreposição</td><td><span class="formula">Para A e B na mesma data e do mesmo profissional, se ambos não estiverem cancelados, não pode ocorrer simultaneamente A.início &lt; B.fim e B.início &lt; A.fim.</span></td><td>Dois intervalos ativos do mesmo profissional não podem ocupar o mesmo período. Essa validação exige considerar data, hora de início e hora de fim.</td></tr>
 <tr><td>RN03 — horário reservado</td><td><span class="formula">NovoAgendamento.início ≥ AgendamentoExistente.fim OU NovoAgendamento.fim ≤ AgendamentoExistente.início</span></td><td>Um novo atendimento só pode ser inserido se ficar antes ou depois dos intervalos existentes do mesmo profissional, na mesma data e sem sobreposição.</td></tr>
 <tr><td>RN04 — profissional ativo</td><td><span class="formula">NovoAgendamento.id_profissional → Profissionais.ativo = TRUE</span></td><td>Não permitir novos agendamentos com profissional inativo.</td></tr>
 <tr><td>RN05 — vínculos obrigatórios</td><td><span class="formula">Agendamento → exatamente 1 Cliente + 1 Profissional + 1 Procedimento</span></td><td>Cada agendamento deve referenciar uma ocorrência de cada entidade indicada.</td></tr>
