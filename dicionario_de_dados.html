@@ -28,7 +28,7 @@
 </header>
 
 <section class="section" id="identificacao-extra">
-<h2>1. Convenções e padrões</h2><p>Diagramas atualizados: <a href="DER_Conceitual.svg">DER conceitual revisado</a> e <a href="DER_Logico.svg">DER lógico revisado</a>.</p>
+<h2>1. Convenções e padrões</h2><p>Os diagramas existentes foram preservados sem alterações nesta revisão. Consulte <a href="DER_Conceitual.png">DER conceitual</a> e <a href="DER_L%C3%B3gico.png">DER lógico</a> no repositório.</p>
 <div class="panel"><div class="table-wrap"><table><thead><tr><th>Item</th><th>Convenção adotada neste documento</th></tr></thead><tbody>
 <tr><td>SGBD</td><td>Não definido na entrega. Definir antes da implementação física.</td></tr>
 <tr><td>Codificação e collation</td><td>Recomenda-se UTF-8 e uma collation compatível com português brasileiro, com comparação de texto definida explicitamente no SGBD escolhido. O nome exato da collation depende do SGBD e da versão.</td></tr>
@@ -191,7 +191,7 @@
 
 <section class="section" id="pendencias">
 <h2>8. Pendências para manter os documentos consistentes</h2>
-<div class="callout"><strong>Pagamento:</strong> já foi incluído nos diagramas SVG revisados. Confirmar com a responsável se um atendimento pode ter pagamentos parciais ou mais de um pagamento; se sim, revisar a cardinalidade e remover a restrição de unicidade da FK.</div>
+<div class="callout"><strong>Pagamento:</strong> o SQL e este dicionário adotam no máximo um pagamento por agendamento. Confirmar essa hipótese com a responsável; se houver pagamentos parciais ou múltiplos, será necessário rever o modelo. Os diagramas existentes foram preservados sem alterações nesta revisão.</div>
 <div class="callout"><strong>Comissão e caixa:</strong> o README descreve uma divisão de 30% para despesas do salão e 70% para os profissionais. Confirmar com a responsável se a regra é aplicada ao valor recebido de cada atendimento e documentar a origem do valor usado no cálculo. A regra financeira ainda não está representada como entidade própria no DER.</div>
 <div class="callout"><strong>Cancelamento:</strong> a antecedência mínima citada em RN08 não tem número definido no material. Confirmar o prazo com a responsável antes de preencher a regra.</div>
 <div class="callout"><strong>Compras, fornecedores e estoque:</strong> esses processos aparecem no README, mas as entidades Fornecedor, Compra, Item_Compra e Insumo ainda não foram incluídas nos diagramas. Confirmar com a responsável e com o enunciado se devem integrar esta entrega; se sim, acrescentá-las de forma consistente ao DER conceitual, lógico e ao dicionário.<br><br><strong>Tipos físicos:</strong> confirmar os tipos e a collation quando o SGBD for escolhido. Os tipos deste documento são sugestões, não configuração já realizada.</div>
