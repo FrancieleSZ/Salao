@@ -1,172 +1,222 @@
 # Dicionário de dados — Salão dos Primos
 
-**SGBD de referência:** MySQL 8.0+. Os tipos e restrições abaixo correspondem ao arquivo `script.sql`. Os dados de exemplo do script são fictícios.
+**Versão:** 2.1 — 26/10/2026  
+**SGBD:** MySQL 8.0.16 ou superior  
+**Banco:** salao_dos_primos  
+**Charset/collation:** utf8mb4 / utf8mb4_unicode_ci  
+**Script de referência:** [script.sql](script.sql)
+
+Os tipos e restrições desta documentação correspondem ao script SQL. Os dados de exemplo são fictícios. Os DERs conceitual e lógico foram preservados sem alterações conforme solicitado; divergências visuais anteriores continuam pendentes.
+
+## Convenções
+
+- Nomes de tabelas e colunas usam snake_case; chaves substitutas usam prefixo id_.
+- PK é chave primária; FK é chave estrangeira; UNIQUE impede valores repetidos; CHECK valida condições.
+- NOT NULL indica campo obrigatório; quando a coluna aceita NULL, o campo é opcional.
+- Quantidades com casas decimais usam DECIMAL(10,3); valores monetários usam DECIMAL(10,2).
+- Os CHECK são aplicados pelo MySQL a partir da versão 8.0.16.
+- Os tipos de dados pessoais (telefone e e-mail) exigem acesso restrito no uso real.
+
+## Fluxo de dados
+
+1. Cadastrar clientes, profissionais, procedimentos e especialidades.
+2. Criar agendamento com cliente, profissional, procedimento, data, início, término e status.
+3. Validar se o profissional está ativo e se o intervalo não conflita com outro agendamento.
+4. Registrar o atendimento e, quando concluído, lançar o pagamento recebido.
+5. Consultar pagamentos por período e gerar fechamento de caixa com a divisão documentada de 30%/70%.
+6. Registrar fornecedor, compra e itens; cada item de compra cria movimentação de entrada.
+7. Registrar consumo/ajuste por movimentação e consultar saldo/estoque mínimo.
 
 ## 1. cliente
 
 | Campo | Tipo | Obrigatório | Chave/regra | Descrição |
-|---|---|---:|---|---|
-| `id_cliente` | INT | Sim | PK, auto incremento | Identificador único do cliente. |
-| `nome` | VARCHAR(100) | Sim | — | Nome do cliente. |
-| `telefone` | VARCHAR(20) | Não | Dado pessoal | Telefone de contato. |
-| `email` | VARCHAR(120) | Não | Dado pessoal | E-mail de contato. |
+|---|---|---|---|---|
+| id_cliente | INT AUTO_INCREMENT | Sim | PK | Identificador único. |
+| nome | VARCHAR(100) | Sim | — | Nome do cliente. |
+| telefone | VARCHAR(20) | Não | Dado pessoal | Telefone para contato. |
+| email | VARCHAR(120) | Não | Dado pessoal | E-mail para contato. |
 
 ## 2. profissional
 
 | Campo | Tipo | Obrigatório | Chave/regra | Descrição |
-|---|---|---:|---|---|
-| `id_profissional` | INT | Sim | PK, auto incremento | Identificador único do profissional. |
-| `nome` | VARCHAR(100) | Sim | — | Nome do profissional. |
-| `telefone` | VARCHAR(20) | Não | Dado pessoal | Telefone de contato. |
-| `ativo` | BOOLEAN | Sim | Padrão TRUE | Indica se pode receber novos agendamentos. |
+|---|---|---|---|---|
+| id_profissional | INT AUTO_INCREMENT | Sim | PK | Identificador do profissional. |
+| nome | VARCHAR(100) | Sim | — | Nome. |
+| telefone | VARCHAR(20) | Não | Dado pessoal | Telefone de contato. |
+| ativo | BOOLEAN | Sim | DEFAULT TRUE | Indica se recebe novos agendamentos. |
 
 ## 3. procedimento
 
 | Campo | Tipo | Obrigatório | Chave/regra | Descrição |
-|---|---|---:|---|---|
-| `id_procedimento` | INT | Sim | PK, auto incremento | Identificador do procedimento. |
-| `nome` | VARCHAR(120) | Sim | — | Nome do serviço. |
-| `descricao` | VARCHAR(500) | Não | — | Descrição do procedimento. |
-| `duracao_minutos` | INT | Sim | CHECK > 0 | Duração estimada em minutos. |
-| `preco` | DECIMAL(10,2) | Não | CHECK >= 0 quando informado | Preço de referência; o valor final pode variar presencialmente. |
+|---|---|---|---|---|
+| id_procedimento | INT AUTO_INCREMENT | Sim | PK | Identificador. |
+| nome | VARCHAR(120) | Sim | Índice | Nome do serviço. |
+| descricao | VARCHAR(500) | Não | — | Descrição. |
+| duracao_minutos | INT | Sim | CHECK > 0 | Duração estimada. |
+| preco | DECIMAL(10,2) | Não | CHECK >= 0 quando informado | Preço de referência; o valor final pode variar. |
 
 ## 4. especialidade
 
 | Campo | Tipo | Obrigatório | Chave/regra | Descrição |
-|---|---|---:|---|---|
-| `id_especialidade` | INT | Sim | PK, auto incremento | Identificador da especialidade. |
-| `nome` | VARCHAR(80) | Sim | UNIQUE | Nome único da especialidade. |
+|---|---|---|---|---|
+| id_especialidade | INT AUTO_INCREMENT | Sim | PK | Identificador. |
+| nome | VARCHAR(80) | Sim | UNIQUE | Nome único da especialidade. |
 
 ## 5. profissional_especialidade
 
 | Campo | Tipo | Obrigatório | Chave/regra | Descrição |
-|---|---|---:|---|---|
-| `id_profissional` | INT | Sim | PK composta e FK | Referencia `profissional.id_profissional`. |
-| `id_especialidade` | INT | Sim | PK composta e FK | Referencia `especialidade.id_especialidade`. |
+|---|---|---|---|---|
+| id_profissional | INT | Sim | PK composta, FK | Referencia profissional.id_profissional. |
+| id_especialidade | INT | Sim | PK composta, FK | Referencia especialidade.id_especialidade. |
 
-A chave primária composta (`id_profissional`, `id_especialidade`) impede cadastrar o mesmo vínculo duas vezes.
+A PK composta (id_profissional, id_especialidade) impede repetir o mesmo vínculo.
 
 ## 6. agendamento
 
 | Campo | Tipo | Obrigatório | Chave/regra | Descrição |
-|---|---|---:|---|---|
-| `id_agendamento` | INT | Sim | PK, auto incremento | Identificador do agendamento. |
-| `id_cliente` | INT | Sim | FK | Cliente associado ao agendamento. |
-| `id_profissional` | INT | Sim | FK | Profissional responsável pelo atendimento. |
-| `id_procedimento` | INT | Sim | FK | Procedimento reservado. |
-| `data_agendamento` | DATE | Sim | Índice composto com profissional e início | Data do atendimento. |
-| `hora_inicio` | TIME | Sim | Deve ser anterior a `hora_fim` | Horário de início. |
-| `hora_fim` | TIME | Sim | Deve ser posterior a `hora_inicio` | Horário previsto de término; calculado pela aplicação usando a duração do procedimento. |
-| `status` | VARCHAR(20) | Sim | `agendado`, `confirmado`, `concluido`, `cancelado` ou `faltou` | Situação do agendamento. |
-| `observacoes` | TEXT | Não | Evitar dados pessoais desnecessários | Observações sobre o atendimento. |
-| `data_criacao` | TIMESTAMP | Sim | Padrão CURRENT_TIMESTAMP | Data e hora de criação do registro. |
+|---|---|---|---|---|
+| id_agendamento | INT AUTO_INCREMENT | Sim | PK | Identificador. |
+| id_cliente | INT | Sim | FK | Cliente. |
+| id_profissional | INT | Sim | FK | Profissional. |
+| id_procedimento | INT | Sim | FK | Procedimento. |
+| data_agendamento | DATE | Sim | Índice de agenda | Data do atendimento. |
+| hora_inicio | TIME | Sim | CHECK comparativo | Horário inicial. |
+| hora_fim | TIME | Sim | CHECK: maior que início | Término previsto; a aplicação deve calcular com base na duração. |
+| status | VARCHAR(20) | Sim | DEFAULT agendado; CHECK | agendado, confirmado, concluido, cancelado ou faltou. |
+| observacoes | TEXT | Não | — | Evitar dados pessoais desnecessários. |
+| data_criacao | TIMESTAMP | Sim | DEFAULT CURRENT_TIMESTAMP | Criação do registro. |
 
-**Regra de agenda:** os gatilhos do SQL impedem sobreposição de horários não cancelados do mesmo profissional e bloqueiam novos agendamentos com profissional inativo. A aplicação deve calcular a duração do procedimento. Quando a coloração para loiro exigir o dobro do tempo padrão, deve reservar esse intervalo ampliado conforme avaliação profissional.
+Os triggers validam profissional ativo e sobreposição em inserção/alteração. A regra de duração e o eventual dobro de tempo para coloração de loiro devem ser calculados pela aplicação conforme avaliação profissional.
 
 ## 7. pagamento
 
 | Campo | Tipo | Obrigatório | Chave/regra | Descrição |
-|---|---|---:|---|---|
-| `id_pagamento` | INT | Sim | PK, auto incremento | Identificador do pagamento. |
-| `id_agendamento` | INT | Sim | FK e UNIQUE | Atendimento associado; o modelo admite no máximo um pagamento por agendamento.  |
-| `data_pagamento` | DATETIME | Sim | — | Data e hora do recebimento. |
-| `valor_pago` | DECIMAL(10,2) | Sim | CHECK > 0 | Valor efetivamente recebido. |
-| `forma_pagamento` | VARCHAR(20) | Sim | `debito`, `credito`, `pix`, `dinheiro` | Forma utilizada no recebimento. |
-| `observacoes` | TEXT | Não | — | Observações opcionais sobre o pagamento. |
-
+|---|---|---|---|---|
+| id_pagamento | INT AUTO_INCREMENT | Sim | PK | Identificador. |
+| id_agendamento | INT | Sim | FK, UNIQUE | Um pagamento por agendamento nesta versão. |
+| data_pagamento | DATETIME | Sim | Índice | Data/hora do recebimento. |
+| valor_pago | DECIMAL(10,2) | Sim | CHECK > 0 | Valor efetivamente recebido. |
+| forma_pagamento | VARCHAR(20) | Sim | CHECK | debito, credito, pix ou dinheiro. |
+| observacoes | TEXT | Não | — | Observações. |
 
 ## 8. fornecedor
 
 | Campo | Tipo | Obrigatório | Chave/regra | Descrição |
-|---|---|---:|---|---|
-| `id_fornecedor` | INT | Sim | PK, auto incremento | Identificador do fornecedor. |
-| `nome` | VARCHAR(120) | Sim | — | Nome do fornecedor. |
-| `telefone` | VARCHAR(20) | Não | Dado de contato | Telefone do fornecedor. |
-| `email` | VARCHAR(120) | Não | Dado de contato | E-mail do fornecedor. |
-| `observacoes` | TEXT | Não | — | Informações adicionais. |
+|---|---|---|---|---|
+| id_fornecedor | INT AUTO_INCREMENT | Sim | PK | Identificador. |
+| nome | VARCHAR(120) | Sim | Índice | Nome do fornecedor. |
+| telefone | VARCHAR(20) | Não | Contato | Telefone. |
+| email | VARCHAR(120) | Não | Contato | E-mail. |
+| observacoes | TEXT | Não | — | Informações adicionais. |
 
 ## 9. insumo
 
 | Campo | Tipo | Obrigatório | Chave/regra | Descrição |
-|---|---|---:|---|---|
-| `id_insumo` | INT | Sim | PK, auto incremento | Identificador do insumo. |
-| `nome` | VARCHAR(120) | Sim | — | Nome do material utilizado pelo salão. |
-| `unidade_medida` | VARCHAR(20) | Sim | — | Unidade de medida, como unidade ou ml. |
-| `quantidade_estoque` | DECIMAL(10,3) | Sim | CHECK >= 0; padrão 0 | Saldo atual do material. |
-| `estoque_minimo` | DECIMAL(10,3) | Sim | CHECK >= 0; padrão 0 | Nível de alerta para reposição. |
-| `ativo` | BOOLEAN | Sim | Padrão TRUE | Indica se o material continua em uso. |
+|---|---|---|---|---|
+| id_insumo | INT AUTO_INCREMENT | Sim | PK | Identificador. |
+| nome | VARCHAR(120) | Sim | Índice | Nome do material. |
+| unidade_medida | VARCHAR(20) | Sim | — | Unidade, ml, grama etc. |
+| quantidade_estoque | DECIMAL(10,3) | Sim | DEFAULT 0; CHECK >= 0 | Saldo atual. |
+| estoque_minimo | DECIMAL(10,3) | Sim | DEFAULT 0; CHECK >= 0 | Nível de reposição. |
+| ativo | BOOLEAN | Sim | DEFAULT TRUE | Indica se continua em uso. |
 
 ## 10. compra
 
 | Campo | Tipo | Obrigatório | Chave/regra | Descrição |
-|---|---|---:|---|---|
-| `id_compra` | INT | Sim | PK, auto incremento | Identificador da compra. |
-| `id_fornecedor` | INT | Sim | FK | Fornecedor da compra. |
-| `data_compra` | DATETIME | Sim | Padrão CURRENT_TIMESTAMP | Data e hora da compra. |
-| `observacoes` | TEXT | Não | — | Informações adicionais. |
+|---|---|---|---|---|
+| id_compra | INT AUTO_INCREMENT | Sim | PK | Identificador. |
+| id_fornecedor | INT | Sim | FK | Fornecedor. |
+| data_compra | DATETIME | Sim | DEFAULT CURRENT_TIMESTAMP; índice | Data/hora da compra. |
+| observacoes | TEXT | Não | — | Observações. |
 
 ## 11. item_compra
 
 | Campo | Tipo | Obrigatório | Chave/regra | Descrição |
-|---|---|---:|---|---|
-| `id_item_compra` | INT | Sim | PK, auto incremento | Identificador da linha da compra. |
-| `id_compra` | INT | Sim | FK | Compra a que a linha pertence. |
-| `id_insumo` | INT | Sim | FK | Insumo comprado. |
-| `quantidade` | DECIMAL(10,3) | Sim | CHECK > 0 | Quantidade adquirida. |
-| `valor_unitario` | DECIMAL(10,2) | Sim | CHECK >= 0 | Valor por unidade. |
+|---|---|---|---|---|
+| id_item_compra | INT AUTO_INCREMENT | Sim | PK | Identificador da linha. |
+| id_compra | INT | Sim | FK | Compra. |
+| id_insumo | INT | Sim | FK | Insumo. |
+| quantidade | DECIMAL(10,3) | Sim | CHECK > 0 | Quantidade adquirida. |
+| valor_unitario | DECIMAL(10,2) | Sim | CHECK >= 0 | Valor por unidade. |
 
-Ao inserir um item de compra, o gatilho `trg_item_compra_ai` registra automaticamente uma movimentação de entrada, que atualiza o saldo do insumo.
+Ao inserir um item, um trigger gera movimentação de entrada e atualiza o saldo.
 
 ## 12. movimentacao_estoque
 
 | Campo | Tipo | Obrigatório | Chave/regra | Descrição |
-|---|---|---:|---|---|
-| `id_movimentacao` | INT | Sim | PK, auto incremento | Identificador da movimentação. |
-| `id_insumo` | INT | Sim | FK | Insumo movimentado. |
-| `id_agendamento` | INT | Não | FK | Atendimento associado ao consumo, quando aplicável. |
-| `tipo` | VARCHAR(20) | Sim | `entrada`, `consumo` ou `ajuste` | Tipo de movimentação. |
-| `quantidade` | DECIMAL(10,3) | Sim | CHECK > 0 | Quantidade movimentada. |
-| `data_movimentacao` | DATETIME | Sim | Padrão CURRENT_TIMESTAMP | Data e hora do registro. |
-| `observacoes` | TEXT | Não | — | Motivo ou detalhe. |
+|---|---|---|---|---|
+| id_movimentacao | INT AUTO_INCREMENT | Sim | PK | Identificador. |
+| id_insumo | INT | Sim | FK | Insumo movimentado. |
+| id_agendamento | INT | Não | FK opcional | Atendimento associado quando aplicável. |
+| tipo | VARCHAR(20) | Sim | CHECK | entrada, consumo ou ajuste. |
+| quantidade | DECIMAL(10,3) | Sim | CHECK > 0 | Quantidade movimentada. |
+| data_movimentacao | DATETIME | Sim | DEFAULT CURRENT_TIMESTAMP; índice | Data/hora. |
+| observacoes | TEXT | Não | — | Motivo ou detalhe. |
 
-O SQL impede registrar consumo maior que o saldo disponível e atualiza o saldo automaticamente. Na versão atual, o tipo `ajuste` soma a quantidade informada ao saldo.
+O trigger impede consumo maior que o saldo e mantém a quantidade atualizada. O tipo ajuste soma a quantidade informada; para corrigir um saldo para baixo, a rotina atual exige modelar a diferença como consumo, com observação explicativa.
 
 ## 13. fechamento_caixa
 
 | Campo | Tipo | Obrigatório | Chave/regra | Descrição |
-|---|---|---:|---|---|
-| `id_fechamento` | INT | Sim | PK, auto incremento | Identificador do fechamento. |
-| `data_inicio` | DATE | Sim | UNIQUE junto com data_fim | Início do período. |
-| `data_fim` | DATE | Sim | Igual ou posterior a data_inicio | Fim do período. |
-| `total_recebido` | DECIMAL(12,2) | Sim | Calculado pelo procedimento | Soma dos pagamentos recebidos no período. |
-| `percentual_salao` | DECIMAL(5,2) | Sim | Padrão 30% | Percentual destinado às despesas do salão. |
-| `valor_salao` | DECIMAL(12,2) | Sim | 30% do total | Valor destinado ao salão. |
-| `percentual_profissionais` | DECIMAL(5,2) | Sim | Padrão 70% | Percentual destinado aos profissionais. |
-| `valor_profissionais` | DECIMAL(12,2) | Sim | 70% do total | Valor destinado aos profissionais. |
-| `data_fechamento` | DATETIME | Sim | Padrão CURRENT_TIMESTAMP | Momento do fechamento. |
-| `observacoes` | TEXT | Não | — | Observações adicionais. |
+|---|---|---|---|---|
+| id_fechamento | INT AUTO_INCREMENT | Sim | PK | Identificador. |
+| data_inicio | DATE | Sim | UNIQUE com data_fim | Início do período. |
+| data_fim | DATE | Sim | CHECK >= data_inicio | Fim do período. |
+| total_recebido | DECIMAL(12,2) | Sim | Calculado pela procedure | Soma dos pagamentos no período. |
+| percentual_salao | DECIMAL(5,2) | Sim | DEFAULT 30.00 | Percentual do salão. |
+| valor_salao | DECIMAL(12,2) | Sim | Calculado | 30% do total. |
+| percentual_profissionais | DECIMAL(5,2) | Sim | DEFAULT 70.00 | Percentual dos profissionais. |
+| valor_profissionais | DECIMAL(12,2) | Sim | Calculado | 70% do total. |
+| data_fechamento | DATETIME | Sim | DEFAULT CURRENT_TIMESTAMP | Momento do fechamento. |
+| observacoes | TEXT | Não | — | Observações. |
 
-Para fechar um período, executar `CALL fechar_caixa('AAAA-MM-DD', 'AAAA-MM-DD')`. O procedimento soma os pagamentos dentro do período e calcula a divisão 30%/70%. A restrição UNIQUE impede repetir exatamente o mesmo período.
+Executar CALL fechar_caixa('AAAA-MM-DD','AAAA-MM-DD') para fechar um período. O mesmo par de datas não pode ser inserido duas vezes.
 
-## 14. Relacionamentos adicionais
+## 14. Relacionamentos e cardinalidades lógicas
 
-- **Fornecedor — Compra:** um fornecedor pode estar associado a várias compras; cada compra referencia um fornecedor.
-- **Compra — Item_Compra:** cada compra é composta por linhas de itens; cada linha pertence a uma compra.
-- **Insumo — Item_Compra:** um insumo pode aparecer em várias compras; cada item referencia um insumo.
-- **Insumo — Movimentacao_Estoque:** cada movimentação pertence a um insumo; o insumo pode ter várias movimentações.
-- **Agendamento — Movimentacao_Estoque:** uma movimentação pode apontar para o atendimento associado ao consumo; o vínculo é opcional.
+- Cliente (0,n) — Agendamento (1,1): um cliente pode ter vários agendamentos; cada agendamento tem um cliente.
+- Profissional (0,n) — Agendamento (1,1): cada agendamento tem um profissional.
+- Procedimento (0,n) — Agendamento (1,1): cada agendamento tem um procedimento.
+- Profissional (0,n) — Especialidade (0,n): resolvido por profissional_especialidade.
+- Agendamento (0,1) — Pagamento (1,1): um pagamento no máximo por agendamento.
+- Fornecedor (0,n) — Compra (1,1).
+- Compra (1,n) — Item_Compra (1,1).
+- Insumo (0,n) — Item_Compra (1,1).
+- Insumo (0,n) — Movimentacao_Estoque (1,1).
+- Agendamento (0,n) — Movimentacao_Estoque (0,1), quando a movimentação estiver associada a um atendimento.
 
-## 15. Índices e validações
+**Nota:** as cardinalidades acima descrevem a estrutura lógica documentada no SQL. Como os diagramas foram preservados sem edição, eles podem não refletir integralmente essas relações.
 
-- PKs identificam unicamente cada registro e FKs mantêm os vínculos entre as tabelas.
-- `especialidade.nome` é único.
-- `profissional_especialidade` usa chave primária composta.
-- `agendamento` possui índice para consultas por data, profissional e horário.
-- Os gatilhos validam o profissional ativo e a sobreposição de horários em inserções e alterações.
-- O campo de preço é uma referência; não substitui o valor efetivamente recebido no pagamento.
+## 15. Regras, índices e restrições
 
-## 16. Privacidade e limites do modelo
+- PKs e FKs preservam identificação e integridade referencial.
+- especialidade.nome é UNIQUE; profissional_especialidade usa PK composta.
+- agendamento tem índice para data, profissional e início, além de validações por trigger.
+- pagamento tem UNIQUE em id_agendamento e índice por data_pagamento.
+- CHECK restringe duração, horários, status, formas de pagamento, valores e quantidades.
+- As validações de sobreposição são implementadas por triggers, mas devem ser testadas em MySQL e sob operações concorrentes.
 
-Telefone e e-mail são dados pessoais e devem ser acessados apenas para finalidades legítimas do salão. O dicionário não afirma que esses dados são dados pessoais sensíveis.
+## 16. Acesso, LGPD e auditoria
 
-O SQL implementa compras, fornecedores, itens de compra, movimentações de estoque e fechamento de caixa, além do cálculo 30%/70% sobre os pagamentos registrados no período. O consumo de insumos deve ser registrado por movimentação; o sistema não estima automaticamente a quantidade de material usada em cada procedimento. Os DERs foram preservados sem alterações, conforme solicitado.
+Telefone e e-mail são dados pessoais e devem ser acessados apenas por pessoas autorizadas, para finalidades legítimas do salão. Não são automaticamente classificados como dados pessoais sensíveis.
+
+| Operação | Acesso mínimo recomendado |
+|---|---|
+| Cadastro/consulta de clientes | Profissionais autorizados e responsável |
+| Consulta/alteração da agenda | Profissionais autorizados e responsável |
+| Cadastro de procedimentos/profissionais | Responsável ou pessoa autorizada |
+| Pagamentos e fechamento de caixa | Responsável e pessoas autorizadas para a função |
+| Compras e estoque | Pessoas responsáveis por compras e controle de materiais |
+
+O SQL atual não possui tabela de log de acesso. Como melhoria futura, pode ser criada uma tabela de auditoria com identificador do evento, usuário, operação, entidade afetada, data/hora e resultado, evitando gravar senhas ou dados pessoais desnecessários.
+
+## 17. Limites e decisões
+
+- O SQL inclui agenda, pagamentos, compras, fornecedores, itens, estoque e fechamento de caixa; os DERs preservados não exibem todas essas tabelas.
+- O sistema não registra venda de produtos porque a documentação informa que o salão não os comercializa.
+- O pagamento é único por agendamento nesta versão; pagamentos parciais separados exigiriam rever a regra.
+- A procedure calcula a divisão 30%/70% dos pagamentos registrados, mas não substitui conferência financeira/fiscal.
+- O consumo de insumos precisa ser registrado; não é calculado automaticamente por procedimento.
+- O banco não implementa emissão de nota fiscal.
+
+**Referência de versão:** MySQL aplica restrições CHECK a partir da versão 8.0.16. Consulte a [documentação oficial](https://dev.mysql.com/doc/refman/8.0/en/create-table-check-constraints.html).
