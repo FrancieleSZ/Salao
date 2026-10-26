@@ -103,7 +103,7 @@
 <tr><td><code>data_agendamento</code></td><td>Data do atendimento.</td><td>Sim.</td><td><code>DATE</code></td></tr>
 <tr><td><code>hora_inicio</code></td><td>Horário de início do procedimento.</td><td>Sim; precisa ser validado contra outros agendamentos do profissional (RN02).</td><td><code>TIME</code></td></tr>
 <tr><td><code>hora_fim</code></td><td>Horário previsto para o término.</td><td>Calculado por hora de início + duração do procedimento.</td><td><code>TIME</code></td></tr>
-<tr><td><code>status</code></td><td>Situação do agendamento: marcado, concluído ou cancelado.</td><td>Sim; CHECK restringe aos valores permitidos.</td><td><code>VARCHAR(20)</code></td></tr>
+<tr><td><code>status</code></td><td>Situação do agendamento: agendado, confirmado, concluído, cancelado ou faltou.</td><td>Sim; CHECK restringe aos valores permitidos.</td><td><code>VARCHAR(20)</code></td></tr>
 <tr><td><code>observacoes</code></td><td>Observações sobre o atendimento.</td><td>Não; evitar inserir dados pessoais desnecessários.</td><td><code>TEXT</code></td></tr>
 <tr><td><code>data_criacao</code></td><td>Data e hora em que o agendamento foi registrado.</td><td>Sim; preenchida automaticamente.</td><td><code>TIMESTAMP</code></td></tr>
 <tr><td><code>id_cliente</code><span class="tag fk">FK</span></td><td>Cliente associado ao agendamento.</td><td>Sim; referencia Cliente.</td><td><code>INTEGER</code></td></tr>
