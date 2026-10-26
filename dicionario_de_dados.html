@@ -51,16 +51,16 @@
 
 <section class="section" id="cliente">
 <div class="panel"><div class="panel-head"><h3>3.1 Cliente</h3><p>Pessoa que agenda e recebe os serviços do salão.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico sugerido</th></tr></thead><tbody>
-<tr><td><code>id_cliente</code><span class="tag">PK</span></td><td>Identificador único do cliente.</td><td>Sim; gerado pelo sistema.</td><td><code>INTEGER</code> ou inteiro auto-gerado</td></tr>
+<tr><td><code>id_cliente</code><span class="tag">PK</span></td><td>Identificador único do cliente.</td><td>Sim; gerado pelo sistema.</td><td><code>INT AUTO_INCREMENT</code></td></tr>
 <tr><td><code>nome</code></td><td>Nome do cliente.</td><td>Sim.</td><td><code>VARCHAR(100)</code></td></tr>
-<tr><td><code>telefone</code></td><td>Contato principal para confirmação de agendamentos.</td><td>Sim; dado pessoal, restringir acesso.</td><td><code>VARCHAR(20)</code></td></tr>
+<tr><td><code>telefone</code></td><td>Contato principal para confirmação de agendamentos.</td><td>Não; dado pessoal, restringir acesso.</td><td><code>VARCHAR(20)</code></td></tr>
 <tr><td><code>email</code></td><td>E-mail principal.</td><td>Não; dado pessoal, restringir acesso.</td><td><code>VARCHAR(120)</code></td></tr>
 </tbody></table></div></div>
 </section>
 
 <section class="section" id="profissionais">
 <div class="panel"><div class="panel-head"><h3>3.2 Profissionais</h3><p>Pessoas que executam os procedimentos. A agenda é controlada por profissional.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico sugerido</th></tr></thead><tbody>
-<tr><td><code>id_profissional</code><span class="tag">PK</span></td><td>Identificador único do profissional.</td><td>Sim; gerado pelo sistema.</td><td><code>INTEGER</code> ou inteiro auto-gerado</td></tr>
+<tr><td><code>id_profissional</code><span class="tag">PK</span></td><td>Identificador único do profissional.</td><td>Sim; gerado pelo sistema.</td><td><code>INT AUTO_INCREMENT</code></td></tr>
 <tr><td><code>nome</code></td><td>Nome do profissional.</td><td>Sim.</td><td><code>VARCHAR(100)</code></td></tr>
 <tr><td><code>telefone</code></td><td>Contato do profissional.</td><td>Não; dado pessoal, restringir acesso.</td><td><code>VARCHAR(20)</code></td></tr>
 <tr><td><code>ativo</code></td><td>Indica se o profissional está atuando no salão.</td><td>Sim; valor booleano. Profissional inativo não recebe novos agendamentos (RN04).</td><td><code>BOOLEAN</code></td></tr>
@@ -69,7 +69,7 @@
 
 <section class="section" id="especialidades">
 <div class="panel"><div class="panel-head"><h3>3.3 Especialidades</h3><p>Área de atuação que um profissional domina, como corte ou coloração.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico sugerido</th></tr></thead><tbody>
-<tr><td><code>id_especialidade</code><span class="tag">PK</span></td><td>Identificador único da especialidade.</td><td>Sim; gerado pelo sistema.</td><td><code>INTEGER</code> ou inteiro auto-gerado</td></tr>
+<tr><td><code>id_especialidade</code><span class="tag">PK</span></td><td>Identificador único da especialidade.</td><td>Sim; gerado pelo sistema.</td><td><code>INT AUTO_INCREMENT</code></td></tr>
 <tr><td><code>nome</code></td><td>Nome da especialidade.</td><td>Sim; deve ser único.</td><td><code>VARCHAR(80)</code></td></tr>
 </tbody></table></div></div>
 </section>
@@ -84,7 +84,7 @@
 
 <section class="section" id="procedimentos">
 <div class="panel"><div class="panel-head"><h3>3.5 Procedimentos</h3><p>Serviços de beleza oferecidos pelo salão. A duração define o tempo reservado na agenda.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico sugerido</th></tr></thead><tbody>
-<tr><td><code>id_procedimento</code><span class="tag">PK</span></td><td>Identificador único do procedimento.</td><td>Sim; gerado pelo sistema.</td><td><code>INTEGER</code> ou inteiro auto-gerado</td></tr>
+<tr><td><code>id_procedimento</code><span class="tag">PK</span></td><td>Identificador único do procedimento.</td><td>Sim; gerado pelo sistema.</td><td><code>INT AUTO_INCREMENT</code></td></tr>
 <tr><td><code>nome</code></td><td>Nome do procedimento.</td><td>Sim.</td><td><code>VARCHAR(120)</code></td></tr>
 <tr><td><code>duracao_minutos</code></td><td>Duração estimada do procedimento, em minutos.</td><td>Sim; maior que zero; usada no cálculo de término (RN01).</td><td><code>INTEGER</code></td></tr>
 <tr><td><code>preco</code></td><td>Valor de referência do procedimento.</td><td>Não; o valor final pode variar com o tamanho do cabelo (RN06).</td><td><code>DECIMAL(10,2)</code></td></tr>
@@ -94,7 +94,7 @@
 
 <section class="section" id="agendamentos">
 <div class="panel"><div class="panel-head"><h3>3.6 Agendamentos</h3><p>Evento no tempo que associa um cliente, um profissional e um procedimento.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico sugerido</th></tr></thead><tbody>
-<tr><td><code>id_agendamento</code><span class="tag">PK</span></td><td>Identificador único do agendamento.</td><td>Sim; gerado pelo sistema.</td><td><code>INTEGER</code> ou inteiro auto-gerado</td></tr>
+<tr><td><code>id_agendamento</code><span class="tag">PK</span></td><td>Identificador único do agendamento.</td><td>Sim; gerado pelo sistema.</td><td><code>INT AUTO_INCREMENT</code></td></tr>
 <tr><td><code>data_agendamento</code></td><td>Data do atendimento.</td><td>Sim.</td><td><code>DATE</code></td></tr>
 <tr><td><code>hora_inicio</code></td><td>Horário de início do procedimento.</td><td>Sim; precisa ser validado contra outros agendamentos do profissional (RN02).</td><td><code>TIME</code></td></tr>
 <tr><td><code>hora_fim</code></td><td>Horário previsto para o término.</td><td>Calculado por hora de início + duração do procedimento.</td><td><code>TIME</code></td></tr>
@@ -186,7 +186,7 @@
 
 <section class="section" id="relacionamentos">
 <h2>4. Relacionamentos e cardinalidades</h2>
-<p class="intro">Formato (mínimo, máximo), conforme a convenção declarada no README. Os rótulos do DER, do dicionário e do modelo lógico precisam ser idênticos.</p>
+<p class="intro">Formato (mínimo, máximo) para os relacionamentos descritos no modelo lógico/SQL. Os DERs foram preservados sem edição e podem continuar divergindo desta documentação; não apresentar os PNGs como corrigidos.</p>
 <div class="panel"><div class="table-wrap"><table><thead><tr><th>Relacionamento</th><th>Cardinalidade</th><th>Interpretação</th><th>Implementação lógica</th></tr></thead><tbody>
 <tr><td>Cliente realiza Agendamentos</td><td>Cliente (1,1); Agendamento (0,n)</td><td>Um cliente pode ter nenhum ou vários agendamentos; cada agendamento pertence a um cliente.</td><td><code>Agendamentos.id_cliente</code> referencia <code>Cliente.id_cliente</code>.</td></tr>
 <tr><td>Profissional atende Agendamentos</td><td>Profissional (1,1); Agendamento (0,n)</td><td>Um profissional pode atender nenhum ou vários agendamentos; cada agendamento tem um profissional.</td><td><code>Agendamentos.id_profissional</code> referencia <code>Profissionais.id_profissional</code>.</td></tr>
@@ -263,7 +263,7 @@
 </section>
 
 <footer>
-<strong>Salão dos Primos — Entrega 1.</strong> Dicionário revisado em 26/10/2026. Os campos, tipos e regras documentados foram alinhados ao script SQL. Os DERs foram preservados conforme solicitado.
+<strong>Salão dos Primos — Entrega 2.</strong> Dicionário revisado em 26/10/2026. Os campos, tipos e regras documentados foram alinhados ao script SQL. Os DERs foram preservados conforme solicitado.
 </footer>
 </main>
 </div>
