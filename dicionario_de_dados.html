@@ -14,8 +14,8 @@
 <div class="layout">
 <nav class="side" aria-label="Índice do dicionário">
 <h2>Visão geral</h2><ul><li><a href="#identificacao">Identificação e convenções</a></li><li><a href="#fluxo">Fluxo de dados</a></li></ul>
-<h2>Entidades</h2><ul><li><a href="#cliente">Cliente</a></li><li><a href="#profissionais">Profissionais</a></li><li><a href="#especialidades">Especialidades</a></li><li><a href="#vinculo">Profissional_Especialidade</a></li><li><a href="#procedimentos">Procedimentos</a></li><li><a href="#agendamentos">Agendamentos</a></li><li><a href="#pagamento">Pagamento — pendência de escopo</a></li></ul>
-<h2>Regras e controles</h2><ul><li><a href="#relacionamentos">Relacionamentos</a></li><li><a href="#regras">Expressões formais</a></li><li><a href="#indices">Índices propostos</a></li><li><a href="#acessos">Acesso, LGPD e auditoria</a></li><li><a href="#pendencias">Pendências de validação</a></li></ul>
+<h2>Entidades</h2><ul><li><a href="#cliente">Cliente</a></li><li><a href="#profissionais">Profissionais</a></li><li><a href="#especialidades">Especialidades</a></li><li><a href="#vinculo">Profissional_Especialidade</a></li><li><a href="#procedimentos">Procedimentos</a></li><li><a href="#agendamentos">Agendamentos</a></li><li><a href="#pagamento">Pagamento</a></li></ul>
+<h2>Regras e controles</h2><ul><li><a href="#relacionamentos">Relacionamentos</a></li><li><a href="#regras">Expressões formais</a></li><li><a href="#indices">Índices propostos</a></li><li><a href="#acessos">Acesso, LGPD e auditoria</a></li><li><a href="#pendencias">Escopo e decisões do modelo</a></li></ul>
 </nav>
 <main>
 <header class="hero" id="identificacao">
@@ -24,18 +24,18 @@
 <p class="muted">Documento de referência para as entidades, atributos, relacionamentos, regras e controles de dados do sistema de agendamento do salão.</p>
 <p><strong>Integrantes:</strong> Emilly Rodrigues de Souza, Franciele Souza de Jesus, Julia Parra e Kamilly Vitória Alves da Silva.</p>
 <div class="meta"><span class="pill">Versão 2.0</span><span class="pill">Data: 24/10/2026</span><span class="pill">PK = chave primária</span><span class="pill">FK = chave estrangeira</span></div>
-<div class="notice"><strong>Nota sobre a implementação:</strong> o SGBD ainda não foi especificado no material consultado. Por isso, os tipos físicos abaixo são propostas SQL genéricas e devem ser adaptados ao SGBD escolhido. O dicionário não afirma que um banco já foi implementado.</div>
+<div class="notice"><strong>Nota sobre a implementação:</strong> o script SQL utiliza MySQL 8.0+. Os dados de exemplo são fictícios e o script deve ser testado em ambiente próprio antes de uso real.</div>
 </header>
 
 <section class="section" id="identificacao-extra">
 <h2>1. Convenções e padrões</h2><p>Os diagramas existentes foram preservados sem alterações nesta revisão. Consulte <a href="DER_Conceitual.png">DER conceitual</a> e <a href="DER_L%C3%B3gico.png">DER lógico</a> no repositório.</p>
 <div class="panel"><div class="table-wrap"><table><thead><tr><th>Item</th><th>Convenção adotada neste documento</th></tr></thead><tbody>
-<tr><td>SGBD</td><td>Não definido na entrega. Definir antes da implementação física.</td></tr>
+<tr><td>SGBD</td><td>MySQL 8.0+, conforme o script SQL.</td></tr>
 <tr><td>Codificação e collation</td><td>Recomenda-se UTF-8 e uma collation compatível com português brasileiro, com comparação de texto definida explicitamente no SGBD escolhido. O nome exato da collation depende do SGBD e da versão.</td></tr>
 <tr><td>Notação</td><td>Nomes de entidades no singular/plural conforme o DER e nomes de atributos em <code>snake_case</code> minúsculo.</td></tr>
 <tr><td>Prefixos</td><td><code>id_</code> identifica atributos de chave; <code>PK</code> indica chave primária; <code>FK</code> indica chave estrangeira; <code>RN</code> indica regra de negócio e <code>RNF</code>, requisito não funcional.</td></tr>
 <tr><td>Versão e data</td><td>Versão 2.0 — 24/10/2026. Atualizar este registro quando houver alteração aprovada.</td></tr>
-<tr><td>Tipos físicos</td><td>Os tipos indicados nas tabelas são sugestões genéricas. Confirmar sintaxe, limites e comportamento no SGBD selecionado.</td></tr>
+<tr><td>Tipos físicos</td><td>Tipos alinhados ao MySQL 8.0+ e ao script SQL do projeto.</td></tr>
 </tbody></table></div></div>
 </section>
 
@@ -54,10 +54,7 @@
 <tr><td><code>id_cliente</code><span class="tag">PK</span></td><td>Identificador único do cliente.</td><td>Sim; gerado pelo sistema.</td><td><code>INTEGER</code> ou inteiro auto-gerado</td></tr>
 <tr><td><code>nome</code></td><td>Nome do cliente.</td><td>Sim.</td><td><code>VARCHAR(120)</code></td></tr>
 <tr><td><code>telefone</code></td><td>Contato principal para confirmação de agendamentos.</td><td>Sim; dado pessoal, restringir acesso.</td><td><code>VARCHAR(20)</code></td></tr>
-<tr><td><code>telefone_2</code></td><td>Telefone alternativo.</td><td>Não; dado pessoal, restringir acesso.</td><td><code>VARCHAR(20)</code></td></tr>
 <tr><td><code>email</code></td><td>E-mail principal.</td><td>Não; dado pessoal, restringir acesso.</td><td><code>VARCHAR(254)</code></td></tr>
-<tr><td><code>email_2</code></td><td>E-mail alternativo.</td><td>Não; dado pessoal, restringir acesso.</td><td><code>VARCHAR(254)</code></td></tr>
-<tr><td><code>data_cadastro</code></td><td>Data de cadastro.</td><td>Sim; preenchida automaticamente.</td><td><code>TIMESTAMP</code></td></tr>
 </tbody></table></div></div>
 </section>
 
@@ -67,7 +64,6 @@
 <tr><td><code>nome</code></td><td>Nome do profissional.</td><td>Sim.</td><td><code>VARCHAR(120)</code></td></tr>
 <tr><td><code>telefone</code></td><td>Contato do profissional.</td><td>Não; dado pessoal, restringir acesso.</td><td><code>VARCHAR(20)</code></td></tr>
 <tr><td><code>ativo</code></td><td>Indica se o profissional está atuando no salão.</td><td>Sim; valor booleano. Profissional inativo não recebe novos agendamentos (RN04).</td><td><code>BOOLEAN</code></td></tr>
-<tr><td><code>data_cadastro</code></td><td>Data de cadastro do profissional.</td><td>Sim; preenchida automaticamente.</td><td><code>TIMESTAMP</code></td></tr>
 </tbody></table></div></div>
 </section>
 
@@ -75,7 +71,6 @@
 <div class="panel"><div class="panel-head"><h3>3.3 Especialidades</h3><p>Área de atuação que um profissional domina, como corte ou coloração.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico sugerido</th></tr></thead><tbody>
 <tr><td><code>id_especialidade</code><span class="tag">PK</span></td><td>Identificador único da especialidade.</td><td>Sim; gerado pelo sistema.</td><td><code>INTEGER</code> ou inteiro auto-gerado</td></tr>
 <tr><td><code>nome</code></td><td>Nome da especialidade.</td><td>Sim; deve ser único.</td><td><code>VARCHAR(100)</code></td></tr>
-<tr><td><code>descricao</code></td><td>Descrição da especialidade.</td><td>Não.</td><td><code>VARCHAR(500)</code></td></tr>
 </tbody></table></div></div>
 </section>
 
@@ -113,11 +108,11 @@
 </section>
 
 <section class="section" id="pagamento">
-<h2>3.7 Pagamento — entidade incluída na revisão do DER</h2>
-<div class="notice">A documentação considera Pagamento uma entidade essencial. O README informa pagamento presencial ao final do atendimento, com débito, crédito, Pix ou dinheiro. O SQL implementa no máximo um pagamento por agendamento (FK UNIQUE), hipótese que deve ser confirmada com a responsável. Os arquivos de DER foram preservados sem alterações nesta revisão; confira se a entidade Pagamento já está representada nos diagramas entregues.</div>
+<h2>3.7 Pagamento</h2>
+<div class="notice">O pagamento é registrado presencialmente ao final do atendimento. O modelo adota um registro de pagamento por agendamento, com valor efetivamente recebido e forma de pagamento: débito, crédito, Pix ou dinheiro. Os arquivos de DER foram preservados sem alterações, conforme solicitado.</div>
 <div class="panel"><div class="table-wrap"><table><thead><tr><th>Atributo proposto</th><th>Descrição</th><th>Regra / tipo físico sugerido</th></tr></thead><tbody>
 <tr><td><code>id_pagamento</code><span class="tag">PK</span></td><td>Identificador do pagamento.</td><td>Gerado pelo sistema; <code>INTEGER</code>.</td></tr>
-<tr><td><code>id_agendamento</code><span class="tag fk">FK</span></td><td>Atendimento ao qual o pagamento está associado.</td><td>Obrigatório e UNIQUE no SQL; o modelo admite no máximo um pagamento por agendamento. Confirmar essa hipótese com a responsável; <code>INTEGER</code>.</tr>
+<tr><td><code>id_agendamento</code><span class="tag fk">FK</span></td><td>Atendimento ao qual o pagamento está associado.</td><td>Obrigatório e UNIQUE no SQL; o modelo admite no máximo um pagamento por agendamento; <code>INTEGER</code>.</tr>
 <tr><td><code>data_pagamento</code></td><td>Data e hora do recebimento.</td><td>Obrigatório; <code>DATETIME</code>.</td></tr>
 <tr><td><code>valor_pago</code></td><td>Valor efetivamente recebido, combinado presencialmente.</td><td>Obrigatório e maior que zero; <code>DECIMAL(10,2)</code>.</td></tr>
 <tr><td><code>forma_pagamento</code></td><td>Meio usado para pagar.</td><td>Débito, crédito, Pix ou dinheiro, conforme o README; <code>VARCHAR(20)</code>.</td></tr>
@@ -147,13 +142,13 @@
 <tr><td>RN05 — vínculos obrigatórios</td><td><span class="formula">Agendamento → exatamente 1 Cliente + 1 Profissional + 1 Procedimento</span></td><td>Cada agendamento deve referenciar uma ocorrência de cada entidade indicada.</td></tr>
 <tr><td>RN06 — preço de referência</td><td><span class="formula">valor_final é informado no atendimento; preco_procedimento é apenas referência</span></td><td>O valor final pode variar com o tamanho do cabelo e é combinado presencialmente; não assumir que o preço de referência é o valor efetivamente pago.</td></tr>
 <tr><td>RN07 — cancelamento</td><td><span class="formula">status = 'cancelado' ⇒ não bloquear disponibilidade do horário</span></td><td>O agendamento cancelado libera o intervalo para consulta de disponibilidade.</td></tr>
-<tr><td>RN08 — antecedência do cancelamento</td><td><span class="formula">instante_solicitação ≤ instante_agendamento − antecedência_mínima_definida_pelo_salão</span></td><td>O README não informa o número exato de horas de antecedência. O valor deve ser confirmado com a responsável; não inventar um prazo.</td></tr>
+<tr><td>RN08 — antecedência do cancelamento</td><td><span class="formula">instante_solicitação ≤ instante_agendamento − antecedência_mínima_definida_pelo_salão</span></td><td>A entrevista não estabeleceu prazo mínimo de antecedência. Portanto, o sistema não aplica um limite numérico de antecedência nesta versão.</td></tr>
 </tbody></table></div></div>
 </section>
 
 <section class="section" id="indices">
 <h2>6. Índices e restrições sugeridos</h2>
-<p class="intro">Propostas para a implementação física. Devem ser avaliadas no SGBD escolhido e não significam que os índices já existam.</p>
+<p class="intro">Restrições existentes no script SQL e índices recomendados para consultas adicionais. O índice de agenda já está definido no SQL.</p>
 <div class="panel"><div class="table-wrap"><table><thead><tr><th>Entidade</th><th>Índice / restrição sugerida</th><th>Finalidade</th></tr></thead><tbody>
 <tr><td>Cliente</td><td>Índice em <code>nome</code>; avaliar índice em <code>telefone</code>.</td><td>Apoiar a busca de clientes. O telefone só deve ser indexado se houver necessidade real de consulta.</td></tr>
 <tr><td>Profissionais</td><td>Índice em <code>ativo</code> somente se o volume de consultas justificar.</td><td>Apoiar filtros de profissionais ativos; avaliar seletividade antes de criar.</td></tr>
@@ -161,7 +156,7 @@
 <tr><td>Profissional_Especialidade</td><td>PK composta <code>(id_profissional, id_especialidade)</code> e índice reverso em <code>id_especialidade</code> se necessário.</td><td>Evitar vínculos duplicados e facilitar consultas por especialidade.</td></tr>
 <tr><td>Procedimentos</td><td>Índice em <code>nome</code> se houver pesquisa frequente.</td><td>Facilitar localizar procedimentos.</td></tr>
 <tr><td>Agendamentos</td><td>Índice composto em <code>(data_agendamento, id_profissional, hora_inicio)</code>; índices nas FKs.</td><td>Apoiar consulta de agenda por dia e profissional. A regra de não sobreposição exige validação transacional, não apenas um índice comum.</td></tr>
-<tr><td>Pagamento — proposta</td><td>Índice em <code>id_agendamento</code> e <code>data_pagamento</code>.</td><td>Apoiar consulta de pagamentos por atendimento e período, caso a entidade seja aprovada.</td></tr>
+<tr><td>Pagamento</td><td>UNIQUE em <code>id_agendamento</code> e índice em <code>data_pagamento</code> a avaliar.</td><td>Apoiar consulta de pagamentos por atendimento e período, caso a entidade seja aprovada.</td></tr>
 </tbody></table></div></div>
 </section>
 
@@ -177,7 +172,7 @@
 </tbody></table></div></div>
 <p>Telefone e e-mail são <strong>dados pessoais</strong>. O acesso deve ser limitado ao necessário para as finalidades do salão, com medidas de segurança e sem exposição pública. A classificação legal de dado pessoal sensível não deve ser aplicada automaticamente a telefone e e-mail.</p>
 <h3>7.2 Registro de acesso (proposta técnica)</h3>
-<p>O modelo atual não apresenta uma entidade de auditoria. Para registrar operações relevantes, recomenda-se avaliar uma tabela separada, por exemplo <code>Log_Acesso</code>, com os seguintes campos propostos:</p>
+<p>O modelo atual não apresenta uma entidade de auditoria. Para registrar operações relevantes em uma evolução futura, recomenda-se avaliar uma tabela separada, por exemplo <code>Log_Acesso</code>, com os seguintes campos propostos:</p>
 <div class="panel"><div class="table-wrap"><table><thead><tr><th>Atributo proposto</th><th>Finalidade</th><th>Tipo físico sugerido</th></tr></thead><tbody>
 <tr><td><code>id_log</code> (PK)</td><td>Identificador do evento.</td><td><code>INTEGER</code></td></tr>
 <tr><td><code>id_usuario</code></td><td>Identificador do usuário autenticado, conforme futura modelagem de usuários.</td><td>Tipo igual ao identificador da entidade Usuário, ainda não modelada.</td></tr>
@@ -190,16 +185,16 @@
 </section>
 
 <section class="section" id="pendencias">
-<h2>8. Pendências para manter os documentos consistentes</h2>
-<div class="callout"><strong>Pagamento:</strong> o SQL e este dicionário adotam no máximo um pagamento por agendamento. Confirmar essa hipótese com a responsável; se houver pagamentos parciais ou múltiplos, será necessário rever o modelo. Os diagramas existentes foram preservados sem alterações nesta revisão.</div>
-<div class="callout"><strong>Comissão e caixa:</strong> o README descreve uma divisão de 30% para despesas do salão e 70% para os profissionais. Confirmar com a responsável se a regra é aplicada ao valor recebido de cada atendimento e documentar a origem do valor usado no cálculo. A regra financeira ainda não está representada como entidade própria no DER.</div>
-<div class="callout"><strong>Cancelamento:</strong> a antecedência mínima citada em RN08 não tem número definido no material. Confirmar o prazo com a responsável antes de preencher a regra.</div>
-<div class="callout"><strong>Compras, fornecedores e estoque:</strong> esses processos aparecem no README, mas as entidades Fornecedor, Compra, Item_Compra e Insumo ainda não foram incluídas nos diagramas. Confirmar com a responsável e com o enunciado se devem integrar esta entrega; se sim, acrescentá-las de forma consistente ao DER conceitual, lógico e ao dicionário.<br><br><strong>Tipos físicos:</strong> confirmar os tipos e a collation quando o SGBD for escolhido. Os tipos deste documento são sugestões, não configuração já realizada.</div>
-<div class="callout"><strong>DER lógico:</strong> manter os nomes dos atributos e a chave composta de Profissional_Especialidade iguais neste documento, no README e no diagrama. Os arquivos de DER foram preservados sem alterações nesta revisão; confira se os atributos e a entidade Pagamento correspondem ao SQL. Log_Acesso continua sendo uma proposta de auditoria e não faz parte do DER atual.</div>
+<h2>8. Escopo e decisões do modelo</h2>
+<div class="callout"><strong>Pagamento:</strong> o modelo registra um pagamento por agendamento, associado ao valor recebido e à forma de pagamento. A regra está representada no SQL pela restrição UNIQUE em <code>id_agendamento</code>.</div>
+<div class="callout"><strong>Comissão e caixa:</strong> a regra informada é 30% para despesas do salão e 70% para os profissionais. O SQL atual registra pagamentos, mas ainda não calcula automaticamente a divisão nem implementa fechamento de caixa.</div>
+<div class="callout"><strong>Cancelamento:</strong> não foi estabelecido um prazo mínimo numérico de antecedência. A regra documentada libera o horário quando o agendamento é cancelado.</div>
+<div class="callout"><strong>Compras, fornecedores e estoque:</strong> são processos descritos no levantamento e nos requisitos, mas ainda não estão implementados no SQL nem representados como entidades nos DERs preservados. Para não declarar uma funcionalidade inexistente, esta limitação permanece explícita. <br><br><strong>Tipos físicos:</strong> o dicionário utiliza MySQL 8.0+ como referência, de acordo com o script SQL.</div>
+<div class="callout"><strong>DER:</strong> os arquivos de DER foram preservados sem alterações, conforme solicitado. Assim, as divergências visuais já apontadas pelo professor — como identificadores, cardinalidades e a representação de Pagamento — continuam pendentes no diagrama, mesmo com a documentação textual revisada. Log_Acesso é uma proposta técnica de auditoria e não faz parte do SQL atual.</div>
 </section>
 
 <footer>
-<strong>Salão dos Primos — Entrega 1.</strong> Dicionário revisado em 24/10/2026. As sugestões de tipos físicos, índices, Pagamento e Log_Acesso estão identificadas como propostas quando não constam do modelo atual.
+<strong>Salão dos Primos — Entrega 1.</strong> Dicionário revisado em 26/10/2026. Os campos e restrições das entidades implementadas foram alinhados ao SQL; limitações de escopo estão identificadas explicitamente.
 </footer>
 </main>
 </div>
