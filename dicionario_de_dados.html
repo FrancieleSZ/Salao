@@ -14,8 +14,8 @@
 <div class="layout">
 <nav class="side" aria-label="Índice do dicionário">
 <h2>Visão geral</h2><ul><li><a href="#identificacao">Identificação e convenções</a></li><li><a href="#fluxo">Fluxo de dados</a></li></ul>
-<h2>Entidades</h2><ul><li><a href="#cliente">Cliente</a></li><li><a href="#profissionais">Profissionais</a></li><li><a href="#especialidades">Especialidades</a></li><li><a href="#vinculo">Profissional_Especialidade</a></li><li><a href="#procedimentos">Procedimentos</a></li><li><a href="#agendamentos">Agendamentos</a></li><li><a href="#pagamento">Pagamento</a></li></ul>
-<h2>Regras e controles</h2><ul><li><a href="#relacionamentos">Relacionamentos</a></li><li><a href="#regras">Expressões formais</a></li><li><a href="#indices">Índices propostos</a></li><li><a href="#acessos">Acesso, LGPD e auditoria</a></li><li><a href="#pendencias">Escopo e decisões do modelo</a></li></ul>
+<h2>Entidades</h2><ul><li><a href="#cliente">Cliente</a></li><li><a href="#profissionais">Profissionais</a></li><li><a href="#especialidades">Especialidades</a></li><li><a href="#vinculo">Profissional_Especialidade</a></li><li><a href="#procedimentos">Procedimentos</a></li><li><a href="#agendamentos">Agendamentos</a></li><li><a href="#pagamento">Pagamento</a></li><li><a href="#fornecedor">Fornecedor</a></li><li><a href="#insumo">Insumos</a></li><li><a href="#compras">Compras e itens</a></li><li><a href="#estoque">Movimentação de estoque</a></li><li><a href="#caixa">Fechamento de caixa</a></li></ul>
+<h2>Regras e controles</h2><ul><li><a href="#relacionamentos">Relacionamentos</a></li><li><a href="#regras">Expressões formais</a></li><li><a href="#indices">Índices e restrições</a></li><li><a href="#acessos">Acesso, LGPD e auditoria</a></li><li><a href="#pendencias">Escopo e decisões do modelo</a></li></ul>
 </nav>
 <main>
 <header class="hero" id="identificacao">
@@ -120,7 +120,70 @@
 </tbody></table></div></div>
 </section>
 
-<section class="section" id="relacionamentos">
+
+<section class="section" id="fornecedor">
+<div class="panel"><div class="panel-head"><h3>3.8 Fornecedor</h3><p>Empresa ou pessoa de quem o salão compra insumos.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico</th></tr></thead><tbody>
+<tr><td><code>id_fornecedor</code><span class="tag">PK</span></td><td>Identificador do fornecedor.</td><td>Sim; auto incremento.</td><td><code>INT</code></td></tr>
+<tr><td><code>nome</code></td><td>Nome do fornecedor.</td><td>Sim.</td><td><code>VARCHAR(120)</code></td></tr>
+<tr><td><code>telefone</code></td><td>Contato.</td><td>Não.</td><td><code>VARCHAR(20)</code></td></tr>
+<tr><td><code>email</code></td><td>E-mail de contato.</td><td>Não.</td><td><code>VARCHAR(120)</code></td></tr>
+<tr><td><code>observacoes</code></td><td>Informações adicionais.</td><td>Não.</td><td><code>TEXT</code></td></tr>
+</tbody></table></div></div>
+</section>
+<section class="section" id="insumo">
+<div class="panel"><div class="panel-head"><h3>3.9 Insumo</h3><p>Material usado nos procedimentos; não representa produto vendido ao cliente.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico</th></tr></thead><tbody>
+<tr><td><code>id_insumo</code><span class="tag">PK</span></td><td>Identificador do insumo.</td><td>Sim; auto incremento.</td><td><code>INT</code></td></tr>
+<tr><td><code>nome</code></td><td>Nome do material.</td><td>Sim.</td><td><code>VARCHAR(120)</code></td></tr>
+<tr><td><code>unidade_medida</code></td><td>Unidade usada para medir o saldo.</td><td>Sim, por exemplo unidade ou ml.</td><td><code>VARCHAR(20)</code></td></tr>
+<tr><td><code>quantidade_estoque</code></td><td>Saldo atual.</td><td>Sim; inicia em zero ou no saldo informado; não pode ser negativo.</td><td><code>DECIMAL(10,3)</code></td></tr>
+<tr><td><code>estoque_minimo</code></td><td>Nível de alerta para reposição.</td><td>Sim; não negativo.</td><td><code>DECIMAL(10,3)</code></td></tr>
+<tr><td><code>ativo</code></td><td>Indica se o insumo permanece em uso.</td><td>Sim; padrão verdadeiro.</td><td><code>BOOLEAN</code></td></tr>
+</tbody></table></div></div>
+</section>
+<section class="section" id="compras">
+<div class="panel"><div class="panel-head"><h3>3.10 Compra</h3><p>Registro de aquisição de insumos de um fornecedor.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico</th></tr></thead><tbody>
+<tr><td><code>id_compra</code><span class="tag">PK</span></td><td>Identificador da compra.</td><td>Sim; auto incremento.</td><td><code>INT</code></td></tr>
+<tr><td><code>id_fornecedor</code><span class="tag fk">FK</span></td><td>Fornecedor da compra.</td><td>Sim.</td><td><code>INT</code></td></tr>
+<tr><td><code>data_compra</code></td><td>Data e hora da compra.</td><td>Sim; padrão data/hora atual.</td><td><code>DATETIME</code></td></tr>
+<tr><td><code>observacoes</code></td><td>Informações adicionais.</td><td>Não.</td><td><code>TEXT</code></td></tr>
+</tbody></table></div></div>
+<div class="panel"><div class="panel-head"><h3>3.11 Item_Compra</h3><p>Insumo, quantidade e preço unitário que compõem uma compra.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico</th></tr></thead><tbody>
+<tr><td><code>id_item_compra</code><span class="tag">PK</span></td><td>Identificador da linha.</td><td>Sim; auto incremento.</td><td><code>INT</code></td></tr>
+<tr><td><code>id_compra</code><span class="tag fk">FK</span></td><td>Compra a que pertence.</td><td>Sim.</td><td><code>INT</code></td></tr>
+<tr><td><code>id_insumo</code><span class="tag fk">FK</span></td><td>Insumo adquirido.</td><td>Sim.</td><td><code>INT</code></td></tr>
+<tr><td><code>quantidade</code></td><td>Quantidade adquirida.</td><td>Sim; maior que zero.</td><td><code>DECIMAL(10,3)</code></td></tr>
+<tr><td><code>valor_unitario</code></td><td>Valor por unidade.</td><td>Sim; zero ou maior.</td><td><code>DECIMAL(10,2)</code></td></tr>
+</tbody></table></div></div>
+<p>Ao inserir um item de compra, o SQL gera automaticamente uma movimentação de entrada e atualiza o saldo do insumo.</p>
+</section>
+<section class="section" id="estoque">
+<div class="panel"><div class="panel-head"><h3>3.12 Movimentacao_Estoque</h3><p>Histórico de entrada, consumo e ajuste de materiais.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico</th></tr></thead><tbody>
+<tr><td><code>id_movimentacao</code><span class="tag">PK</span></td><td>Identificador da movimentação.</td><td>Sim; auto incremento.</td><td><code>INT</code></td></tr>
+<tr><td><code>id_insumo</code><span class="tag fk">FK</span></td><td>Insumo movimentado.</td><td>Sim.</td><td><code>INT</code></td></tr>
+<tr><td><code>id_agendamento</code><span class="tag fk">FK</span></td><td>Atendimento relacionado ao consumo, quando aplicável.</td><td>Não.</td><td><code>INT</code></td></tr>
+<tr><td><code>tipo</code></td><td>Tipo de movimentação.</td><td>Sim: <code>entrada</code>, <code>consumo</code> ou <code>ajuste</code>.</td><td><code>VARCHAR(20)</code></td></tr>
+<tr><td><code>quantidade</code></td><td>Quantidade movimentada.</td><td>Sim; maior que zero.</td><td><code>DECIMAL(10,3)</code></td></tr>
+<tr><td><code>data_movimentacao</code></td><td>Data e hora do registro.</td><td>Sim; preenchida automaticamente.</td><td><code>DATETIME</code></td></tr>
+<tr><td><code>observacoes</code></td><td>Motivo ou detalhe da movimentação.</td><td>Não.</td><td><code>TEXT</code></td></tr>
+</tbody></table></div></div>
+<p>O SQL impede registrar consumo maior que o saldo disponível e atualiza o estoque a cada movimentação. A movimentação de ajuste atual, nesta versão, soma a quantidade informada ao saldo.</p>
+</section>
+<section class="section" id="caixa">
+<div class="panel"><div class="panel-head"><h3>3.13 Fechamento_Caixa</h3><p>Resumo financeiro de um período com a divisão 30%/70% informada pelo salão.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico</th></tr></thead><tbody>
+<tr><td><code>id_fechamento</code><span class="tag">PK</span></td><td>Identificador do fechamento.</td><td>Sim; auto incremento.</td><td><code>INT</code></td></tr>
+<tr><td><code>data_inicio</code></td><td>Início do período.</td><td>Sim; junto a data_fim forma uma combinação única.</td><td><code>DATE</code></td></tr>
+<tr><td><code>data_fim</code></td><td>Fim do período.</td><td>Sim; igual ou posterior à data inicial.</td><td><code>DATE</code></td></tr>
+<tr><td><code>total_recebido</code></td><td>Soma dos pagamentos registrados no período.</td><td>Sim.</td><td><code>DECIMAL(12,2)</code></td></tr>
+<tr><td><code>percentual_salao</code></td><td>Percentual destinado às despesas do salão.</td><td>Sim; padrão 30%.</td><td><code>DECIMAL(5,2)</code></td></tr>
+<tr><td><code>valor_salao</code></td><td>Valor calculado para o salão.</td><td>Sim; 30% do total recebido.</td><td><code>DECIMAL(12,2)</code></td></tr>
+<tr><td><code>percentual_profissionais</code></td><td>Percentual destinado aos profissionais.</td><td>Sim; padrão 70%.</td><td><code>DECIMAL(5,2)</code></td></tr>
+<tr><td><code>valor_profissionais</code></td><td>Valor calculado para os profissionais.</td><td>Sim; 70% do total recebido.</td><td><code>DECIMAL(12,2)</code></td></tr>
+<tr><td><code>data_fechamento</code></td><td>Momento do fechamento.</td><td>Sim; preenchido automaticamente.</td><td><code>DATETIME</code></td></tr>
+<tr><td><code>observacoes</code></td><td>Observações do fechamento.</td><td>Não.</td><td><code>TEXT</code></td></tr>
+</tbody></table></div></div>
+<p>Para gerar o fechamento, executar <code>CALL fechar_caixa('AAAA-MM-DD', 'AAAA-MM-DD')</code>. O procedimento soma os pagamentos do período e calcula a divisão informada. O mesmo período não pode ser fechado duas vezes por causa da restrição UNIQUE.</p>
+</section>
+\n<section class="section" id="relacionamentos">
 <h2>4. Relacionamentos e cardinalidades</h2>
 <p class="intro">Formato (mínimo, máximo), conforme a convenção declarada no README. Os rótulos do DER, do dicionário e do modelo lógico precisam ser idênticos.</p>
 <div class="panel"><div class="table-wrap"><table><thead><tr><th>Relacionamento</th><th>Cardinalidade</th><th>Interpretação</th><th>Implementação lógica</th></tr></thead><tbody>
@@ -128,14 +191,19 @@
 <tr><td>Profissional atende Agendamentos</td><td>Profissional (1,1); Agendamento (0,n)</td><td>Um profissional pode atender nenhum ou vários agendamentos; cada agendamento tem um profissional.</td><td><code>Agendamentos.id_profissional</code> referencia <code>Profissionais.id_profissional</code>.</td></tr>
 <tr><td>Procedimento consta em Agendamentos</td><td>Procedimento (1,1); Agendamento (0,n)</td><td>Um procedimento pode constar em nenhum ou vários agendamentos; cada agendamento tem um procedimento.</td><td><code>Agendamentos.id_procedimento</code> referencia <code>Procedimentos.id_procedimento</code>.</td></tr>
 <tr><td>Profissionais possuem Especialidades</td><td>Profissionais (0,n); Especialidades (0,n)</td><td>Um profissional pode ter várias especialidades; uma especialidade pode pertencer a vários profissionais.</td><td>Tabela associativa <code>Profissional_Especialidade</code> com PK composta.</td></tr>
-<tr><td>Agendamento possui Pagamento</td><td>Agendamento (0,1); Pagamento (1,1)</td><td>O modelo assume no máximo um pagamento por agendamento; confirmar se há pagamentos parciais/múltiplos.</td><td><code>Pagamento.id_agendamento</code> como FK com unicidade, caso a regra seja confirmada.</td></tr>
+<tr><td>Agendamento possui Pagamento</td><td>Agendamento (0,1); Pagamento (1,1)</td><td>Um agendamento pode não ter pagamento registrado ou ter um pagamento; cada pagamento pertence a um agendamento.</td><td><code>Pagamento.id_agendamento</code> é FK UNIQUE.</td></tr>
+<tr><td>Fornecedor realiza Compras</td><td>Fornecedor (0,n); Compra (1,1)</td><td>Um fornecedor pode aparecer em várias compras; cada compra tem um fornecedor.</td><td><code>Compra.id_fornecedor</code> referencia Fornecedor.</td></tr>
+<tr><td>Compra contém Itens_Compra</td><td>Compra (1,n); Item_Compra (1,1)</td><td>Uma compra contém um ou mais itens; cada item pertence a uma compra.</td><td><code>Item_Compra.id_compra</code> referencia Compra.</td></tr>
+<tr><td>Insumo aparece em Itens_Compra</td><td>Insumo (0,n); Item_Compra (1,1)</td><td>Um insumo pode aparecer em várias linhas de compra; cada item identifica um insumo.</td><td><code>Item_Compra.id_insumo</code> referencia Insumo.</td></tr>
+<tr><td>Insumo possui Movimentações</td><td>Insumo (0,n); Movimentação (1,1)</td><td>Entradas, consumos e ajustes registrados atualizam o saldo do insumo.</td><td><code>Movimentacao_Estoque.id_insumo</code> referencia Insumo.</td></tr>
+<tr><td>Agendamento pode estar ligado a consumo</td><td>Agendamento (0,n); Movimentação (0,1)</td><td>Uma movimentação de consumo pode ser associada a um atendimento, quando aplicável.</td><td><code>Movimentacao_Estoque.id_agendamento</code> é FK opcional.</td></tr>
 </tbody></table></div></div>
 </section>
 
 <section class="section" id="regras">
 <h2>5. Regras de negócio — expressão formal e leitura</h2>
 <div class="panel"><div class="table-wrap"><table><thead><tr><th>Regra</th><th>Expressão / condição formal</th><th>Leitura</th></tr></thead><tbody>
-<tr><td>RN01 — duração</td><td><span class="formula">hora_fim = hora_inicio + duracao_minutos(procedimento)</span></td><td>O término é calculado usando a duração do procedimento. A regra de duração dobrada para coloração loira deve ser aplicada conforme a descrição validada no README.</td></tr>
+<tr><td>RN01 — duração</td><td><span class="formula">hora_fim = hora_inicio + duracao_minutos(procedimento)</span></td><td>O término deve ser calculado usando a duração do procedimento; quando a coloração para loiro exigir o dobro do tempo, o horário final deve refletir essa duração estendida.</td></tr>
 <tr><td>RN02 — sem sobreposição</td><td><span class="formula">Para A e B na mesma data e do mesmo profissional, se ambos não estiverem cancelados, não pode ocorrer simultaneamente A.início &lt; B.fim e B.início &lt; A.fim.</span></td><td>Dois intervalos ativos do mesmo profissional não podem ocupar o mesmo período. Essa validação exige considerar data, hora de início e hora de fim.</td></tr>
 <tr><td>RN03 — horário reservado</td><td><span class="formula">NovoAgendamento.início ≥ AgendamentoExistente.fim OU NovoAgendamento.fim ≤ AgendamentoExistente.início</span></td><td>Um novo atendimento só pode ser inserido se ficar antes ou depois dos intervalos existentes do mesmo profissional, na mesma data e sem sobreposição.</td></tr>
 <tr><td>RN04 — profissional ativo</td><td><span class="formula">NovoAgendamento.id_profissional → Profissionais.ativo = TRUE</span></td><td>Não permitir novos agendamentos com profissional inativo.</td></tr>
@@ -194,7 +262,7 @@
 </section>
 
 <footer>
-<strong>Salão dos Primos — Entrega 1.</strong> Dicionário revisado em 26/10/2026. Os campos e restrições das entidades implementadas foram alinhados ao SQL; limitações de escopo estão identificadas explicitamente.
+<strong>Salão dos Primos — Entrega 1.</strong> Dicionário revisado em 26/10/2026. Os campos, tipos e regras documentados foram alinhados ao script SQL. Os DERs foram preservados conforme solicitado.
 </footer>
 </main>
 </div>
