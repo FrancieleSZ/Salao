@@ -112,7 +112,7 @@ O sistema não inclui venda de produtos nesta versão, pois a responsável infor
 - **RN09 — Pagamento:** registrar valor efetivamente recebido e forma de pagamento. Formas informadas: débito, crédito, Pix e dinheiro.
 - **RN10 — Comissão/despesas:** o registro atual informa 30% para despesas do salão e 70% para os profissionais. A divisão informada é 30% para despesas do salão e 70% para os profissionais. O procedimento SQL `fechar_caixa` calcula os percentuais informados sobre os pagamentos do período.
 - **RN11 — Fechamento de caixa:** o fechamento deve considerar os pagamentos efetivamente registrados no período e a divisão validada pela responsável.
-- **RN12 — Compra de insumos:** a compra deve identificar os itens adquiridos e o fornecedor, caso esse controle seja implementado.
+- **RN12 — Compra de insumos:** cada compra deve registrar o fornecedor e os itens adquiridos, com quantidade e valor unitário.
 - **RN13 — Estoque:** saldo de insumo não pode ficar inconsistente entre entradas e consumo; registrar as entradas e o consumo de insumos.
 - **RN14 — Sem venda de produtos:** o salão informou que não comercializa produtos; não modelar vendas de produtos como processo ativo nesta versão.
 - **RN15 — LGPD:** coletar apenas os dados pessoais necessários e restringir seu acesso às pessoas autorizadas.
