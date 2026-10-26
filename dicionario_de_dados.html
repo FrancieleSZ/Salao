@@ -46,7 +46,10 @@
 <div class="callout"><strong>2. Agendamento:</strong> o usuário seleciona cliente, profissional, procedimento, data e hora de início. O sistema consulta a agenda do profissional e calcula o término com base na duração do procedimento antes de registrar a reserva.</div>
 <div class="callout"><strong>3. Alteração:</strong> cancelamento e remarcação atualizam o estado ou os dados do agendamento. Um agendamento cancelado não deve bloquear o horário.</div>
 <div class="callout"><strong>4. Atendimento:</strong> o profissional executa o procedimento e o agendamento pode ser marcado como concluído.</div>
-<div class="callout"><strong>5. Pagamento e fechamento:</strong> o README informa que o pagamento ocorre presencialmente ao final do atendimento e alimenta o fechamento de caixa e a comissão. O pagamento está documentado e implementado no SQL; os arquivos de DER foram preservados sem alterações, conforme solicitado.</div>
+<div class="callout"><strong>5. Pagamento e fechamento:</strong> o pagamento é registrado ao final do atendimento e alimenta consultas de recebimentos e o cálculo de fechamento de caixa baseado na divisão informada de 30%/70%.</div>
+<div class="callout"><strong>6. Compra:</strong> cadastrar fornecedor, registrar compra e inserir seus itens com quantidade e valor unitário.</div>
+<div class="callout"><strong>7. Estoque:</strong> a inclusão de item de compra gera movimentação de entrada; o consumo e os ajustes são registrados por movimentação e atualizam o saldo. A consulta de estoque mínimo apoia a reposição.</div>
+<div class="callout"><strong>Limite dos diagramas:</strong> os DERs conceitual e lógico foram preservados sem edição conforme solicitado e não exibem todas as tabelas de apoio implementadas no SQL.</div>
 </section>
 
 <section class="section" id="cliente">
@@ -110,7 +113,7 @@
 <section class="section" id="pagamento">
 <h2>3.7 Pagamento</h2>
 <div class="notice">O pagamento é registrado presencialmente ao final do atendimento. O modelo adota um registro de pagamento por agendamento, com valor efetivamente recebido e forma de pagamento: débito, crédito, Pix ou dinheiro. Os arquivos de DER foram preservados sem alterações, conforme solicitado.</div>
-<div class="panel"><div class="table-wrap"><table><thead><tr><th>Atributo proposto</th><th>Descrição</th><th>Regra / tipo físico sugerido</th></tr></thead><tbody>
+<div class="panel"><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Regra / tipo físico</th></tr></thead><tbody>
 <tr><td><code>id_pagamento</code><span class="tag">PK</span></td><td>Identificador do pagamento.</td><td>Gerado pelo sistema; <code>INTEGER</code>.</td></tr>
 <tr><td><code>id_agendamento</code><span class="tag fk">FK</span></td><td>Atendimento ao qual o pagamento está associado.</td><td>Obrigatório e UNIQUE no SQL; o modelo admite no máximo um pagamento por agendamento; <code>INTEGER</code>.</td></tr>
 <tr><td><code>data_pagamento</code></td><td>Data e hora do recebimento.</td><td>Obrigatório; <code>DATETIME</code>.</td></tr>
