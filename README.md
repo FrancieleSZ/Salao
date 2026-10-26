@@ -1,194 +1,275 @@
-# Entrega 1 — Modelo Conceitual (DER)
-### Sistema de gestão de informações do Salão dos Primos
+# Entrega 2 — Modelo Lógico, Implementação SQL e Apresentação Final
 
----
+## Sistema de gestão de informações — Salão dos Primos
 
-## Metadados
+> Escopo desta revisão: relatório, levantamento, dicionários, script SQL, consultas e roteiro da apresentação foram revisados. Os arquivos DER_Conceitual.png e DER_Lógico.png foram mantidos exatamente como estavam, conforme solicitado. Por isso, algumas divergências apontadas na correção da Entrega 1 continuam visíveis nos diagramas e são registradas abaixo.
 
-- **Integrantes**
-  - Emilly Rodrigues de Souza — RGM: 47508248
-  - Franciele Souza de Jesus — RGM: 47643323
-  - Julia Parra — RGM: 47566604
-  - Kamilly Vitória Alves da Silva — RGM: 46919431
-- **Organização:** Salão dos Primos
-- **Responsável entrevistada:** Alaide
-- **Versão do documento:** 2.0 — 24/10/2026
+## Integrantes
 
-## 1. Caracterização da organização
+| Nome completo | RGM | Usuário GitHub |
+|---|---:|---|
+| Emilly Rodrigues de Souza | 47508248 | confirmar conta real |
+| Franciele Souza de Jesus | 47643323 | FrancieleSZ |
+| Julia Parra | 47566604 | confirmar conta real |
+| Kamilly Vitória Alves da Silva | 46919431 | confirmar conta real |
 
-O Salão dos Primos é um salão de beleza feminino e masculino, com fins lucrativos, quatro profissionais e aproximadamente 30 a 50 clientes. Conforme a entrevista e a observação realizadas no local, o controle de horários é feito em caderno de papel. Isso dificulta consultar a disponibilidade antes de ir ao salão e aumenta a quantidade de mensagens de WhatsApp recebidas pelos profissionais durante os atendimentos.
+Nomes e RGMs foram transcritos da documentação de avaliação da Entrega 1. Os usuários GitHub dos demais integrantes devem ser preenchidos conforme as contas reais; não foram inferidos.
 
-**Evidências registradas no trabalho**
-- Endereço informado: R. Bernardino Vergueiro, 276 — Jardim Jaú, São Paulo - SP, 03710-060.
-- Instagram: https://www.instagram.com/salaodosprimoss/
-- Telefone de contato do salão: (11) 94400-0738.
-- Fotos da visita: [Imagem1.jpeg](Imagem1.jpeg) e [Imagem2.jpeg](Imagem2.jpeg).
-- Pesquisa de campo: entrevista com a responsável e observação dos processos no salão.
+## 1.1 Revisão do modelo conceitual
 
-## 2. Processos de negócio
+### Caracterização da organização
 
-### 2.1 Processos identificados
+O Salão dos Primos é um salão de beleza feminino e masculino, com fins lucrativos. A documentação da Entrega 1 registra quatro profissionais e aproximadamente 30 a 50 clientes. O controle de horários foi descrito como feito em caderno de papel, o que dificulta consultar a disponibilidade antes de ir ao salão e aumenta as mensagens recebidas por WhatsApp durante os atendimentos.
 
-1. **Cadastro de clientes:** registrar dados básicos necessários para contato e organização dos atendimentos.
-2. **Marcação de horário:** selecionar cliente, profissional, procedimento, data e hora.
-3. **Organização e consulta da agenda:** verificar disponibilidade por profissional e duração do procedimento, evitando sobreposição.
-4. **Contato e confirmação:** comunicação presencial ou por WhatsApp para marcar, confirmar e esclarecer dúvidas.
-5. **Cancelamento e remarcação:** localizar o agendamento, cancelar ou escolher outro horário e liberar a vaga anterior quando aplicável.
-6. **Atendimento / execução do procedimento:** realizar o serviço reservado; a duração depende do procedimento e pode ser maior em casos como coloração para loiro.
-7. **Recebimento do pagamento:** ocorre presencialmente ao final do atendimento; o valor final é combinado no salão e pode variar conforme o tamanho do cabelo. Formas informadas: débito, crédito, Pix e dinheiro.
-8. **Comissão e despesas do salão:** a divisão informada é de 30% para despesas do salão e 70% para os profissionais. O procedimento SQL `fechar_caixa` calcula essa divisão sobre os pagamentos registrados no período.
-9. **Fechamento de caixa:** conferir os valores recebidos no período e a divisão correspondente. A conferência considera os pagamentos registrados no período.
-10. **Compra de produtos e insumos:** reposição de tintas e produtos químicos usados nos procedimentos, por meio de fornecedores.
-11. **Controle de estoque de insumos:** acompanhar entradas, consumo e saldo para reduzir risco de falta de materiais. O controle de estoque acompanha entradas e consumo de insumos.
-12. **Cadastro/consulta de fornecedores:** registrar ou consultar os fornecedores de quem o salão compra insumos, para identificar a origem das compras.
-13. **Venda de produtos no salão:** segundo o registro da entrevista, o salão **não vende produtos**. Portanto, venda de produtos não é tratada como processo operacional do sistema nesta versão.
+**Problemas de gestão da informação**
 
-### 2.2 Integração dos processos
+- **P1 — Consulta de agenda:** os horários anotados em papel dificultam consultar a disponibilidade por profissional e evitar conflito de horário.
+- **P2 — Sobrecarga de mensagens:** dúvidas e pedidos de horários por WhatsApp interrompem os profissionais durante os atendimentos.
+- **P3 — Conferência de recebimentos:** os pagamentos ocorrem presencialmente ao final do atendimento; registrar valores e formas permite consultar os recebimentos e apoiar o fechamento de caixa.
+- **P4 — Acompanhamento de insumos:** o modelo registra compras, entradas e consumo de materiais usados nos procedimentos, permitindo consultar saldo e necessidade de reposição.
 
-- O cadastro do cliente antecede a marcação; cada agendamento deve estar ligado a um cliente.
-- A consulta da agenda verifica o tempo livre do profissional durante toda a duração estimada do procedimento.
-- Cancelamentos liberam o horário; remarcações devem verificar disponibilidade antes de confirmar o novo período.
-- Ao concluir o atendimento, registra-se a situação do agendamento e o pagamento presencial.
-- Os pagamentos registrados dão suporte à conferência de caixa e ao cálculo da divisão financeira, aplicando a divisão informada de 30% para despesas do salão e 70% para os profissionais.
-- A compra de insumos gera entradas de estoque; o consumo dos materiais nos procedimentos reduz o saldo, conforme o processo de controle de estoque descrito no levantamento.
-- O cadastro de fornecedor dá suporte à identificação da origem das compras.
-- A venda de produtos foi excluída do escopo funcional porque o salão informou que não realiza essa atividade.
+P1 e P2 constam na caracterização original. P3 e P4 descrevem os processos financeiros e de insumos contemplados nesta versão do sistema. As consultas gerenciais relacionadas estão identificadas como G01–G08 no script SQL. O estoque é de insumos usados nos serviços, não de produtos vendidos ao cliente.
 
-### 2.3 Fluxos resumidos
+### Evidências e contato
 
-**Marcação:** solicitação do cliente → localizar/cadastrar cliente → escolher profissional e procedimento → consultar disponibilidade → validar duração e conflitos → registrar e confirmar agendamento.
+- **Organização:** Salão dos Primos.
+- **Responsável registrada na Entrega 1:** Alaide.
+- **Endereço registrado:** R. Bernardino Vergueiro, 276 — Jardim Jaú, São Paulo - SP, 03710-060.
+- **Telefone registrado:** (11) 94400-0738.
+- **Instagram:** https://www.instagram.com/salaodosprimoss/
+- **Fotos existentes no repositório:** [Imagem1.jpeg](Imagem1.jpeg) e [Imagem2.jpeg](Imagem2.jpeg).
+- **Correção da Entrega 1:** [Issue #19 — avaliação do professor](https://github.com/FrancieleSZ/Salao/issues/19).
 
-**Atendimento e pagamento:** chegada do cliente → execução do procedimento → concluir atendimento → registrar pagamento e forma de pagamento → incluir no controle de caixa.
+O material registra entrevista e observação no local e duas fotos. A data exata da visita, a função completa da entrevistada e a lista dos integrantes que participaram não estão identificadas de forma verificável nos arquivos consultados; não foram inventadas. Acrescentem esses dados se estiverem nas anotações reais do grupo.
 
-**Cancelamento/remarcação:** receber solicitação → localizar agendamento → cancelar e liberar horário ou consultar nova disponibilidade → atualizar registro → confirmar com o cliente.
+### Processos de negócio
 
-**Compra e estoque:** identificar necessidade de reposição → selecionar/consultar fornecedor → registrar compra e itens → registrar entrada dos insumos → atualizar saldo. O consumo é registrado por movimentação de estoque, associada ao agendamento quando aplicável.
+1. **Cadastro de clientes:** manter nome e meios de contato necessários para organizar atendimentos.
+2. **Cadastro de profissionais:** manter profissionais e situação ativa/inativa.
+3. **Procedimentos e especialidades:** registrar serviços, duração estimada, preço de referência e áreas de atuação.
+4. **Marcação e consulta da agenda:** escolher cliente, profissional, procedimento, data e horários; consultar disponibilidade e impedir sobreposição.
+5. **Confirmação, cancelamento e remarcação:** atualizar a situação; o cancelamento libera o intervalo.
+6. **Execução do atendimento:** registrar o estado do agendamento e consultar o serviço reservado.
+7. **Recebimento:** registrar valor efetivamente recebido, data e forma (débito, crédito, Pix ou dinheiro, conforme a documentação).
+8. **Conferência de caixa e divisão financeira:** consultar pagamentos e calcular a divisão informada de 30% para despesas do salão e 70% para profissionais.
+9. **Compras e fornecedores:** registrar fornecedor, compra e itens adquiridos.
+10. **Controle de insumos:** registrar entrada por compra, consumo e saldo; consultar insumos no nível mínimo ou abaixo.
+11. **Venda de produtos:** fora do escopo, pois a documentação informa que o salão não comercializa produtos.
 
-## 3. Requisitos do sistema
+### Requisitos funcionais
 
-### 3.1 Requisitos funcionais
+- **RF01:** cadastrar clientes com nome, telefone e e-mail; telefone e e-mail são opcionais no esquema SQL.
+- **RF02:** cadastrar procedimentos com nome, descrição, duração estimada e preço de referência.
+- **RF03:** cadastrar profissionais com nome, telefone e situação ativa/inativa.
+- **RF04:** cadastrar especialidades e relacioná-las aos profissionais.
+- **RF05:** registrar agendamento com cliente, profissional, procedimento, data, início, término, situação e observações.
+- **RF06:** permitir à aplicação calcular o término com base na duração do procedimento e na avaliação profissional quando houver duração estendida.
+- **RF07:** impedir sobreposição de horários não cancelados do mesmo profissional.
+- **RF08:** consultar agenda por data e profissional.
+- **RF09:** cancelar ou remarcar agendamentos sem manter bloqueado o horário cancelado.
+- **RF10:** consultar o histórico de agendamentos de um cliente.
+- **RF11:** impedir novos agendamentos com profissional inativo.
+- **RF12:** registrar um pagamento por agendamento, com valor efetivamente recebido, data e forma.
+- **RF13:** consultar pagamentos por período e forma.
+- **RF14:** calcular a divisão informada de 30%/70% sobre pagamentos registrados.
+- **RF15:** cadastrar fornecedores e registrar compras de insumos com itens, quantidades e valores unitários.
+- **RF16:** registrar entrada e consumo de insumos, atualizar saldo e consultar níveis de reposição.
+- **RF17:** consultar totais de compras por fornecedor e período.
 
-- **RF01.** Cadastrar clientes com dados básicos de contato.
-- **RF02.** Cadastrar procedimentos com nome, descrição, duração estimada e preço de referência.
-- **RF03.** Cadastrar profissionais e indicar se estão ativos.
-- **RF04.** Cadastrar especialidades e vincular profissionais às especialidades que dominam.
-- **RF05.** Registrar agendamento com cliente, profissional, procedimento, data e hora de início.
-- **RF06.** Calcular ou determinar o horário previsto de término a partir da duração do procedimento.
-- **RF07.** Impedir sobreposição de agendamentos do mesmo profissional.
-- **RF08.** Consultar a agenda por data e profissional e verificar horários disponíveis.
-- **RF09.** Cancelar ou remarcar agendamentos, liberando o horário anterior quando cancelado ou remarcado.
-- **RF10.** Consultar o histórico de agendamentos de um cliente.
-- **RF11.** Impedir novos agendamentos com profissional inativo.
-- **RF12.** Registrar o pagamento do atendimento, com valor efetivamente recebido, data e forma de pagamento.
-- **RF13.** Consultar os pagamentos registrados por período para apoiar a conferência de caixa.
-- **RF14.** Apoiar o cálculo da divisão de valores entre despesas do salão e profissionais, aplicando a divisão informada de 30% para despesas do salão e 70% para os profissionais.
-- **RF15.** Registrar compras de insumos, com fornecedor, data e itens comprados, conforme o controle de compras e estoque descrito no levantamento.
-- **RF16.** Consultar entradas, saldo atual e insumos abaixo do estoque mínimo.
-- **RF17.** Cadastrar e consultar fornecedores de insumos, para apoiar o registro de compras.
+### Requisitos não funcionais
 
-### 3.2 Restrição de escopo
+- **RNF01 — Usabilidade:** dados organizados para consulta rápida durante o expediente.
+- **RNF02 — Desempenho:** consultas frequentes podem filtrar agenda por data e profissional usando índice.
+- **RNF03 — Segurança e privacidade:** restringir dados pessoais e financeiros às pessoas autorizadas.
+- **RNF04 — Disponibilidade:** a solução deve estar acessível durante o funcionamento do salão quando implantada.
+- **RNF05 — Confiabilidade:** evitar conflitos de agenda e manter consistência dos vínculos, pagamentos e movimentações.
+- **RNF06 — Integridade:** usar PKs, FKs, restrições de domínio e validações no banco.
 
-O sistema não inclui venda de produtos nesta versão, pois a responsável informou que o salão não comercializa produtos. Isso é uma decisão de escopo, não uma funcionalidade do sistema.
+### Regras de negócio
 
-### 3.3 Requisitos não funcionais
+- **RN01 — Duração:** a reserva considera a duração estimada; coloração destinada a deixar o cabelo loiro pode exigir o dobro do tempo padrão, conforme avaliação profissional.
+- **RN02 — Sem sobreposição:** um profissional não pode ter dois agendamentos não cancelados com intervalos sobrepostos na mesma data.
+- **RN03 — Intervalo completo:** a disponibilidade deve cobrir todo o período entre início e término.
+- **RN04 — Profissional ativo:** profissional inativo não recebe novos agendamentos.
+- **RN05 — Vínculos obrigatórios:** cada agendamento referencia exatamente um cliente, profissional e procedimento; cada pagamento referencia um agendamento.
+- **RN06 — Preço de referência:** o preço cadastrado é estimado; o valor final pode variar e é combinado presencialmente.
+- **RN07 — Cancelamento:** agendamento cancelado não bloqueia o intervalo.
+- **RN08 — Antecedência de cancelamento:** não há prazo mínimo numérico documentado; o sistema não o aplica automaticamente.
+- **RN09 — Pagamento:** registrar valor efetivamente recebido e forma permitida: débito, crédito, Pix ou dinheiro.
+- **RN10 — Divisão financeira:** 30% para despesas do salão e 70% para profissionais, conforme a documentação.
+- **RN11 — Fechamento:** o cálculo considera pagamentos registrados no período informado.
+- **RN12 — Compras:** cada compra referencia fornecedor e contém itens com quantidade e valor unitário.
+- **RN13 — Estoque:** entradas, consumo e ajustes atualizam saldo; o consumo não pode superar o saldo disponível.
+- **RN14 — Sem venda de produtos:** não implementar venda de produtos nesta versão.
+- **RN15 — Privacidade:** coletar somente dados necessários e limitar o acesso.
+- **RN16 — Higiene e segurança:** procedimentos com químicos e instrumentos devem seguir orientações sanitárias aplicáveis; detalhes específicos não foram inventados no banco.
+- **RN17 — Nota fiscal:** a documentação anterior informa emissão de nota fiscal, mas o processo fiscal e a integração de emissão não fazem parte deste banco.
+- **RN18 — Atraso e sinal:** não há regra numérica documentada para tolerância a atraso, sinal ou pagamento antecipado; não são automatizados.
 
-- **RNF01 — Usabilidade:** interface simples e rápida para uso durante o expediente.
-- **RNF02 — Desempenho:** consulta de disponibilidade deve responder rapidamente.
-- **RNF03 — Segurança e privacidade:** restringir acesso a dados pessoais e financeiros conforme a função do usuário.
-- **RNF04 — Disponibilidade:** sistema acessível durante o funcionamento do salão.
-- **RNF05 — Confiabilidade:** evitar conflitos de agenda e preservar a consistência dos registros de pagamentos e compras.
-- **RNF06 — Integridade:** relacionamentos devem usar chaves estrangeiras e validações adequadas no banco de dados.
+### Tratamento dos apontamentos da Entrega 1
 
-## 4. Regras de negócio
+| Apontamento | Tratamento |
+|---|---|
+| Processos limitados à agenda | Documentação e SQL ampliados para pagamentos, fechamento, compras, fornecedores e controle de insumos. |
+| Requisito central de agendamento ausente/inconsistente | RF05–RF11 detalham cadastro, agenda, conflitos, cancelamento e profissional ativo. |
+| Regras de negócio insuficientes | RN01–RN18 documentadas e associadas às validações/consultas quando implementadas. |
+| Dicionário incompleto | HTML ampliado com fluxo, convenções, tipos, relacionamentos, restrições, privacidade e proposta de log. |
+| DER sem identificadores, divergência de cardinalidade e ausência de Pagamento | **Não alterado**, por instrução expressa. As divergências visuais continuam pendentes. |
 
-- **RN01 — Duração:** a reserva de horário deve considerar a duração estimada do procedimento. A regra relatada para coloração destinada a deixar o cabelo loiro pode exigir o dobro do tempo padrão, conforme a avaliação do profissional.
-- **RN02 — Sem sobreposição:** um profissional não pode ter dois agendamentos ativos com intervalos sobrepostos na mesma data.
-- **RN03 — Intervalo completo:** um novo agendamento só pode ser confirmado se todo o intervalo necessário estiver disponível.
-- **RN04 — Profissional ativo:** profissional inativo não pode receber novos agendamentos.
-- **RN05 — Vínculos obrigatórios:** cada agendamento referencia exatamente um cliente, um profissional e um procedimento.
-- **RN06 — Preço de referência:** o preço cadastrado é estimado; o valor final é combinado presencialmente e pode variar conforme o tamanho do cabelo.
-- **RN07 — Cancelamento:** agendamento cancelado não bloqueia mais o intervalo na agenda.
-- **RN08 — Antecedência de cancelamento:** a antecedência mínima deve ser definida pela responsável. Não foi estabelecido um prazo mínimo numérico nesta versão; o cancelamento libera o horário.
-- **RN09 — Pagamento:** registrar valor efetivamente recebido e forma de pagamento. Formas informadas: débito, crédito, Pix e dinheiro.
-- **RN10 — Comissão/despesas:** o registro atual informa 30% para despesas do salão e 70% para os profissionais. A divisão informada é 30% para despesas do salão e 70% para os profissionais. O procedimento SQL `fechar_caixa` calcula os percentuais informados sobre os pagamentos do período.
-- **RN11 — Fechamento de caixa:** o fechamento deve considerar os pagamentos efetivamente registrados no período e a divisão validada pela responsável.
-- **RN12 — Compra de insumos:** cada compra deve registrar o fornecedor e os itens adquiridos, com quantidade e valor unitário.
-- **RN13 — Estoque:** saldo de insumo não pode ficar inconsistente entre entradas e consumo; registrar as entradas e o consumo de insumos.
-- **RN14 — Sem venda de produtos:** o salão informou que não comercializa produtos; não modelar vendas de produtos como processo ativo nesta versão.
-- **RN15 — LGPD:** coletar apenas os dados pessoais necessários e restringir seu acesso às pessoas autorizadas.
-- **RN16 — Normas sanitárias:** o salão utiliza produtos químicos e instrumentos que exigem cuidados de higiene e segurança; os procedimentos concretos devem seguir a orientação sanitária aplicável.
-- **RN17 — Nota fiscal:** o registro da entrevista informa que o salão emite nota fiscal; o processo e os campos necessários devem ser detalhados se entrarem no escopo do sistema.
-- **RN18 — Atrasos e sinal:** a tolerância de atraso, o sinal e o pagamento antecipado não são aplicados como regras automáticas nesta versão.
+**Software dos diagramas:** o software de autoria não está comprovado apenas pelos PNGs. Confirmem o nome do aplicativo a partir do arquivo-fonte antes de informar no relatório.
 
-## 5. Dicionário de dados
+## 1.2 Conversão do modelo conceitual para o lógico
 
-O dicionário detalhado está em [dicionario_de_dados.html](dicionario_de_dados.html). Ele descreve atributos, regras, tipos físicos sugeridos, índices, acesso e privacidade. Tipos e índices são propostas para o SGBD que vier a ser escolhido, não uma implementação já existente.
+- **Entidades para tabelas:** Cliente, Profissional, Procedimento, Especialidade e Agendamento têm tabelas próprias. Pagamento representa o recebimento. Fornecedor, Insumo, Compra, Item_Compra, Movimentacao_Estoque e Fechamento_Caixa ampliam o SQL para processos de apoio.
+- **Atributos para colunas:** identificadores inteiros, datas e horários em tipos próprios, valores monetários em DECIMAL, textos em VARCHAR/TEXT e quantidades fracionárias em DECIMAL(10,3).
+- **Relacionamentos 1:N:** a FK fica no lado N: agendamento referencia cliente, profissional e procedimento; pagamento referencia agendamento; compra referencia fornecedor; item_compra referencia compra e insumo; movimentacao_estoque referencia insumo e, opcionalmente, agendamento.
+- **Relacionamento N:N:** Profissional–Especialidade é resolvido por profissional_especialidade, cuja PK composta é (id_profissional, id_especialidade); ambos os campos são FKs.
+- **Agendamento–Pagamento:** o SQL permite no máximo um pagamento por agendamento, por FK com UNIQUE. Isso é uma decisão de implementação, não confirmação de pagamentos parciais.
+- **Generalização/especialização:** não há generalização implementada nas tabelas atuais.
+- **Limitação dos diagramas:** o SQL e os dicionários incluem entidades de apoio ausentes dos DERs preservados; portanto, os diagramas não representam integralmente o esquema SQL atual.
 
-## 6. Modelo conceitual, lógico e físico
+## 1.3 Chaves primárias e estrangeiras
 
-### 6.1 Entidades centrais
+| Tabela | PK | FKs |
+|---|---|---|
+| cliente | id_cliente | — |
+| profissional | id_profissional | — |
+| procedimento | id_procedimento | — |
+| especialidade | id_especialidade | — |
+| profissional_especialidade | id_profissional, id_especialidade | id_profissional → profissional; id_especialidade → especialidade |
+| agendamento | id_agendamento | id_cliente; id_profissional; id_procedimento |
+| pagamento | id_pagamento | id_agendamento → agendamento (também UNIQUE) |
+| fornecedor | id_fornecedor | — |
+| insumo | id_insumo | — |
+| compra | id_compra | id_fornecedor → fornecedor |
+| item_compra | id_item_compra | id_compra → compra; id_insumo → insumo |
+| movimentacao_estoque | id_movimentacao | id_insumo → insumo; id_agendamento → agendamento (opcional) |
+| fechamento_caixa | id_fechamento | — |
 
-- **Cliente:** pessoa que agenda e recebe serviços.
-- **Profissionais:** pessoas que executam procedimentos.
-- **Procedimentos:** serviços oferecidos, com duração estimada.
-- **Agendamentos:** evento com data, início, término e situação.
-- **Especialidades:** áreas de atuação dos profissionais.
-- **Pagamento:** registro do recebimento presencial associado ao atendimento.
-- **Fornecedor:** cadastro de quem fornece insumos.
-- **Insumo:** material utilizado na execução dos procedimentos, com saldo e nível mínimo.
-- **Compra e Item_Compra:** registro das compras de insumos, fornecedor, quantidade e valor unitário.
-- **Movimentacao_Estoque:** histórico de entradas, consumo e ajustes de insumos.
-- **Fechamento_Caixa:** total recebido no período e divisão de 30% para o salão e 70% para os profissionais.
+## 1.4 Normalização: 1FN, 2FN e 3FN
 
-Compras, fornecedores e estoque estão implementados no SQL e descritos nos dicionários. Os DERs foram preservados sem alteração, conforme solicitado, e por isso não mostram as entidades adicionais.
+- **1FN — valores atômicos:** cada coluna guarda um único valor por registro. Os vínculos de profissionais e especialidades ficam em linhas próprias na tabela associativa; cada item de compra é uma linha independente.
+- **2FN — dependência completa da chave:** profissional_especialidade tem chave composta e não possui atributos não-chave que dependam apenas de parte dela. As demais tabelas usam PKs simples; compra e itens de compra são separados.
+- **3FN — sem dependências transitivas indevidas:** dados de cliente, profissional, procedimento, fornecedor e insumo ficam em suas próprias tabelas e são referenciados por FKs. O nome do fornecedor não é repetido em cada compra e o nome do insumo não é repetido em cada item de compra.
+- **Justificativa:** a decomposição reduz duplicidade e anomalias de inserção, atualização e exclusão, além de preservar integridade referencial. Fechamento_Caixa guarda um retrato calculado do período; os valores são gerados pela procedure e a rotina não substitui conferência financeira real.
 
-### 6.2 Diagramas
+## 1.5 Justificativas técnicas
 
-- **DER conceitual:** [DER_Conceitual.png](DER_Conceitual.png)
-- **DER lógico:** [DER_Lógico.png](DER_L%C3%B3gico.png)
-- Os diagramas foram preservados nesta revisão, conforme solicitado. Nenhum arquivo de DER foi editado ou recriado. As alterações desta revisão abrangem o SQL e a documentação textual.
+- **PKs inteiras:** identificam registros sem depender de nome, telefone ou dado que possa mudar ou repetir.
+- **PK composta em profissional_especialidade:** impede repetir o mesmo vínculo profissional/especialidade.
+- **FKs obrigatórias:** impedem agendamentos sem cliente, profissional ou procedimento válido e itens sem compra/insumo correspondente.
+- **FK opcional em movimentacao_estoque.id_agendamento:** permite associar um consumo a um atendimento quando conhecido; ajustes e consumos gerais podem não ter atendimento.
+- **UNIQUE em pagamento.id_agendamento:** implementa um pagamento por agendamento. Se houver pagamentos parciais separados, essa decisão deve ser revista após confirmação.
+- **CHECK e domínios:** restringem duração positiva, valores monetários não negativos, quantidades positivas, formas de pagamento e estados permitidos. O MySQL precisa ser versão 8.0.16 ou superior para aplicar CHECK, conforme a [documentação oficial](https://dev.mysql.com/doc/refman/8.0/en/create-table-check-constraints.html).
+- **Triggers de agenda:** verificam profissional ativo e sobreposição em inserções/alterações. Em aplicação concorrente, transações e concorrência ainda precisam ser testadas.
+- **Triggers de estoque:** item de compra gera entrada; movimentações atualizam saldo; consumo maior que o saldo é rejeitado.
+- **Fechamento de caixa:** a procedure soma pagamentos do período e calcula 30%/70%. O resultado depende dos pagamentos registrados e não comprova, por si só, fechamento contábil/fiscal.
+- **Privacidade:** dados de exemplo são fictícios; no uso real, o acesso deve ser restrito.
 
-### 6.3 Relacionamentos e cardinalidades
+## 1.6 Proposta analítica para BI e IA
 
-No diagrama conceitual, cada par (mínimo, máximo) é colocado junto à entidade que está sendo contada: o par junto a Cliente indica quantos clientes se relacionam com uma ocorrência de Agendamento; o par junto a Agendamento indica quantos agendamentos se relacionam com uma ocorrência de Cliente.
+### KPIs propostos
 
-- **Cliente — Agendamentos:** junto a Cliente, (1,1), pois cada agendamento tem exatamente um cliente; junto a Agendamentos, (0,n), pois um cliente pode ter nenhum ou vários agendamentos.
-- **Profissionais — Agendamentos:** junto a Profissionais, (1,1), pois cada agendamento tem exatamente um profissional; junto a Agendamentos, (0,n), pois um profissional pode ter nenhum ou vários agendamentos.
-- **Procedimentos — Agendamentos:** junto a Procedimentos, (1,1), pois cada agendamento tem exatamente um procedimento; junto a Agendamentos, (0,n), pois um procedimento pode constar em nenhum ou vários agendamentos.
-- **Profissionais — Especialidades:** relacionamento N:N, com (0,n) em ambos os lados, resolvido no modelo lógico por tabela associativa Profissional_Especialidade.
-- **Agendamentos — Pagamento:** junto a Agendamentos, (0,1), e junto a Pagamento, (1,1): o desenho assume no máximo um pagamento por agendamento e cada pagamento pertence a exatamente um agendamento. O modelo adota um pagamento por agendamento, representado pela restrição UNIQUE em `Pagamento.id_agendamento`.
+| KPI | Fórmula e período | Uso |
+|---|---|---|
+| Recebimento por forma | Soma de valor_pago por mês e forma | Conferir recebimentos registrados. |
+| Agendamentos por situação | Contagem por mês e status | Acompanhar conclusões, cancelamentos e faltas. |
+| Taxa de cancelamento/falta | (cancelados + faltas) / total de agendamentos × 100, por mês | Identificar períodos com maior perda de horários. |
+| Demanda por procedimento | Contagem de agendamentos por procedimento | Planejar agenda e oferta de serviços. |
+| Recebimento por profissional | Soma de pagamentos ligados aos agendamentos de cada profissional | Analisar atendimentos e recebimentos registrados. |
+| Insumos no mínimo ou abaixo | Lista de insumos com saldo menor ou igual ao mínimo | Priorizar reposição. |
+| Compras por fornecedor/mês | Soma de quantidade × valor unitário por fornecedor e mês | Acompanhar gastos registrados. |
+| Estimativa 30%/70% | Total de pagamentos × 30% e × 70%, por mês | Conferir o cálculo baseado na divisão informada. |
 
-### 6.4 Chaves e integridade
+### Rastreabilidade
 
-- Todas as entidades possuem identificador primário.
-- A tabela Agendamentos contém as FKs id_cliente, id_profissional e id_procedimento.
-- Profissional_Especialidade utiliza PK composta por id_profissional e id_especialidade, que também são FKs.
-- Pagamento contém id_agendamento como FK; a restrição de unicidade representa a hipótese de no máximo um pagamento por agendamento e precisa ser validada.
-- A prevenção de sobreposição de horários requer uma validação transacional, trigger ou mecanismo equivalente no SGBD; um índice comum, sozinho, não garante essa regra.
+| Problema/KPI | Tabelas | Consulta SQL |
+|---|---|---|
+| P1 — consulta de agenda e conflitos | agendamento, cliente, profissional, procedimento | G02; auditoria A01 |
+| P2 — consulta de agenda para reduzir dependência de mensagens | agendamento, profissional, cliente, procedimento | G02 |
+| P3 — recebimentos e conferência de caixa | pagamento, agendamento, profissional | G01, G05, G07 |
+| P4 — reposição de insumos | insumo, movimentacao_estoque, compra, item_compra, fornecedor | G03, G06; A06 |
+| Taxa de cancelamento/falta | agendamento | G08 |
+| Demanda por procedimento | procedimento, agendamento | G04 |
+| Integridade dos vínculos | tabelas relacionadas | A02, A07 |
+| Atendimento concluído sem pagamento | agendamento, pagamento | A03 |
+| Profissional inativo com agendamento ativo | profissional, agendamento | A04 |
+| Pagamento inválido | pagamento | A05 |
 
-## 7. Justificativa técnica
+### Potencial para BI e IA
 
-Cliente, Profissionais e Procedimentos são entidades separadas porque possuem atributos próprios e podem participar de muitos agendamentos. Agendamentos representa o evento no tempo e permite registrar data, horários e situação, além de aplicar a regra de não sobreposição. Especialidades fica separada para evitar armazenar várias áreas de atuação em um único campo. Pagamento foi incluído porque o recebimento ocorre ao final do atendimento e foi considerado essencial na avaliação do professor.
+Os dados podem alimentar painéis por mês, profissional, procedimento, situação, forma de pagamento, fornecedor e insumo. Uma evolução poderia prever demanda por procedimento e período, sugerir reposição com base no histórico de consumo ou identificar horários com mais cancelamentos. Essas aplicações são propostas futuras, não funcionalidades de IA implementadas pelo SQL. Os resultados dependem de dados suficientes, consistentes e revisados pela equipe.
 
-Compra, fornecedor, insumo, item de compra, movimentação de estoque e fechamento de caixa estão implementados no SQL. Os diagramas foram preservados sem alteração, conforme solicitado. O salão não realiza venda de produtos, portanto esse processo não é representado como funcionalidade ativa.
+## 2. Modelo lógico relacional
 
-## 8. Uso de inteligência artificial
+- **Modelo lógico existente:** [DER_Lógico.png](DER_L%C3%B3gico.png).
+- **DER conceitual existente:** [DER_Conceitual.png](DER_Conceitual.png).
+- **Software de autoria:** confirmar pelo arquivo-fonte; não foi possível comprová-lo apenas pelos PNGs.
+- **Integridade documental:** os dois diagramas foram preservados sem edição. A correção anterior apontou falta de identificadores, cardinalidades inconsistentes e ausência de Pagamento no DER conceitual; essas divergências continuam pendentes. O SQL também contém tabelas de compras/estoque/caixa que não aparecem nos diagramas. Isso é explicitado aqui, mas não corrigido visualmente por causa da instrução de preservação.
+
+## 3. Script SQL completo
+
+Arquivo: [script.sql](script.sql).
+
+O script está direcionado a MySQL 8.0.16 ou superior e contém criação do banco/tabelas, PK/FK, restrições, índices, triggers, procedure de fechamento, massa fictícia, exemplos de JOIN, UPDATE, DELETE, consultas gerenciais G01–G08 e auditorias A01–A07.
+
+**Importante:** o script foi revisado textualmente, mas não foi executado em servidor MySQL nesta revisão. Antes da apresentação, executar em banco de teste vazio e confirmar a saída das consultas e triggers. A chamada de fechamento no final deve ser executada uma única vez em banco limpo, pois o período possui restrição UNIQUE.
+
+## 4. Massa de dados
+
+A massa está incluída no script.sql e contém registros fictícios:
+
+- 40 clientes;
+- 4 profissionais;
+- 10 procedimentos;
+- 5 especialidades e 12 vínculos profissional-especialidade;
+- 96 agendamentos em períodos diferentes, com situações variadas;
+- pagamentos fictícios com diferentes formas;
+- 3 fornecedores, 8 insumos, 3 compras, itens e movimentações de estoque.
+
+A quantidade de clientes está na ordem de grandeza dos 30–50 clientes registrados na caracterização; os quatro profissionais refletem o número informado. Agendamentos, pagamentos e compras foram ampliados artificialmente para demonstrar filtros, formas de pagamento, estados e níveis de estoque; não representam volume histórico real. Os nomes/contatos são exemplos fictícios e os e-mails usam o domínio reservado .invalid.
+
+## 5. Repositório GitHub e artefatos
+
+- [README / Relatório Técnico Final](README.md)
+- [Script SQL e massa de dados](script.sql)
+- [Dicionário HTML](dicionario_de_dados.html)
+- [Dicionário Markdown](dicionario_dados.md)
+- [Levantamento](levantamento.md)
+- [DER conceitual — preservado](DER_Conceitual.png)
+- [DER lógico — preservado](DER_L%C3%B3gico.png)
+- [Fotos no repositório](Imagem1.jpeg) e [Imagem2.jpeg](Imagem2.jpeg)
+- [Roteiro do pitch](roteiro_pitch.md)
+- [Correção da Entrega 1](https://github.com/FrancieleSZ/Salao/issues/19)
+
+O professor informa que somente a branch main será corrigida. Verifiquem se o histórico de commits identifica todos os integrantes e se a contribuição está distribuída. Esta revisão não inventa contas GitHub nem declara colaboração que não foi verificada.
+
+## 6. Uso de Inteligência Artificial
 
 | Item | Registro |
 |---|---|
-| **Ferramenta e etapa** | O histórico do projeto registra uso de Claude (Anthropic) no esboço inicial do README. Nesta revisão, foi utilizado ChatGPT (OpenAI) para comparar os arquivos e alinhar o SQL e os dicionários de dados. Os arquivos de DER foram preservados sem alterações. |
-| **Motivação** | Organizar o material da entrevista e corrigir as divergências apontadas na avaliação do professor entre processos, requisitos, regras, dicionário e DER. |
-| **Prompts utilizados nesta revisão** | “eu n arumei o html faz ele para mim de modo certo”; “agora faz a correção de tudo novamente”. |
-| **Resposta recebida** | Revisão do README, ampliação dos processos e requisitos, explicitação das regras confirmadas e das limitações de implementação, atualização do SQL e dos dicionários para alinhar os campos, os tipos e as regras documentadas. Os DERs não foram modificados nesta revisão. |
-| **Fontes consultadas** | README e dicionário do repositório, DERs existentes e correção do professor na issue #19. Não foram consultadas fontes externas nesta revisão. |
-| **Trechos rejeitados ou corrigidos** | Foram alinhados os campos e tipos do SQL e dos dicionários, revisadas as validações de agenda e registradas as regras confirmadas e as limitações que não são automatizadas pelo banco. Os diagramas não foram modificados nesta revisão. |
-| **Justificativa da escolha final** | A versão atual prioriza os fatos documentados na entrevista e a correção do professor, separando o que está descrito do que ainda precisa ser validado. |
-| **Reflexão crítica** | A IA pode propor estruturas plausíveis que não correspondem ao funcionamento real do salão. O modelo implementa a divisão 30%/70%, um pagamento por agendamento e controle de compras/estoque no SQL. Os DERs foram preservados conforme solicitado, então ainda não refletem as entidades adicionais implementadas no banco. |
+| Ferramentas e etapas | A correção da Entrega 1 registra uso de Claude no esboço inicial do README. Nesta revisão, foi usado ChatGPT para comparar o esqueleto da Entrega 2 com o repositório, revisar documentação, ampliar a massa fictícia e elaborar consultas SQL. |
+| Motivação | Corrigir lacunas apontadas na avaliação e organizar os artefatos conforme o esqueleto da Entrega 2. |
+| Solicitação desta revisão | “pode corrigir todos os erros agora, tem acesso ao github e o repositorio, só n mude os DErs”. Em etapas anteriores, o grupo também pediu revisão do HTML e do repositório. |
+| Resposta aproveitada | Organização das seções do relatório, documentação de conversão/normalização, PK/FK, massa fictícia mais variada e consultas gerenciais/auditoria. |
+| Fontes verificadas | Esqueleto da Entrega 2, arquivos do repositório, correção do professor na [issue #19](https://github.com/FrancieleSZ/Salao/issues/19) e [documentação oficial MySQL sobre CHECK](https://dev.mysql.com/doc/refman/8.0/en/create-table-check-constraints.html). |
+| Ajustes/rejeições | Não foram inventadas datas de entrevista, função da entrevistada, usuários GitHub ausentes, resultados de execução SQL ou dados reais de clientes. Os diagramas foram mantidos intactos. |
+| Justificativa final | A proposta prioriza os fatos documentados e a correção do professor; os dados de demonstração são explicitamente fictícios. |
+| Reflexão crítica | A IA pode sugerir estruturas plausíveis que não correspondem à operação real. O SQL precisa ser executado e testado pelo grupo. Os DERs continuam com divergências anteriores porque foram preservados, então a consistência visual entre diagramas e esquema SQL não está completa. |
 
-## 9. Limitações conhecidas desta versão
+## 7. Apresentação corporativa final — pitch de 8 minutos
 
-1. Os DERs foram preservados sem alterações, conforme solicitado. Por isso, as entidades Fornecedor, Compra, Item_Compra, Insumo, Movimentacao_Estoque e Fechamento_Caixa, presentes no SQL e nos dicionários, ainda não aparecem nos diagramas.
-2. O SQL valida os horários e os conflitos de agenda. A aplicação deve preencher `hora_fim` com base na duração do procedimento e reservar o dobro do tempo quando a coloração para loiro exigir essa duração estendida.
-3. O consumo de insumos é registrado por movimentação de estoque; o banco não estima automaticamente a quantidade de cada produto químico usada em cada procedimento.
-4. A emissão de nota fiscal está registrada como processo do negócio, mas os campos e a integração fiscal não fazem parte deste banco de dados.
-5. O modelo considera um pagamento por agendamento e não inclui venda de produtos, pois o salão não comercializa produtos.
+O roteiro está em [roteiro_pitch.md](roteiro_pitch.md). A apresentação deve demonstrar o SQL realmente executando em MySQL, com ao menos uma consulta gerencial e uma auditoria. Não afirmar que os diagramas refletem todas as tabelas atuais: eles foram preservados sem alteração.
+
+## Limitações e verificações finais
+
+1. **DERs preservados:** os dois PNGs não foram modificados. Divergências anteriores de identificadores, cardinalidades e Pagamento continuam pendentes.
+2. **Modelo lógico:** como o diagrama não foi modificado, deve ser comparado com as tabelas/FKs documentadas antes da defesa.
+3. **Teste de execução:** não foi comprovado que o script executa de ponta a ponta em MySQL. Executar em banco vazio e guardar evidência.
+4. **Levantamento de campo:** a data exata da entrevista, participantes e função completa da responsável precisam ser confirmadas nas anotações reais, se disponíveis.
+5. **Usuários GitHub:** confirmar as contas reais dos integrantes e revisar a distribuição de commits.
+6. **Regra de pagamento:** o esquema permite um pagamento por agendamento. Se houver pagamentos parciais separados, rever após confirmação.
+7. **Fechamento de caixa:** calcula 30%/70% dos pagamentos lançados no período; não substitui conferência contábil/fiscal.
+8. **Consumo de estoque:** a entrada por compra é automatizada, mas o consumo deve ser lançado por movimentação; a quantidade consumida em cada serviço não é calculada automaticamente.
+9. **Nota fiscal:** o processo fiscal não foi implementado no banco.
+10. **Escopo:** o salão não vende produtos conforme a documentação; o estoque modelado corresponde a insumos utilizados nos serviços.
