@@ -182,9 +182,8 @@ Compra, fornecedor e estoque são processos reais descritos no trabalho, mas a e
 
 ## 9. Limitações conhecidas desta versão
 
-1. Alinhar o SQL ao cálculo informado de 30%/70%, incluindo o registro dos valores usados na conferência de caixa.
-2. Manter documentado que não há prazo mínimo numérico de cancelamento, tolerância de atraso, sinal ou pagamento antecipado definidos nesta versão.
-3. O modelo adotado considera um pagamento por agendamento.
-4. Modelar no banco as compras, os fornecedores e o estoque descritos no levantamento.
-5. Se compras, fornecedores e estoque forem exigidos no DER desta entrega, acrescentar as entidades correspondentes aos dois diagramas e ao dicionário, mantendo nomes, PKs, FKs e cardinalidades iguais em todos os arquivos.
-6. O SQL e os dicionários adotam MySQL 8.0+ como referência.
+1. Os DERs foram preservados sem alterações, conforme solicitado. Por isso, as entidades Fornecedor, Compra, Item_Compra, Insumo, Movimentacao_Estoque e Fechamento_Caixa, presentes no SQL e nos dicionários, ainda não aparecem nos diagramas.
+2. O SQL valida os horários e os conflitos de agenda, mas a aplicação deve preencher `hora_fim` com base na duração do procedimento. Quando a coloração para loiro exigir o dobro do tempo padrão, o horário final deve refletir a duração estendida.
+3. O consumo de insumos é registrado por movimentação de estoque; o banco não estima automaticamente a quantidade de cada produto químico usada em cada procedimento.
+4. A emissão de nota fiscal está registrada como processo do negócio, mas os campos e a integração fiscal não fazem parte deste banco de dados.
+5. O modelo considera um pagamento por agendamento e não inclui venda de produtos, pois o salão não comercializa produtos.
