@@ -81,10 +81,10 @@ O Salão dos Primos é um salão de beleza feminino e masculino, com fins lucrat
 - **RF11.** Impedir novos agendamentos com profissional inativo.
 - **RF12.** Registrar o pagamento do atendimento, com valor efetivamente recebido, data e forma de pagamento.
 - **RF13.** Consultar os pagamentos registrados por período para apoiar a conferência de caixa.
-- **RF14.** Apoiar o cálculo da divisão de valores entre despesas do salão e profissionais, após a regra de cálculo ser validada.
-- **RF15.** Registrar compras de insumos, com fornecedor, data e itens comprados, caso esse controle seja aprovado pelo salão.
+- **RF14.** Apoiar o cálculo da divisão de valores entre despesas do salão e profissionais, aplicando a divisão informada de 30% para despesas do salão e 70% para os profissionais.
+- **RF15.** Registrar compras de insumos, com fornecedor, data e itens comprados, conforme o controle de compras e estoque descrito no levantamento.
 - **RF16.** Consultar entradas e saldo de insumos, caso o controle de estoque seja confirmado.
-- **RF17.** Cadastrar e consultar fornecedores de insumos, caso o salão deseje manter esse cadastro no sistema.
+- **RF17.** Cadastrar e consultar fornecedores de insumos, para apoiar o registro de compras.
 
 ### 3.2 Restrição de escopo
 
@@ -108,9 +108,9 @@ O sistema não inclui venda de produtos nesta versão, pois a responsável infor
 - **RN05 — Vínculos obrigatórios:** cada agendamento referencia exatamente um cliente, um profissional e um procedimento.
 - **RN06 — Preço de referência:** o preço cadastrado é estimado; o valor final é combinado presencialmente e pode variar conforme o tamanho do cabelo.
 - **RN07 — Cancelamento:** agendamento cancelado não bloqueia mais o intervalo na agenda.
-- **RN08 — Antecedência de cancelamento:** a antecedência mínima deve ser definida pela responsável. O prazo exato não consta no material disponível e não deve ser inventado.
+- **RN08 — Antecedência de cancelamento:** a antecedência mínima deve ser definida pela responsável. Não foi estabelecido um prazo mínimo numérico nesta versão; o cancelamento libera o horário.
 - **RN09 — Pagamento:** registrar valor efetivamente recebido e forma de pagamento. Formas informadas: débito, crédito, Pix e dinheiro.
-- **RN10 — Comissão/despesas:** o registro atual informa 30% para despesas do salão e 70% para os profissionais. A divisão informada é 30% para despesas do salão e 70% para os profissionais. O script atual ainda não automatiza esse cálculo.
+- **RN10 — Comissão/despesas:** o registro atual informa 30% para despesas do salão e 70% para os profissionais. A divisão informada é 30% para despesas do salão e 70% para os profissionais. O procedimento SQL `fechar_caixa` calcula os percentuais informados sobre os pagamentos do período.
 - **RN11 — Fechamento de caixa:** o fechamento deve considerar os pagamentos efetivamente registrados no período e a divisão validada pela responsável.
 - **RN12 — Compra de insumos:** a compra deve identificar os itens adquiridos e o fornecedor, caso esse controle seja implementado.
 - **RN13 — Estoque:** saldo de insumo não pode ficar inconsistente entre entradas e consumo; registrar as entradas e o consumo de insumos.
@@ -118,7 +118,7 @@ O sistema não inclui venda de produtos nesta versão, pois a responsável infor
 - **RN15 — LGPD:** coletar apenas os dados pessoais necessários e restringir seu acesso às pessoas autorizadas.
 - **RN16 — Normas sanitárias:** o salão utiliza produtos químicos e instrumentos que exigem cuidados de higiene e segurança; os procedimentos concretos devem seguir a orientação sanitária aplicável.
 - **RN17 — Nota fiscal:** o registro da entrevista informa que o salão emite nota fiscal; o processo e os campos necessários devem ser detalhados se entrarem no escopo do sistema.
-- **RN18 — Atrasos e sinal:** não há tolerância de atraso, exigência de sinal ou pagamento antecipado estabelecidos como regras nesta versão.
+- **RN18 — Atrasos e sinal:** a tolerância de atraso, o sinal e o pagamento antecipado não são aplicados como regras automáticas nesta versão.
 
 ## 5. Dicionário de dados
 
@@ -141,7 +141,7 @@ As compras, fornecedores e controle de insumos aparecem nos processos e requisit
 
 - **DER conceitual:** [DER_Conceitual.png](DER_Conceitual.png)
 - **DER lógico:** [DER_Lógico.png](DER_L%C3%B3gico.png)
-- Os diagramas foram preservados nesta revisão, conforme solicitado. Nenhum arquivo de DER foi editado ou recriado. As alterações desta revisão ficam restritas ao SQL e à documentação textual.
+- Os diagramas foram preservados nesta revisão, conforme solicitado. Nenhum arquivo de DER foi editado ou recriado. As alterações desta revisão abrangem o SQL e a documentação textual.
 
 ### 6.3 Relacionamentos e cardinalidades
 
@@ -178,13 +178,13 @@ Compra, fornecedor e estoque são processos reais descritos no trabalho, mas a e
 | **Fontes consultadas** | README e dicionário do repositório, DERs existentes e correção do professor na issue #19. Não foram consultadas fontes externas nesta revisão. |
 | **Trechos rejeitados ou corrigidos** | Foram alinhados os campos e tipos do SQL e dos dicionários, revisadas as validações de agenda e mantidas como pendências as regras que dependem de confirmação. Os diagramas não foram modificados nesta revisão. Regras não confirmadas, como prazo de cancelamento e base de cálculo da comissão, foram mantidas como pendências. |
 | **Justificativa da escolha final** | A versão atual prioriza os fatos documentados na entrevista e a correção do professor, separando o que está descrito do que ainda precisa ser validado. |
-| **Reflexão crítica** | A IA pode propor estruturas plausíveis que não correspondem ao funcionamento real do salão. Por isso, a divisão 30%/70%, a cardinalidade de Pagamento e o escopo de estoque precisam ser confirmados pela equipe com a responsável antes da entrega final. Compras, fornecedores e estoque ainda precisam ser incorporados ao modelo caso a disciplina exija que esses processos estejam modelados como entidades nesta entrega. Nenhuma alteração foi feita nos diagramas. |
+| **Reflexão crítica** | A IA pode propor estruturas plausíveis que não correspondem ao funcionamento real do salão. O modelo implementa a divisão 30%/70%, um pagamento por agendamento e controle de compras/estoque no SQL. Os DERs foram preservados conforme solicitado, então ainda não refletem as entidades adicionais implementadas no banco. Nenhuma alteração foi feita nos diagramas. |
 
-## 9. Pendências antes da entrega
+## 9. Limitações conhecidas desta versão
 
 1. Alinhar o SQL ao cálculo informado de 30%/70%, incluindo o registro dos valores usados na conferência de caixa.
 2. Manter documentado que não há prazo mínimo numérico de cancelamento, tolerância de atraso, sinal ou pagamento antecipado definidos nesta versão.
 3. O modelo adotado considera um pagamento por agendamento.
 4. Modelar no banco as compras, os fornecedores e o estoque descritos no levantamento.
 5. Se compras, fornecedores e estoque forem exigidos no DER desta entrega, acrescentar as entidades correspondentes aos dois diagramas e ao dicionário, mantendo nomes, PKs, FKs e cardinalidades iguais em todos os arquivos.
-6. O SQL e o dicionário adotam MySQL 8.0+ como SGBD de referência.
+6. O SQL e os dicionários adotam MySQL 8.0+ como referência.
