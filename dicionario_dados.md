@@ -61,7 +61,7 @@ A chave primária composta (`id_profissional`, `id_especialidade`) impede cadast
 | `observacoes` | TEXT | Não | Evitar dados pessoais desnecessários | Observações sobre o atendimento. |
 | `data_criacao` | TIMESTAMP | Sim | Padrão CURRENT_TIMESTAMP | Data e hora de criação do registro. |
 
-**Regra de agenda:** os gatilhos do SQL impedem sobreposição de horários não cancelados do mesmo profissional e bloqueiam novos agendamentos com profissional inativo. A aplicação deve calcular a duração e aplicar o tempo adicional quando a coloração para loiro exigir o dobro do tempo padrão, conforme avaliação profissional.
+**Regra de agenda:** os gatilhos do SQL impedem sobreposição de horários não cancelados do mesmo profissional e bloqueiam novos agendamentos com profissional inativo. A aplicação deve calcular a duração do procedimento. Quando a coloração para loiro exigir o dobro do tempo padrão, deve reservar esse intervalo ampliado conforme avaliação profissional.
 
 ## 7. pagamento
 
@@ -74,7 +74,89 @@ A chave primária composta (`id_profissional`, `id_especialidade`) impede cadast
 | `forma_pagamento` | VARCHAR(20) | Sim | `debito`, `credito`, `pix`, `dinheiro` | Forma utilizada no recebimento. |
 | `observacoes` | TEXT | Não | — | Observações opcionais sobre o pagamento. |
 
-## 8. Índices e validações
+
+## 8. fornecedor
+
+| Campo | Tipo | Obrigatório | Chave/regra | Descrição |
+|---|---|---:|---|---|
+| `id_fornecedor` | INT | Sim | PK, auto incremento | Identificador do fornecedor. |
+| `nome` | VARCHAR(120) | Sim | — | Nome do fornecedor. |
+| `telefone` | VARCHAR(20) | Não | Dado de contato | Telefone do fornecedor. |
+| `email` | VARCHAR(120) | Não | Dado de contato | E-mail do fornecedor. |
+| `observacoes` | TEXT | Não | — | Informações adicionais. |
+
+## 9. insumo
+
+| Campo | Tipo | Obrigatório | Chave/regra | Descrição |
+|---|---|---:|---|---|
+| `id_insumo` | INT | Sim | PK, auto incremento | Identificador do insumo. |
+| `nome` | VARCHAR(120) | Sim | — | Nome do material utilizado pelo salão. |
+| `unidade_medida` | VARCHAR(20) | Sim | — | Unidade de medida, como unidade ou ml. |
+| `quantidade_estoque` | DECIMAL(10,3) | Sim | CHECK >= 0; padrão 0 | Saldo atual do material. |
+| `estoque_minimo` | DECIMAL(10,3) | Sim | CHECK >= 0; padrão 0 | Nível de alerta para reposição. |
+| `ativo` | BOOLEAN | Sim | Padrão TRUE | Indica se o material continua em uso. |
+
+## 10. compra
+
+| Campo | Tipo | Obrigatório | Chave/regra | Descrição |
+|---|---|---:|---|---|
+| `id_compra` | INT | Sim | PK, auto incremento | Identificador da compra. |
+| `id_fornecedor` | INT | Sim | FK | Fornecedor da compra. |
+| `data_compra` | DATETIME | Sim | Padrão CURRENT_TIMESTAMP | Data e hora da compra. |
+| `observacoes` | TEXT | Não | — | Informações adicionais. |
+
+## 11. item_compra
+
+| Campo | Tipo | Obrigatório | Chave/regra | Descrição |
+|---|---|---:|---|---|
+| `id_item_compra` | INT | Sim | PK, auto incremento | Identificador da linha da compra. |
+| `id_compra` | INT | Sim | FK | Compra a que a linha pertence. |
+| `id_insumo` | INT | Sim | FK | Insumo comprado. |
+| `quantidade` | DECIMAL(10,3) | Sim | CHECK > 0 | Quantidade adquirida. |
+| `valor_unitario` | DECIMAL(10,2) | Sim | CHECK >= 0 | Valor por unidade. |
+
+Ao inserir um item de compra, o gatilho `trg_item_compra_ai` registra automaticamente uma movimentação de entrada, que atualiza o saldo do insumo.
+
+## 12. movimentacao_estoque
+
+| Campo | Tipo | Obrigatório | Chave/regra | Descrição |
+|---|---|---:|---|---|
+| `id_movimentacao` | INT | Sim | PK, auto incremento | Identificador da movimentação. |
+| `id_insumo` | INT | Sim | FK | Insumo movimentado. |
+| `id_agendamento` | INT | Não | FK | Atendimento associado ao consumo, quando aplicável. |
+| `tipo` | VARCHAR(20) | Sim | `entrada`, `consumo` ou `ajuste` | Tipo de movimentação. |
+| `quantidade` | DECIMAL(10,3) | Sim | CHECK > 0 | Quantidade movimentada. |
+| `data_movimentacao` | DATETIME | Sim | Padrão CURRENT_TIMESTAMP | Data e hora do registro. |
+| `observacoes` | TEXT | Não | — | Motivo ou detalhe. |
+
+O SQL impede registrar consumo maior que o saldo disponível e atualiza o saldo automaticamente. Na versão atual, o tipo `ajuste` soma a quantidade informada ao saldo.
+
+## 13. fechamento_caixa
+
+| Campo | Tipo | Obrigatório | Chave/regra | Descrição |
+|---|---|---:|---|---|
+| `id_fechamento` | INT | Sim | PK, auto incremento | Identificador do fechamento. |
+| `data_inicio` | DATE | Sim | UNIQUE junto com data_fim | Início do período. |
+| `data_fim` | DATE | Sim | Igual ou posterior a data_inicio | Fim do período. |
+| `total_recebido` | DECIMAL(12,2) | Sim | Calculado pelo procedimento | Soma dos pagamentos recebidos no período. |
+| `percentual_salao` | DECIMAL(5,2) | Sim | Padrão 30% | Percentual destinado às despesas do salão. |
+| `valor_salao` | DECIMAL(12,2) | Sim | 30% do total | Valor destinado ao salão. |
+| `percentual_profissionais` | DECIMAL(5,2) | Sim | Padrão 70% | Percentual destinado aos profissionais. |
+| `valor_profissionais` | DECIMAL(12,2) | Sim | 70% do total | Valor destinado aos profissionais. |
+| `data_fechamento` | DATETIME | Sim | Padrão CURRENT_TIMESTAMP | Momento do fechamento. |
+| `observacoes` | TEXT | Não | — | Observações adicionais. |
+
+Para fechar um período, executar `CALL fechar_caixa('AAAA-MM-DD', 'AAAA-MM-DD')`. O procedimento soma os pagamentos dentro do período e calcula a divisão 30%/70%. A restrição UNIQUE impede repetir exatamente o mesmo período.
+
+## 14. Relacionamentos adicionais
+
+- **Fornecedor — Compra:** um fornecedor pode estar associado a várias compras; cada compra referencia um fornecedor.
+- **Compra — Item_Compra:** cada compra é composta por linhas de itens; cada linha pertence a uma compra.
+- **Insumo — Item_Compra:** um insumo pode aparecer em várias compras; cada item referencia um insumo.
+- **Insumo — Movimentacao_Estoque:** cada movimentação pertence a um insumo; o insumo pode ter várias movimentações.
+- **Agendamento — Movimentacao_Estoque:** uma movimentação pode apontar para o atendimento associado ao consumo; o vínculo é opcional.
+
+## 15. Índices e validações
 
 - PKs identificam unicamente cada registro e FKs mantêm os vínculos entre as tabelas.
 - `especialidade.nome` é único.
@@ -83,8 +165,8 @@ A chave primária composta (`id_profissional`, `id_especialidade`) impede cadast
 - Os gatilhos validam o profissional ativo e a sobreposição de horários em inserções e alterações.
 - O campo de preço é uma referência; não substitui o valor efetivamente recebido no pagamento.
 
-## 9. Privacidade e limites do modelo
+## 16. Privacidade e limites do modelo
 
 Telefone e e-mail são dados pessoais e devem ser acessados apenas para finalidades legítimas do salão. O dicionário não afirma que esses dados são dados pessoais sensíveis.
 
-Este modelo ainda não implementa compras, fornecedores, estoque, fechamento de caixa ou cálculo automático da divisão 30%/70%. Esses processos estão documentados como requisitos do negócio, mas precisam de tabelas e regras adicionais no SQL para serem executados. Os DERs foram preservados sem alterações, conforme solicitado.
+O SQL implementa compras, fornecedores, itens de compra, movimentações de estoque e fechamento de caixa, além do cálculo 30%/70% sobre os pagamentos registrados no período. O consumo de insumos deve ser registrado por movimentação; o sistema não estima automaticamente a quantidade de material usada em cada procedimento. Os DERs foram preservados sem alterações, conforme solicitado.
