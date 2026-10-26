@@ -52,16 +52,16 @@
 <section class="section" id="cliente">
 <div class="panel"><div class="panel-head"><h3>3.1 Cliente</h3><p>Pessoa que agenda e recebe os serviços do salão.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico sugerido</th></tr></thead><tbody>
 <tr><td><code>id_cliente</code><span class="tag">PK</span></td><td>Identificador único do cliente.</td><td>Sim; gerado pelo sistema.</td><td><code>INTEGER</code> ou inteiro auto-gerado</td></tr>
-<tr><td><code>nome</code></td><td>Nome do cliente.</td><td>Sim.</td><td><code>VARCHAR(120)</code></td></tr>
+<tr><td><code>nome</code></td><td>Nome do cliente.</td><td>Sim.</td><td><code>VARCHAR(100)</code></td></tr>
 <tr><td><code>telefone</code></td><td>Contato principal para confirmação de agendamentos.</td><td>Sim; dado pessoal, restringir acesso.</td><td><code>VARCHAR(20)</code></td></tr>
-<tr><td><code>email</code></td><td>E-mail principal.</td><td>Não; dado pessoal, restringir acesso.</td><td><code>VARCHAR(254)</code></td></tr>
+<tr><td><code>email</code></td><td>E-mail principal.</td><td>Não; dado pessoal, restringir acesso.</td><td><code>VARCHAR(120)</code></td></tr>
 </tbody></table></div></div>
 </section>
 
 <section class="section" id="profissionais">
 <div class="panel"><div class="panel-head"><h3>3.2 Profissionais</h3><p>Pessoas que executam os procedimentos. A agenda é controlada por profissional.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico sugerido</th></tr></thead><tbody>
 <tr><td><code>id_profissional</code><span class="tag">PK</span></td><td>Identificador único do profissional.</td><td>Sim; gerado pelo sistema.</td><td><code>INTEGER</code> ou inteiro auto-gerado</td></tr>
-<tr><td><code>nome</code></td><td>Nome do profissional.</td><td>Sim.</td><td><code>VARCHAR(120)</code></td></tr>
+<tr><td><code>nome</code></td><td>Nome do profissional.</td><td>Sim.</td><td><code>VARCHAR(100)</code></td></tr>
 <tr><td><code>telefone</code></td><td>Contato do profissional.</td><td>Não; dado pessoal, restringir acesso.</td><td><code>VARCHAR(20)</code></td></tr>
 <tr><td><code>ativo</code></td><td>Indica se o profissional está atuando no salão.</td><td>Sim; valor booleano. Profissional inativo não recebe novos agendamentos (RN04).</td><td><code>BOOLEAN</code></td></tr>
 </tbody></table></div></div>
@@ -70,7 +70,7 @@
 <section class="section" id="especialidades">
 <div class="panel"><div class="panel-head"><h3>3.3 Especialidades</h3><p>Área de atuação que um profissional domina, como corte ou coloração.</p></div><div class="table-wrap"><table><thead><tr><th>Atributo</th><th>Descrição</th><th>Obrigatório / regra</th><th>Tipo físico sugerido</th></tr></thead><tbody>
 <tr><td><code>id_especialidade</code><span class="tag">PK</span></td><td>Identificador único da especialidade.</td><td>Sim; gerado pelo sistema.</td><td><code>INTEGER</code> ou inteiro auto-gerado</td></tr>
-<tr><td><code>nome</code></td><td>Nome da especialidade.</td><td>Sim; deve ser único.</td><td><code>VARCHAR(100)</code></td></tr>
+<tr><td><code>nome</code></td><td>Nome da especialidade.</td><td>Sim; deve ser único.</td><td><code>VARCHAR(80)</code></td></tr>
 </tbody></table></div></div>
 </section>
 
