@@ -46,7 +46,7 @@
 <div class="callout"><strong>2. Agendamento:</strong> o usuário seleciona cliente, profissional, procedimento, data e hora de início. O sistema consulta a agenda do profissional e calcula o término com base na duração do procedimento antes de registrar a reserva.</div>
 <div class="callout"><strong>3. Alteração:</strong> cancelamento e remarcação atualizam o estado ou os dados do agendamento. Um agendamento cancelado não deve bloquear o horário.</div>
 <div class="callout"><strong>4. Atendimento:</strong> o profissional executa o procedimento e o agendamento pode ser marcado como concluído.</div>
-<div class="callout"><strong>5. Pagamento e fechamento:</strong> o README informa que o pagamento ocorre presencialmente ao final do atendimento e alimenta o fechamento de caixa e a comissão. Entretanto, a entidade Pagamento ainda não consta no DER atual; ver a seção de pendências.</div>
+<div class="callout"><strong>5. Pagamento e fechamento:</strong> o README informa que o pagamento ocorre presencialmente ao final do atendimento e alimenta o fechamento de caixa e a comissão. O pagamento está documentado e implementado no SQL; os arquivos de DER foram preservados sem alterações, conforme solicitado.</div>
 </section>
 
 <section class="section" id="cliente">
@@ -183,7 +183,8 @@
 </tbody></table></div></div>
 <p>Para gerar o fechamento, executar <code>CALL fechar_caixa('AAAA-MM-DD', 'AAAA-MM-DD')</code>. O procedimento soma os pagamentos do período e calcula a divisão informada. O mesmo período não pode ser fechado duas vezes por causa da restrição UNIQUE.</p>
 </section>
-\n<section class="section" id="relacionamentos">
+
+<section class="section" id="relacionamentos">
 <h2>4. Relacionamentos e cardinalidades</h2>
 <p class="intro">Formato (mínimo, máximo), conforme a convenção declarada no README. Os rótulos do DER, do dicionário e do modelo lógico precisam ser idênticos.</p>
 <div class="panel"><div class="table-wrap"><table><thead><tr><th>Relacionamento</th><th>Cardinalidade</th><th>Interpretação</th><th>Implementação lógica</th></tr></thead><tbody>
@@ -255,9 +256,9 @@
 <section class="section" id="pendencias">
 <h2>8. Escopo e decisões do modelo</h2>
 <div class="callout"><strong>Pagamento:</strong> o modelo registra um pagamento por agendamento, associado ao valor recebido e à forma de pagamento. A regra está representada no SQL pela restrição UNIQUE em <code>id_agendamento</code>.</div>
-<div class="callout"><strong>Comissão e caixa:</strong> a regra informada é 30% para despesas do salão e 70% para os profissionais. O SQL atual registra pagamentos, mas ainda não calcula automaticamente a divisão nem implementa fechamento de caixa.</div>
+<div class="callout"><strong>Comissão e caixa:</strong> a regra informada é 30% para despesas do salão e 70% para os profissionais. O procedimento SQL <code>fechar_caixa</code> soma os pagamentos do período e calcula 30% para o salão e 70% para os profissionais.</div>
 <div class="callout"><strong>Cancelamento:</strong> não foi estabelecido um prazo mínimo numérico de antecedência. A regra documentada libera o horário quando o agendamento é cancelado.</div>
-<div class="callout"><strong>Compras, fornecedores e estoque:</strong> são processos descritos no levantamento e nos requisitos, mas ainda não estão implementados no SQL nem representados como entidades nos DERs preservados. Para não declarar uma funcionalidade inexistente, esta limitação permanece explícita. <br><br><strong>Tipos físicos:</strong> o dicionário utiliza MySQL 8.0+ como referência, de acordo com o script SQL.</div>
+<div class="callout"><strong>Compras, fornecedores e estoque:</strong> estão implementados no SQL e descritos neste dicionário. Os DERs foram preservados sem alterações conforme solicitado, portanto ainda não exibem essas entidades adicionais. <br><br><strong>Tipos físicos:</strong> o dicionário utiliza MySQL 8.0+ como referência, de acordo com o script SQL.</div>
 <div class="callout"><strong>DER:</strong> os arquivos de DER foram preservados sem alterações, conforme solicitado. Assim, as divergências visuais já apontadas pelo professor — como identificadores, cardinalidades e a representação de Pagamento — continuam pendentes no diagrama, mesmo com a documentação textual revisada. Log_Acesso é uma proposta técnica de auditoria e não faz parte do SQL atual.</div>
 </section>
 
