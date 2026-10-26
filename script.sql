@@ -130,7 +130,7 @@ BEGIN
   FROM profissional
   WHERE id_profissional = NEW.id_profissional;
 
-  IF v_ativo IS NULL OR v_ativo = FALSE THEN
+  IF NEW.status <> 'cancelado' AND (v_ativo IS NULL OR v_ativo = FALSE) THEN
     SIGNAL SQLSTATE '45000'
       SET MESSAGE_TEXT = 'Não é permitido agendar com profissional inativo ou inexistente.';
   END IF;
