@@ -137,11 +137,11 @@ O dicionário detalhado está em [dicionario_de_dados.html](dicionario_de_dados.
 
 As compras, fornecedores e controle de insumos aparecem nos processos e requisitos. A modelagem completa dessas entidades depende da confirmação do fluxo real de compras/estoque com a responsável e deve ser adicionada ao DER se o professor exigir que esses processos também estejam representados como entidades nesta entrega.
 
-### 6.2 Diagramas revisados
+### 6.2 Diagramas
 
-- **DER conceitual revisado:** [DER_Conceitual.svg](DER_Conceitual.svg)
-- **DER lógico revisado:** [DER_Logico.svg](DER_Logico.svg)
-- Os arquivos PNG anteriores são versões antigas e não devem ser considerados a versão revisada. Os SVGs acima são os diagramas atualizados para esta revisão.
+- **DER conceitual:** [DER_Conceitual.png](DER_Conceitual.png)
+- **DER lógico:** [DER_Lógico.png](DER_L%C3%B3gico.png)
+- Os diagramas foram preservados nesta revisão, conforme solicitado. Nenhum arquivo de DER foi editado ou recriado. As alterações desta revisão ficam restritas ao SQL e à documentação textual.
 
 ### 6.3 Relacionamentos e cardinalidades
 
@@ -171,10 +171,10 @@ Compra, fornecedor e estoque são processos reais descritos no trabalho, mas a e
 
 | Item | Registro |
 |---|---|
-| **Ferramenta e etapa** | O histórico do projeto registra uso de Claude (Anthropic) no esboço inicial do README. Nesta revisão, foi utilizado ChatGPT (OpenAI) para comparar os arquivos, organizar requisitos e regras, revisar o dicionário e corrigir os SVGs. |
+| **Ferramenta e etapa** | O histórico do projeto registra uso de Claude (Anthropic) no esboço inicial do README. Nesta revisão, foi utilizado ChatGPT (OpenAI) para comparar os arquivos e alinhar o SQL e os dicionários de dados. Os arquivos de DER foram preservados sem alterações. |
 | **Motivação** | Organizar o material da entrevista e corrigir as divergências apontadas na avaliação do professor entre processos, requisitos, regras, dicionário e DER. |
 | **Prompts utilizados nesta revisão** | “eu n arumei o html faz ele para mim de modo certo”; “agora faz a correção de tudo novamente”. |
-| **Resposta recebida** | Revisão do README, ampliação dos processos e requisitos, explicitação das regras confirmadas e pendentes, atualização do dicionário e correção dos diagramas SVG para incluir Pagamento e alinhar as cardinalidades. |
+| **Resposta recebida** | Revisão do README, ampliação dos processos e requisitos, explicitação das regras confirmadas e pendentes, atualização do SQL e dos dicionários para alinhar os campos, os tipos e as regras documentadas. Os DERs não foram modificados nesta revisão. |
 | **Fontes consultadas** | README e dicionário do repositório, DERs existentes e correção do professor na issue #19. Não foram consultadas fontes externas nesta revisão. |
 | **Trechos rejeitados ou corrigidos** | Foram corrigidas a classificação de telefone/e-mail como dados sensíveis, a divergência de chave primária em Profissional_Especialidade, a ausência de Pagamento nos diagramas e a leitura das cardinalidades. Regras não confirmadas, como prazo de cancelamento e base de cálculo da comissão, foram mantidas como pendências. |
 | **Justificativa da escolha final** | A versão atual prioriza os fatos documentados na entrevista e a correção do professor, separando o que está descrito do que ainda precisa ser validado. |
