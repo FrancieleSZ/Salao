@@ -36,7 +36,7 @@ O Salão dos Primos é um salão de beleza feminino e masculino, com fins lucrat
 5. **Cancelamento e remarcação:** localizar o agendamento, cancelar ou escolher outro horário e liberar a vaga anterior quando aplicável.
 6. **Atendimento / execução do procedimento:** realizar o serviço reservado; a duração depende do procedimento e pode ser maior em casos como coloração para loiro.
 7. **Recebimento do pagamento:** ocorre presencialmente ao final do atendimento; o valor final é combinado no salão e pode variar conforme o tamanho do cabelo. Formas informadas: débito, crédito, Pix e dinheiro.
-8. **Comissão e despesas do salão:** o relato registrado pelo grupo indica uma divisão de 30% para despesas do salão e 70% para os profissionais. A divisão informada é de 30% para despesas do salão e 70% para os profissionais; o SQL atual ainda não automatiza o cálculo.
+8. **Comissão e despesas do salão:** a divisão informada é de 30% para despesas do salão e 70% para os profissionais. O procedimento SQL `fechar_caixa` calcula essa divisão sobre os pagamentos registrados no período.
 9. **Fechamento de caixa:** conferir os valores recebidos no período e a divisão correspondente. A conferência considera os pagamentos registrados no período.
 10. **Compra de produtos e insumos:** reposição de tintas e produtos químicos usados nos procedimentos, por meio de fornecedores.
 11. **Controle de estoque de insumos:** acompanhar entradas, consumo e saldo para reduzir risco de falta de materiais. O controle de estoque acompanha entradas e consumo de insumos.
