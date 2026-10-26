@@ -112,7 +112,7 @@
 <div class="notice">O pagamento é registrado presencialmente ao final do atendimento. O modelo adota um registro de pagamento por agendamento, com valor efetivamente recebido e forma de pagamento: débito, crédito, Pix ou dinheiro. Os arquivos de DER foram preservados sem alterações, conforme solicitado.</div>
 <div class="panel"><div class="table-wrap"><table><thead><tr><th>Atributo proposto</th><th>Descrição</th><th>Regra / tipo físico sugerido</th></tr></thead><tbody>
 <tr><td><code>id_pagamento</code><span class="tag">PK</span></td><td>Identificador do pagamento.</td><td>Gerado pelo sistema; <code>INTEGER</code>.</td></tr>
-<tr><td><code>id_agendamento</code><span class="tag fk">FK</span></td><td>Atendimento ao qual o pagamento está associado.</td><td>Obrigatório e UNIQUE no SQL; o modelo admite no máximo um pagamento por agendamento; <code>INTEGER</code>.</tr>
+<tr><td><code>id_agendamento</code><span class="tag fk">FK</span></td><td>Atendimento ao qual o pagamento está associado.</td><td>Obrigatório e UNIQUE no SQL; o modelo admite no máximo um pagamento por agendamento; <code>INTEGER</code>.</td></tr>
 <tr><td><code>data_pagamento</code></td><td>Data e hora do recebimento.</td><td>Obrigatório; <code>DATETIME</code>.</td></tr>
 <tr><td><code>valor_pago</code></td><td>Valor efetivamente recebido, combinado presencialmente.</td><td>Obrigatório e maior que zero; <code>DECIMAL(10,2)</code>.</td></tr>
 <tr><td><code>forma_pagamento</code></td><td>Meio usado para pagar.</td><td>Débito, crédito, Pix ou dinheiro, conforme o README; <code>VARCHAR(20)</code>.</td></tr>
