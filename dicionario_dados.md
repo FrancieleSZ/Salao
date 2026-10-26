@@ -57,7 +57,7 @@ A chave primária composta (`id_profissional`, `id_especialidade`) impede cadast
 | `data_agendamento` | DATE | Sim | Índice composto com profissional e início | Data do atendimento. |
 | `hora_inicio` | TIME | Sim | Deve ser anterior a `hora_fim` | Horário de início. |
 | `hora_fim` | TIME | Sim | Deve ser posterior a `hora_inicio` | Horário previsto de término; calculado pela aplicação usando a duração do procedimento. |
-| `status` | VARCHAR(20) | Sim | `marcado`, `concluido` ou `cancelado` | Situação do agendamento. |
+| `status` | VARCHAR(20) | Sim | `agendado`, `confirmado`, `concluido`, `cancelado` ou `faltou` | Situação do agendamento. |
 | `observacoes` | TEXT | Não | Evitar dados pessoais desnecessários | Observações sobre o atendimento. |
 | `data_criacao` | TIMESTAMP | Sim | Padrão CURRENT_TIMESTAMP | Data e hora de criação do registro. |
 
