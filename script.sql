@@ -354,7 +354,7 @@ VALUES ('Coloração exemplo', 'unidade', 0, 2);
 INSERT INTO compra (id_fornecedor, observacoes)
 VALUES (1, 'Compra fictícia para teste');
 INSERT INTO item_compra (id_compra, id_insumo, quantidade, valor_unitario)
-VALUES (1, 5.000, 18.50);
+VALUES (1, 1, 5.000, 18.50);
 
 -- CONSULTAS DE EXEMPLO
 -- 1. Agenda com cliente, profissional e procedimento
