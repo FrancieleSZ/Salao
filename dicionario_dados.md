@@ -61,14 +61,14 @@ A chave primária composta (`id_profissional`, `id_especialidade`) impede cadast
 | `observacoes` | TEXT | Não | Evitar dados pessoais desnecessários | Observações sobre o atendimento. |
 | `data_criacao` | TIMESTAMP | Sim | Padrão CURRENT_TIMESTAMP | Data e hora de criação do registro. |
 
-**Regra de agenda:** os gatilhos do SQL impedem sobreposição de horários não cancelados do mesmo profissional e bloqueiam novos agendamentos com profissional inativo. A aplicação ainda precisa calcular a duração e definir o tratamento específico para serviços que possam exigir tempo adicional.
+**Regra de agenda:** os gatilhos do SQL impedem sobreposição de horários não cancelados do mesmo profissional e bloqueiam novos agendamentos com profissional inativo. A aplicação deve calcular a duração e aplicar o tempo adicional quando a coloração para loiro exigir o dobro do tempo padrão, conforme avaliação profissional.
 
 ## 7. pagamento
 
 | Campo | Tipo | Obrigatório | Chave/regra | Descrição |
 |---|---|---:|---|---|
 | `id_pagamento` | INT | Sim | PK, auto incremento | Identificador do pagamento. |
-| `id_agendamento` | INT | Sim | FK e UNIQUE | Atendimento associado; o modelo admite no máximo um pagamento por agendamento. Confirmar essa hipótese com a responsável. |
+| `id_agendamento` | INT | Sim | FK e UNIQUE | Atendimento associado; o modelo admite no máximo um pagamento por agendamento.  |
 | `data_pagamento` | DATETIME | Sim | — | Data e hora do recebimento. |
 | `valor_pago` | DECIMAL(10,2) | Sim | CHECK > 0 | Valor efetivamente recebido. |
 | `forma_pagamento` | VARCHAR(20) | Sim | `debito`, `credito`, `pix`, `dinheiro` | Forma utilizada no recebimento. |
@@ -87,4 +87,4 @@ A chave primária composta (`id_profissional`, `id_especialidade`) impede cadast
 
 Telefone e e-mail são dados pessoais e devem ser acessados apenas para finalidades legítimas do salão. O dicionário não afirma que esses dados são dados pessoais sensíveis.
 
-Este modelo não inclui compras, fornecedores, estoque, fechamento de caixa ou cálculo automático da divisão 30%/70%. Esses processos aparecem no levantamento, mas o README os mantém como dependentes de confirmação de escopo e regras com a responsável. Os DERs foram preservados sem alterações.
+Este modelo ainda não implementa compras, fornecedores, estoque, fechamento de caixa ou cálculo automático da divisão 30%/70%. Esses processos estão documentados como requisitos do negócio, mas precisam de tabelas e regras adicionais no SQL para serem executados. Os DERs foram preservados sem alterações, conforme solicitado.
