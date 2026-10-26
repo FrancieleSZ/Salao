@@ -62,7 +62,7 @@ O Salão dos Primos é um salão de beleza feminino e masculino, com fins lucrat
 
 **Cancelamento/remarcação:** receber solicitação → localizar agendamento → cancelar e liberar horário ou consultar nova disponibilidade → atualizar registro → confirmar com o cliente.
 
-**Compra e estoque:** identificar necessidade de reposição → selecionar/consultar fornecedor → registrar compra e itens → registrar entrada dos insumos → atualizar saldo. O controle de consumo durante os procedimentos depende da confirmação do processo real do salão.
+**Compra e estoque:** identificar necessidade de reposição → selecionar/consultar fornecedor → registrar compra e itens → registrar entrada dos insumos → atualizar saldo. O consumo é registrado por movimentação de estoque, associada ao agendamento quando aplicável.
 
 ## 3. Requisitos do sistema
 
@@ -83,7 +83,7 @@ O Salão dos Primos é um salão de beleza feminino e masculino, com fins lucrat
 - **RF13.** Consultar os pagamentos registrados por período para apoiar a conferência de caixa.
 - **RF14.** Apoiar o cálculo da divisão de valores entre despesas do salão e profissionais, aplicando a divisão informada de 30% para despesas do salão e 70% para os profissionais.
 - **RF15.** Registrar compras de insumos, com fornecedor, data e itens comprados, conforme o controle de compras e estoque descrito no levantamento.
-- **RF16.** Consultar entradas e saldo de insumos, caso o controle de estoque seja confirmado.
+- **RF16.** Consultar entradas, saldo atual e insumos abaixo do estoque mínimo.
 - **RF17.** Cadastrar e consultar fornecedores de insumos, para apoiar o registro de compras.
 
 ### 3.2 Restrição de escopo
@@ -124,7 +124,7 @@ O sistema não inclui venda de produtos nesta versão, pois a responsável infor
 
 O dicionário detalhado está em [dicionario_de_dados.html](dicionario_de_dados.html). Ele descreve atributos, regras, tipos físicos sugeridos, índices, acesso e privacidade. Tipos e índices são propostas para o SGBD que vier a ser escolhido, não uma implementação já existente.
 
-## 6. Modelo conceitual e lógico
+## 6. Modelo conceitual, lógico e físico
 
 ### 6.1 Entidades centrais
 
@@ -133,9 +133,14 @@ O dicionário detalhado está em [dicionario_de_dados.html](dicionario_de_dados.
 - **Procedimentos:** serviços oferecidos, com duração estimada.
 - **Agendamentos:** evento com data, início, término e situação.
 - **Especialidades:** áreas de atuação dos profissionais.
-- **Pagamento:** registro do recebimento presencial associado ao atendimento; incluído por ser essencial na avaliação do professor.
+- **Pagamento:** registro do recebimento presencial associado ao atendimento.
+- **Fornecedor:** cadastro de quem fornece insumos.
+- **Insumo:** material utilizado na execução dos procedimentos, com saldo e nível mínimo.
+- **Compra e Item_Compra:** registro das compras de insumos, fornecedor, quantidade e valor unitário.
+- **Movimentacao_Estoque:** histórico de entradas, consumo e ajustes de insumos.
+- **Fechamento_Caixa:** total recebido no período e divisão de 30% para o salão e 70% para os profissionais.
 
-As compras, fornecedores e controle de insumos aparecem nos processos e requisitos. Compras, fornecedores e estoque são processos confirmados no levantamento, mas suas entidades ainda precisam ser incluídas no SQL e nos diagramas para que a implementação cubra todo esse escopo. Os diagramas permanecem sem alteração conforme solicitado.
+Compras, fornecedores e estoque estão implementados no SQL e descritos nos dicionários. Os DERs foram preservados sem alteração, conforme solicitado, e por isso não mostram as entidades adicionais.
 
 ### 6.2 Diagramas
 
@@ -151,7 +156,7 @@ No diagrama conceitual, cada par (mínimo, máximo) é colocado junto à entidad
 - **Profissionais — Agendamentos:** junto a Profissionais, (1,1), pois cada agendamento tem exatamente um profissional; junto a Agendamentos, (0,n), pois um profissional pode ter nenhum ou vários agendamentos.
 - **Procedimentos — Agendamentos:** junto a Procedimentos, (1,1), pois cada agendamento tem exatamente um procedimento; junto a Agendamentos, (0,n), pois um procedimento pode constar em nenhum ou vários agendamentos.
 - **Profissionais — Especialidades:** relacionamento N:N, com (0,n) em ambos os lados, resolvido no modelo lógico por tabela associativa Profissional_Especialidade.
-- **Agendamentos — Pagamento:** junto a Agendamentos, (0,1), e junto a Pagamento, (1,1): o desenho assume no máximo um pagamento por agendamento e cada pagamento pertence a exatamente um agendamento. Confirmar se há pagamentos parciais ou múltiplos antes da implementação.
+- **Agendamentos — Pagamento:** junto a Agendamentos, (0,1), e junto a Pagamento, (1,1): o desenho assume no máximo um pagamento por agendamento e cada pagamento pertence a exatamente um agendamento. O modelo adota um pagamento por agendamento, representado pela restrição UNIQUE em `Pagamento.id_agendamento`.
 
 ### 6.4 Chaves e integridade
 
@@ -165,7 +170,7 @@ No diagrama conceitual, cada par (mínimo, máximo) é colocado junto à entidad
 
 Cliente, Profissionais e Procedimentos são entidades separadas porque possuem atributos próprios e podem participar de muitos agendamentos. Agendamentos representa o evento no tempo e permite registrar data, horários e situação, além de aplicar a regra de não sobreposição. Especialidades fica separada para evitar armazenar várias áreas de atuação em um único campo. Pagamento foi incluído porque o recebimento ocorre ao final do atendimento e foi considerado essencial na avaliação do professor.
 
-Compra, fornecedor e estoque são processos reais descritos no trabalho, mas a estrutura detalhada dessas entidades precisa ser confirmada e incluída nos diagramas caso faça parte do escopo obrigatório. O salão não realiza venda de produtos, portanto esse processo não deve ser representado como funcionalidade ativa.
+Compra, fornecedor, insumo, item de compra, movimentação de estoque e fechamento de caixa estão implementados no SQL. Os diagramas foram preservados sem alteração, conforme solicitado. O salão não realiza venda de produtos, portanto esse processo não é representado como funcionalidade ativa.
 
 ## 8. Uso de inteligência artificial
 
@@ -174,16 +179,16 @@ Compra, fornecedor e estoque são processos reais descritos no trabalho, mas a e
 | **Ferramenta e etapa** | O histórico do projeto registra uso de Claude (Anthropic) no esboço inicial do README. Nesta revisão, foi utilizado ChatGPT (OpenAI) para comparar os arquivos e alinhar o SQL e os dicionários de dados. Os arquivos de DER foram preservados sem alterações. |
 | **Motivação** | Organizar o material da entrevista e corrigir as divergências apontadas na avaliação do professor entre processos, requisitos, regras, dicionário e DER. |
 | **Prompts utilizados nesta revisão** | “eu n arumei o html faz ele para mim de modo certo”; “agora faz a correção de tudo novamente”. |
-| **Resposta recebida** | Revisão do README, ampliação dos processos e requisitos, explicitação das regras confirmadas e pendentes, atualização do SQL e dos dicionários para alinhar os campos, os tipos e as regras documentadas. Os DERs não foram modificados nesta revisão. |
+| **Resposta recebida** | Revisão do README, ampliação dos processos e requisitos, explicitação das regras confirmadas e das limitações de implementação, atualização do SQL e dos dicionários para alinhar os campos, os tipos e as regras documentadas. Os DERs não foram modificados nesta revisão. |
 | **Fontes consultadas** | README e dicionário do repositório, DERs existentes e correção do professor na issue #19. Não foram consultadas fontes externas nesta revisão. |
-| **Trechos rejeitados ou corrigidos** | Foram alinhados os campos e tipos do SQL e dos dicionários, revisadas as validações de agenda e mantidas como pendências as regras que dependem de confirmação. Os diagramas não foram modificados nesta revisão. Regras não confirmadas, como prazo de cancelamento e base de cálculo da comissão, foram mantidas como pendências. |
+| **Trechos rejeitados ou corrigidos** | Foram alinhados os campos e tipos do SQL e dos dicionários, revisadas as validações de agenda e registradas as regras confirmadas e as limitações que não são automatizadas pelo banco. Os diagramas não foram modificados nesta revisão. |
 | **Justificativa da escolha final** | A versão atual prioriza os fatos documentados na entrevista e a correção do professor, separando o que está descrito do que ainda precisa ser validado. |
-| **Reflexão crítica** | A IA pode propor estruturas plausíveis que não correspondem ao funcionamento real do salão. O modelo implementa a divisão 30%/70%, um pagamento por agendamento e controle de compras/estoque no SQL. Os DERs foram preservados conforme solicitado, então ainda não refletem as entidades adicionais implementadas no banco. Nenhuma alteração foi feita nos diagramas. |
+| **Reflexão crítica** | A IA pode propor estruturas plausíveis que não correspondem ao funcionamento real do salão. O modelo implementa a divisão 30%/70%, um pagamento por agendamento e controle de compras/estoque no SQL. Os DERs foram preservados conforme solicitado, então ainda não refletem as entidades adicionais implementadas no banco. |
 
 ## 9. Limitações conhecidas desta versão
 
 1. Os DERs foram preservados sem alterações, conforme solicitado. Por isso, as entidades Fornecedor, Compra, Item_Compra, Insumo, Movimentacao_Estoque e Fechamento_Caixa, presentes no SQL e nos dicionários, ainda não aparecem nos diagramas.
-2. O SQL valida os horários e os conflitos de agenda, mas a aplicação deve preencher `hora_fim` com base na duração do procedimento. Quando a coloração para loiro exigir o dobro do tempo padrão, o horário final deve refletir a duração estendida.
+2. O SQL valida os horários e os conflitos de agenda. A aplicação deve preencher `hora_fim` com base na duração do procedimento e reservar o dobro do tempo quando a coloração para loiro exigir essa duração estendida.
 3. O consumo de insumos é registrado por movimentação de estoque; o banco não estima automaticamente a quantidade de cada produto químico usada em cada procedimento.
 4. A emissão de nota fiscal está registrada como processo do negócio, mas os campos e a integração fiscal não fazem parte deste banco de dados.
 5. O modelo considera um pagamento por agendamento e não inclui venda de produtos, pois o salão não comercializa produtos.
