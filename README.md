@@ -36,11 +36,11 @@ O Salão dos Primos é um salão de beleza feminino e masculino, com fins lucrat
 5. **Cancelamento e remarcação:** localizar o agendamento, cancelar ou escolher outro horário e liberar a vaga anterior quando aplicável.
 6. **Atendimento / execução do procedimento:** realizar o serviço reservado; a duração depende do procedimento e pode ser maior em casos como coloração para loiro.
 7. **Recebimento do pagamento:** ocorre presencialmente ao final do atendimento; o valor final é combinado no salão e pode variar conforme o tamanho do cabelo. Formas informadas: débito, crédito, Pix e dinheiro.
-8. **Comissão e despesas do salão:** o relato registrado pelo grupo indica uma divisão de 30% para despesas do salão e 70% para os profissionais. Confirmar com a responsável a base exata de cálculo antes de implementar.
-9. **Fechamento de caixa:** conferir os valores recebidos no período e a divisão correspondente. A forma detalhada de conferência precisa ser validada com a responsável.
+8. **Comissão e despesas do salão:** o relato registrado pelo grupo indica uma divisão de 30% para despesas do salão e 70% para os profissionais. A divisão informada é de 30% para despesas do salão e 70% para os profissionais; o SQL atual ainda não automatiza o cálculo.
+9. **Fechamento de caixa:** conferir os valores recebidos no período e a divisão correspondente. A conferência considera os pagamentos registrados no período.
 10. **Compra de produtos e insumos:** reposição de tintas e produtos químicos usados nos procedimentos, por meio de fornecedores.
-11. **Controle de estoque de insumos:** acompanhar entradas, consumo e saldo para reduzir risco de falta de materiais. O procedimento exato de controle deve ser confirmado com a responsável.
-12. **Cadastro/consulta de fornecedores:** registrar ou consultar os fornecedores de quem o salão compra insumos, caso esse controle seja adotado pelo sistema.
+11. **Controle de estoque de insumos:** acompanhar entradas, consumo e saldo para reduzir risco de falta de materiais. O controle de estoque acompanha entradas e consumo de insumos.
+12. **Cadastro/consulta de fornecedores:** registrar ou consultar os fornecedores de quem o salão compra insumos, para identificar a origem das compras.
 13. **Venda de produtos no salão:** segundo o registro da entrevista, o salão **não vende produtos**. Portanto, venda de produtos não é tratada como processo operacional do sistema nesta versão.
 
 ### 2.2 Integração dos processos
@@ -49,8 +49,8 @@ O Salão dos Primos é um salão de beleza feminino e masculino, com fins lucrat
 - A consulta da agenda verifica o tempo livre do profissional durante toda a duração estimada do procedimento.
 - Cancelamentos liberam o horário; remarcações devem verificar disponibilidade antes de confirmar o novo período.
 - Ao concluir o atendimento, registra-se a situação do agendamento e o pagamento presencial.
-- Os pagamentos registrados dão suporte à conferência de caixa e ao cálculo da divisão financeira, após validação da regra dos 30%/70%.
-- A compra de insumos gera entradas de estoque; o consumo dos materiais nos procedimentos reduz o saldo, caso o salão confirme que deseja controlar estoque no sistema.
+- Os pagamentos registrados dão suporte à conferência de caixa e ao cálculo da divisão financeira, aplicando a divisão informada de 30% para despesas do salão e 70% para os profissionais.
+- A compra de insumos gera entradas de estoque; o consumo dos materiais nos procedimentos reduz o saldo, conforme o processo de controle de estoque descrito no levantamento.
 - O cadastro de fornecedor dá suporte à identificação da origem das compras.
 - A venda de produtos foi excluída do escopo funcional porque o salão informou que não realiza essa atividade.
 
@@ -110,15 +110,15 @@ O sistema não inclui venda de produtos nesta versão, pois a responsável infor
 - **RN07 — Cancelamento:** agendamento cancelado não bloqueia mais o intervalo na agenda.
 - **RN08 — Antecedência de cancelamento:** a antecedência mínima deve ser definida pela responsável. O prazo exato não consta no material disponível e não deve ser inventado.
 - **RN09 — Pagamento:** registrar valor efetivamente recebido e forma de pagamento. Formas informadas: débito, crédito, Pix e dinheiro.
-- **RN10 — Comissão/despesas:** o registro atual informa 30% para despesas do salão e 70% para os profissionais. Confirmar a base do cálculo e eventuais exceções antes de automatizar.
+- **RN10 — Comissão/despesas:** o registro atual informa 30% para despesas do salão e 70% para os profissionais. A divisão informada é 30% para despesas do salão e 70% para os profissionais. O script atual ainda não automatiza esse cálculo.
 - **RN11 — Fechamento de caixa:** o fechamento deve considerar os pagamentos efetivamente registrados no período e a divisão validada pela responsável.
 - **RN12 — Compra de insumos:** a compra deve identificar os itens adquiridos e o fornecedor, caso esse controle seja implementado.
-- **RN13 — Estoque:** saldo de insumo não pode ficar inconsistente entre entradas e consumo; confirmar com a responsável se o consumo será registrado individualmente.
+- **RN13 — Estoque:** saldo de insumo não pode ficar inconsistente entre entradas e consumo; registrar as entradas e o consumo de insumos.
 - **RN14 — Sem venda de produtos:** o salão informou que não comercializa produtos; não modelar vendas de produtos como processo ativo nesta versão.
 - **RN15 — LGPD:** coletar apenas os dados pessoais necessários e restringir seu acesso às pessoas autorizadas.
 - **RN16 — Normas sanitárias:** o salão utiliza produtos químicos e instrumentos que exigem cuidados de higiene e segurança; os procedimentos concretos devem seguir a orientação sanitária aplicável.
 - **RN17 — Nota fiscal:** o registro da entrevista informa que o salão emite nota fiscal; o processo e os campos necessários devem ser detalhados se entrarem no escopo do sistema.
-- **RN18 — Atrasos e sinal:** tolerância de atraso, exigência de sinal e pagamento antecipado não foram definidos no material disponível; validar com a responsável antes de criar regras para esses casos.
+- **RN18 — Atrasos e sinal:** não há tolerância de atraso, exigência de sinal ou pagamento antecipado estabelecidos como regras nesta versão.
 
 ## 5. Dicionário de dados
 
@@ -135,7 +135,7 @@ O dicionário detalhado está em [dicionario_de_dados.html](dicionario_de_dados.
 - **Especialidades:** áreas de atuação dos profissionais.
 - **Pagamento:** registro do recebimento presencial associado ao atendimento; incluído por ser essencial na avaliação do professor.
 
-As compras, fornecedores e controle de insumos aparecem nos processos e requisitos. A modelagem completa dessas entidades depende da confirmação do fluxo real de compras/estoque com a responsável e deve ser adicionada ao DER se o professor exigir que esses processos também estejam representados como entidades nesta entrega.
+As compras, fornecedores e controle de insumos aparecem nos processos e requisitos. Compras, fornecedores e estoque são processos confirmados no levantamento, mas suas entidades ainda precisam ser incluídas no SQL e nos diagramas para que a implementação cubra todo esse escopo. Os diagramas permanecem sem alteração conforme solicitado.
 
 ### 6.2 Diagramas
 
@@ -182,9 +182,9 @@ Compra, fornecedor e estoque são processos reais descritos no trabalho, mas a e
 
 ## 9. Pendências antes da entrega
 
-1. Confirmar com Alaide a base exata do cálculo de 30%/70%.
-2. Definir o prazo mínimo de antecedência para cancelamento e se há tolerância de atraso ou exigência de sinal.
-3. Confirmar se cada agendamento pode ter um ou mais pagamentos.
-4. Confirmar se o salão quer controlar estoque por consumo de cada atendimento ou somente registrar compras/reposição.
+1. Alinhar o SQL ao cálculo informado de 30%/70%, incluindo o registro dos valores usados na conferência de caixa.
+2. Manter documentado que não há prazo mínimo numérico de cancelamento, tolerância de atraso, sinal ou pagamento antecipado definidos nesta versão.
+3. O modelo adotado considera um pagamento por agendamento.
+4. Modelar no banco as compras, os fornecedores e o estoque descritos no levantamento.
 5. Se compras, fornecedores e estoque forem exigidos no DER desta entrega, acrescentar as entidades correspondentes aos dois diagramas e ao dicionário, mantendo nomes, PKs, FKs e cardinalidades iguais em todos os arquivos.
-6. Definir o SGBD antes de fixar tipos físicos, collation e sintaxe de índices.
+6. O SQL e o dicionário adotam MySQL 8.0+ como SGBD de referência.
