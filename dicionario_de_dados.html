@@ -19,23 +19,23 @@
 </nav>
 <main>
 <header class="hero" id="identificacao">
-<div class="eyebrow">Entrega 1 · Modelagem de dados</div>
+<div class="eyebrow">Entrega 2 · Modelo lógico e implementação SQL</div>
 <h1>Dicionário de Dados — Salão dos Primos</h1>
 <p class="muted">Documento de referência para as entidades, atributos, relacionamentos, regras e controles de dados do sistema de agendamento do salão.</p>
 <p><strong>Integrantes:</strong> Emilly Rodrigues de Souza, Franciele Souza de Jesus, Julia Parra e Kamilly Vitória Alves da Silva.</p>
 <div class="meta"><span class="pill">Versão 2.0</span><span class="pill">Data: 24/10/2026</span><span class="pill">PK = chave primária</span><span class="pill">FK = chave estrangeira</span></div>
-<div class="notice"><strong>Nota sobre a implementação:</strong> o script SQL utiliza MySQL 8.0+. Os dados de exemplo são fictícios e o script deve ser testado em ambiente próprio antes de uso real.</div>
+<div class="notice"><strong>Nota sobre a implementação:</strong> o script SQL utiliza MySQL 8.0.16 ou superior. Os dados de exemplo são fictícios e o script deve ser testado em ambiente próprio antes de uso real.</div>
 </header>
 
 <section class="section" id="identificacao-extra">
 <h2>1. Convenções e padrões</h2><p>Os diagramas existentes foram preservados sem alterações nesta revisão. Consulte <a href="DER_Conceitual.png">DER conceitual</a> e <a href="DER_L%C3%B3gico.png">DER lógico</a> no repositório.</p>
 <div class="panel"><div class="table-wrap"><table><thead><tr><th>Item</th><th>Convenção adotada neste documento</th></tr></thead><tbody>
-<tr><td>SGBD</td><td>MySQL 8.0+, conforme o script SQL.</td></tr>
+<tr><td>SGBD</td><td>MySQL 8.0.16 ou superior, conforme o script SQL.</td></tr>
 <tr><td>Codificação e collation</td><td>Recomenda-se UTF-8 e uma collation compatível com português brasileiro, com comparação de texto definida explicitamente no SGBD escolhido. O nome exato da collation depende do SGBD e da versão.</td></tr>
 <tr><td>Notação</td><td>Nomes de entidades no singular/plural conforme o DER e nomes de atributos em <code>snake_case</code> minúsculo.</td></tr>
 <tr><td>Prefixos</td><td><code>id_</code> identifica atributos de chave; <code>PK</code> indica chave primária; <code>FK</code> indica chave estrangeira; <code>RN</code> indica regra de negócio e <code>RNF</code>, requisito não funcional.</td></tr>
 <tr><td>Versão e data</td><td>Versão 2.0 — 24/10/2026. Atualizar este registro quando houver alteração aprovada.</td></tr>
-<tr><td>Tipos físicos</td><td>Tipos alinhados ao MySQL 8.0+ e ao script SQL do projeto.</td></tr>
+<tr><td>Tipos físicos</td><td>Tipos alinhados ao MySQL 8.0.16+ e ao script SQL do projeto.</td></tr>
 </tbody></table></div></div>
 </section>
 
