@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS agendamento (
   data_agendamento DATE NOT NULL,
   hora_inicio TIME NOT NULL,
   hora_fim TIME NOT NULL,
-  status VARCHAR(20) NOT NULL DEFAULT 'marcado',
+  status VARCHAR(20) NOT NULL DEFAULT 'agendado',
   observacoes TEXT,
   data_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_ag_cliente FOREIGN KEY (id_cliente)
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS agendamento (
   CONSTRAINT fk_ag_procedimento FOREIGN KEY (id_procedimento)
     REFERENCES procedimento(id_procedimento),
   CONSTRAINT chk_ag_horario CHECK (hora_fim > hora_inicio),
-  CONSTRAINT chk_ag_status CHECK (status IN ('marcado','concluido','cancelado'))
+  CONSTRAINT chk_ag_status CHECK (status IN ('agendado','confirmado','concluido','cancelado','faltou'))
 );
 
 CREATE INDEX idx_ag_agenda
@@ -98,7 +98,7 @@ BEGIN
   FROM profissional
   WHERE id_profissional = NEW.id_profissional;
 
-  IF v_ativo IS NULL OR v_ativo = FALSE THEN
+  IF NEW.status <> 'cancelado' AND (v_ativo IS NULL OR v_ativo = FALSE) THEN
     SIGNAL SQLSTATE '45000'
       SET MESSAGE_TEXT = 'Não é permitido agendar com profissional inativo ou inexistente.';
   END IF;
@@ -176,8 +176,8 @@ INSERT INTO profissional_especialidade (id_profissional, id_especialidade) VALUE
 
 INSERT INTO agendamento
 (id_cliente, id_profissional, id_procedimento, data_agendamento, hora_inicio, hora_fim, status, observacoes) VALUES
-(1,1,1,'2026-10-28','10:00:00','10:40:00','marcado','Registro fictício para teste'),
-(2,2,2,'2026-10-28','11:00:00','11:30:00','marcado','Registro fictício para teste'),
+(1,1,1,'2026-10-28','10:00:00','10:40:00','agendado','Registro fictício para teste'),
+(2,2,2,'2026-10-28','11:00:00','11:30:00','agendado','Registro fictício para teste'),
 (3,2,3,'2026-10-29','14:00:00','16:00:00','concluido','Registro fictício para teste');
 
 INSERT INTO pagamento
