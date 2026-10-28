@@ -19,7 +19,7 @@ Nomes e RGMs foram transcritos da documentação de avaliação da Entrega 1. O 
 
 ### Caracterização da organização
 
-O Salão dos Primos é um salão de beleza feminino e masculino, com fins lucrativos. A documentação da Entrega 1 registra quatro profissionais e aproximadamente 30 a 50 clientes. O controle de horários foi descrito como feito em caderno de papel, o que dificulta consultar a disponibilidade antes de ir ao salão e aumenta as mensagens recebidas por WhatsApp durante os atendimentos.
+O Salão dos Primos é um salão de beleza feminino e masculino, com fins lucrativos. A documentação da Entrega 1 registra quatro profissionais e aproximadamente 30 a 50 clientes de pequeno porte atendendo em média mais de 15 clientes por dia. O controle de horários foi descrito como feito em caderno de papel, o que dificulta consultar a disponibilidade antes de ir ao salão e aumenta as mensagens recebidas por WhatsApp durante os atendimentos.
 
 **Problemas de gestão da informação**
 
