@@ -10,7 +10,7 @@
 |---|---:|---|
 | Emilly Rodrigues de Souza | 47508248 | [emillyrodrigues-tech](https://github.com/emillyrodrigues-tech) |
 | Franciele Souza de Jesus | 47643323 | FrancieleSZ |
-| Julia Parra | 47566604 | confirmar conta real |
+| Julia Parra | 47566604 | [juliaatriz](https://github.com/juliaatriz) |
 | Kamilly Vitória Alves da Silva | 46919431 | [KamillyVicks](https://github.com/KamillyVicks) |
 
 Nomes e RGMs foram transcritos da documentação de avaliação da Entrega 1. O usuário de Julia Parra não foi identificado nos 100 commits mais recentes consultados; confirmar a conta real antes da entrega.
