@@ -13,8 +13,6 @@
 | Julia Parra | 47566604 | [juliaatriz](https://github.com/juliaatriz) |
 | Kamilly Vitória Alves da Silva | 46919431 | [KamillyVicks](https://github.com/KamillyVicks) |
 
-Nomes e RGMs foram transcritos da documentação de avaliação da Entrega 1. O usuário de Julia Parra não foi identificado nos 100 commits mais recentes consultados; confirmar a conta real antes da entrega.
-
 ## 1.1 Revisão do modelo conceitual
 
 ### Caracterização da organização
